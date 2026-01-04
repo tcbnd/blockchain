@@ -1,15 +1,10 @@
 const crypto = require('crypto');
-const IPFSClient = require('../utils/ipfsClient');
 const PinataClient = require('../utils/pinataClient');
 require('dotenv').config();
 
 /**
- * 提单数据上传到IPFS
- * 这个脚本演示如何将OCR提取的提单数据上传到IPFS
+ * 提单数据上传到IPFS (使用Pinata)
  */
-
-// 选择使用的IPFS服务
-const USE_PINATA = process.env.PINATA_API_KEY ? true : false;
 
 /**
  * 创建提单元数据
@@ -90,40 +85,25 @@ async function uploadBillToIPFS(billData) {
     const dataHash = calculateDataHash(billData);
     console.log('数据哈希:', dataHash);
     
-    // 3. 上传到IPFS
-    let ipfsHash;
-    let gatewayUrl;
+    // 3. 上传到Pinata
+    console.log('\n使用Pinata服务上传...');
+    const pinata = new PinataClient();
     
-    if (USE_PINATA) {
-      console.log('\n使用Pinata服务上传...');
-      const pinata = new PinataClient();
-      
-      // 测试认证
-      await pinata.testAuthentication();
-      
-      // 上传元数据
-      const result = await pinata.uploadJSON(metadata, {
-        name: `BOL-${billData.billNumber}`,
-        keyvalues: {
-          billNumber: billData.billNumber,
-          type: 'bill-of-lading',
-          timestamp: Date.now().toString()
-        }
-      });
-      
-      ipfsHash = result.IpfsHash;
-      gatewayUrl = pinata.getGatewayUrl(ipfsHash);
-    } else {
-      console.log('\n使用IPFS客户端上传...');
-      const ipfs = new IPFSClient();
-      
-      // 上传元数据
-      ipfsHash = await ipfs.uploadJSON(metadata);
-      gatewayUrl = ipfs.getGatewayUrl(ipfsHash);
-      
-      // Pin文件
-      await ipfs.pinFile(ipfsHash);
-    }
+    // 测试认证
+    await pinata.testAuthentication();
+    
+    // 上传元数据
+    const result = await pinata.uploadJSON(metadata, {
+      name: `BOL-${billData.billNumber}`,
+      keyvalues: {
+        billNumber: billData.billNumber,
+        type: 'bill-of-lading',
+        timestamp: Date.now().toString()
+      }
+    });
+    
+    const ipfsHash = result.IpfsHash;
+    const gatewayUrl = pinata.getGatewayUrl(ipfsHash);
     
     console.log('\n✅ 上传完成!');
     console.log('IPFS哈希:', ipfsHash);
@@ -153,20 +133,12 @@ async function getBillFromIPFS(ipfsHash) {
     console.log('\n=== 从IPFS获取提单数据 ===');
     console.log('IPFS哈希:', ipfsHash);
     
-    let billData;
-    
-    if (USE_PINATA) {
-      // 使用Pinata网关
-      const pinata = new PinataClient();
-      const url = pinata.getGatewayUrl(ipfsHash);
-      const axios = require('axios');
-      const response = await axios.get(url);
-      billData = response.data;
-    } else {
-      // 使用IPFS客户端
-      const ipfs = new IPFSClient();
-      billData = await ipfs.getJSON(ipfsHash);
-    }
+    // 使用Pinata网关
+    const pinata = new PinataClient();
+    const url = pinata.getGatewayUrl(ipfsHash);
+    const axios = require('axios');
+    const response = await axios.get(url);
+    const billData = response.data;
     
     console.log('✅ 获取成功');
     console.log('提单编号:', billData.properties.billData.billNumber);

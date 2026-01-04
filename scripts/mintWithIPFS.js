@@ -48,7 +48,9 @@ async function main() {
   console.log("合约地址:", contractAddress);
   
   // 5. 获取签名者（托运人地址）
-  const [owner, shipper] = await hre.ethers.getSigners();
+  const signers = await hre.ethers.getSigners();
+  const owner = signers[0];
+  const shipper = signers[0]; // 使用同一账户
   console.log("合约所有者:", owner.address);
   console.log("托运人地址:", shipper.address);
   
@@ -71,30 +73,51 @@ async function main() {
   console.log("交易哈希:", receipt.hash);
   console.log("Gas使用量:", receipt.gasUsed.toString());
   
-  // 7. 获取Token ID
-  const tokenId = await contract.billNumberToTokenId(billData.billNumber);
-  console.log("Token ID:", tokenId.toString());
+  // 7. 从交易receipt获取事件来得到Token ID
+  const events = receipt.logs;
+  let tokenId;
+  
+  // 查找 Transfer 事件来获取 tokenId
+  for (const log of events) {
+    try {
+      const parsed = contract.interface.parseLog(log);
+      if (parsed && parsed.name === 'Transfer') {
+        tokenId = parsed.args[2]; // tokenId is the 3rd argument
+        break;
+      }
+    } catch (e) {
+      // 忽略无法解析的日志
+    }
+  }
+  
+  console.log("Token ID:", tokenId ? tokenId.toString() : "未找到");
   
   // 8. 验证NFT信息
-  console.log("\n步骤5: 验证NFT信息");
-  const nftData = await contract.getBillData(tokenId);
-  console.log("链上提单编号:", nftData.billNumber);
-  console.log("链上IPFS哈希:", nftData.ipfsHash);
-  console.log("NFT所有者:", await contract.ownerOf(tokenId));
-  console.log("Token URI:", await contract.tokenURI(tokenId));
-  
-  // 9. 验证数据完整性
-  const isValid = await contract.verifyBillData(tokenId, "0x" + ipfsResult.dataHash);
-  console.log("数据完整性:", isValid ? "✅ 验证通过" : "❌ 验证失败");
+  if (tokenId) {
+    console.log("\n步骤5: 验证NFT信息");
+    const nftData = await contract.getBillData(tokenId);
+    console.log("链上提单编号:", nftData.billNumber);
+    console.log("链上IPFS哈希:", nftData.ipfsHash);
+    console.log("NFT所有者:", await contract.ownerOf(tokenId));
+    console.log("Token URI:", await contract.tokenURI(tokenId));
+    
+    // 9. 验证数据完整性
+    const isValid = await contract.verifyBillData(tokenId, "0x" + ipfsResult.dataHash);
+    console.log("数据完整性:", isValid ? "✅ 验证通过" : "❌ 验证失败");
+  }
   
   console.log("\n=== 完整流程执行完毕 ===");
-  console.log("\n你可以在区块链浏览器查看NFT:");
-  console.log(`https://mumbai.polygonscan.com/token/${contractAddress}?a=${tokenId}`);
+  
+  if (tokenId) {
+    console.log("\n你可以在区块链浏览器查看NFT:");
+    console.log(`https://sepolia.etherscan.io/token/${contractAddress}?a=${tokenId}`);
+  }
+  
   console.log("\n你可以在IPFS网关查看元数据:");
   console.log(ipfsResult.gatewayUrl);
   
   return {
-    tokenId: tokenId.toString(),
+    tokenId: tokenId ? tokenId.toString() : null,
     ipfsHash: ipfsResult.ipfsHash,
     contractAddress,
     transactionHash: receipt.hash
