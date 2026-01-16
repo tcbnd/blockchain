@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill of Lading NFT - DApp</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📦 Bill of Lading NFT System</h1>
+            <button id="connectWallet" class="btn-primary">Connect Wallet</button>
+        </header>
+
+        <!-- Welcome Message (shown before wallet connection) -->
+        <div id="welcomeMessage" class="welcome-message">
+            <h2>👋 Welcome to Bill of Lading NFT DApp</h2>
+            <p>To get started, you need to connect your Web3 wallet (MetaMask):</p>
+            <ol>
+                <li>Install <a href="https://metamask.io" target="_blank">MetaMask</a> if you haven't already</li>
+                <li>Make sure you're on the <strong>Sepolia Testnet</strong></li>
+                <li>Click the "Connect Wallet" button above</li>
+                <li>Approve the connection in MetaMask</li>
+            </ol>
+            <div class="info-box">
+                <p><strong>Contract Address:</strong> 0xfB18AA14dBC3A6A3cCa47150b29055F83134C63b</p>
+                <p><strong>Network:</strong> Sepolia Testnet</p>
+                <p><strong>Need test ETH?</strong> <a href="https://sepoliafaucet.com" target="_blank">Get Sepolia ETH</a></p>
+            </div>
+        </div>
+
+        <div id="walletInfo" class="wallet-info" style="display: none;">
+            <p><strong>Connected:</strong> <span id="walletAddress"></span></p>
+            <p><strong>Network:</strong> <span id="networkName"></span></p>
+            <p><strong>Balance:</strong> <span id="walletBalance"></span></p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="view">View Bills</button>
+            <button class="tab-button" data-tab="mint">Mint New Bill</button>
+            <button class="tab-button" data-tab="finance">Finance Management</button>
+            <button class="tab-button" data-tab="transfer">Transfer Bill</button>
+        </div>
+
+        <!-- View Bills Tab -->
+        <div id="view" class="tab-content active">
+            <h2>My Bills</h2>
+            <div class="input-group">
+                <input type="number" id="viewTokenId" placeholder="Enter Token ID">
+                <button onclick="getBillDetails()" class="btn-secondary">Get Bill Details</button>
+            </div>
+            <div id="billDetails" class="bill-details"></div>
+            <div id="myBillsList" class="bills-list"></div>
+        </div>
+
+        <!-- Mint New Bill Tab -->
+        <div id="mint" class="tab-content">
+            <h2>Mint New Bill of Lading</h2>
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="shipperAddress">Shipper Address:</label>
+                    <input type="text" id="shipperAddress" placeholder="0x...">
+                </div>
+                <div class="form-group">
+                    <label for="billNumber">Bill Number:</label>
+                    <input type="text" id="billNumber" placeholder="BOL-2026-001">
+                </div>
+                <div class="form-group">
+                    <label for="ipfsHash">IPFS Hash:</label>
+                    <input type="text" id="ipfsHash" placeholder="QmXxx...">
+                </div>
+                <div class="form-group">
+                    <label for="dataHash">Data Hash:</label>
+                    <input type="text" id="dataHash" placeholder="0x...">
+                </div>
+                <div class="form-group">
+                    <label for="tokenURI">Token URI:</label>
+                    <input type="text" id="tokenURI" placeholder="ipfs://QmXxx.../metadata.json">
+                </div>
+                <button onclick="mintBill()" class="btn-primary">Mint Bill NFT</button>
+                <div id="mintResult" class="result-message"></div>
+            </div>
+        </div>
+
+        <!-- Finance Management Tab -->
+        <div id="finance" class="tab-content">
+            <h2>Finance Management</h2>
+            
+            <div class="form-container">
+                <h3>Pledge for Financing</h3>
+                <div class="form-group">
+                    <label for="financeTokenId">Token ID:</label>
+                    <input type="number" id="financeTokenId" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label for="financierAddress">Financier Address:</label>
+                    <input type="text" id="financierAddress" placeholder="0x...">
+                </div>
+                <div class="form-group">
+                    <label for="financeAmount">Finance Amount (ETH):</label>
+                    <input type="number" id="financeAmount" step="0.01" placeholder="0.0">
+                </div>
+                <button onclick="pledgeForFinancing()" class="btn-primary">Pledge for Financing</button>
+                <div id="financeResult" class="result-message"></div>
+            </div>
+
+            <div class="form-container">
+                <h3>Release Ownership</h3>
+                <div class="form-group">
+                    <label for="releaseTokenId">Token ID:</label>
+                    <input type="number" id="releaseTokenId" placeholder="0">
+                </div>
+                <button onclick="releaseOwnership()" class="btn-secondary">Release Ownership</button>
+                <div id="releaseResult" class="result-message"></div>
+            </div>
+        </div>
+
+        <!-- Transfer Bill Tab -->
+        <div id="transfer" class="tab-content">
+            <h2>Transfer Bill NFT</h2>
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="transferTokenId">Token ID:</label>
+                    <input type="number" id="transferTokenId" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label for="recipientAddress">Recipient Address:</label>
+                    <input type="text" id="recipientAddress" placeholder="0x...">
+                </div>
+                <button onclick="transferBill()" class="btn-primary">Transfer Bill</button>
+                <div id="transferResult" class="result-message"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="spinner"></div>
+        <p>Processing transaction...</p>
+    </div>
+
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
