@@ -103,10 +103,26 @@ class OCRBlockchainBridge:
         """
         将OCR结果转换为提单标准格式
         """
-        extracted = ocr_result.get('extracted_data', {})
+        # 支持新舊兩種OCR結果格式
+        extracted = ocr_result.get('extracted', {}) or ocr_result.get('extracted_data', {})
         bill_info = extracted.get('bill_info', {})
         shipper = extracted.get('shipper', {})
         consignee = extracted.get('consignee', {})
+        
+        # 處理地址 - 可能是字串或列表
+        shipper_address = shipper.get('address', '')
+        if isinstance(shipper_address, list):
+            shipper_address = '\n'.join(shipper_address)
+        
+        consignee_address = consignee.get('address', '')
+        if isinstance(consignee_address, list):
+            consignee_address = '\n'.join(consignee_address)
+        
+        # 處理貨物描述 - 可能是字串或列表
+        cargo = extracted.get('cargo', [])
+        cargo_desc = bill_info.get('cargo_description', '') or bill_info.get('DESCRIPTION OF GOODS', '')
+        if not cargo_desc and isinstance(cargo, list):
+            cargo_desc = '\n'.join(cargo)
         
         # 构建标准化的提单数据
         bill_data = {
@@ -118,13 +134,14 @@ class OCRBlockchainBridge:
             "placeOfDelivery": bill_info.get('PLACE OF DELIVERY', '') or bill_info.get('place_of_delivery', ''),
             "shipper": {
                 "name": shipper.get('name', ''),
-                "address": shipper.get('address', '')
+                "address": shipper_address
             },
             "consignee": {
                 "name": consignee.get('name', ''),
-                "address": consignee.get('address', '')
+                "address": consignee_address
             },
-            "cargoDescription": bill_info.get('cargo_description', '') or bill_info.get('DESCRIPTION OF GOODS', ''),
+            "cargoDescription": cargo_desc,
+            "containerInfo": extracted.get('container_info', ''),
             "grossWeight": bill_info.get('GROSS WEIGHT', '') or bill_info.get('gross_weight', ''),
             "measurement": bill_info.get('MEASUREMENT', '') or bill_info.get('measurement', ''),
             "issueDate": datetime.now().isoformat().split('T')[0],

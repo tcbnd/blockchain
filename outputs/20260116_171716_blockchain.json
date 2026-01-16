@@ -1,40 +1,40 @@
 {
   "success": true,
   "billData": {
-    "billNumber": "",
-    "vessel": "",
-    "voyage": "",
-    "portOfLoading": "",
-    "portOfDischarge": "",
-    "placeOfDelivery": "",
+    "billNumber": "M205607737",
+    "vessel": "BRAHEMS",
+    "voyage": "042E",
+    "portOfLoading": "Casablanca",
+    "portOfDischarge": "Gothenburg",
+    "placeOfDelivery": "Kungaelv",
     "shipper": {
-      "name": "",
-      "address": ""
+      "name": "MEDAOUI COMMERCE",
+      "address": "DOUAR LETATMA SIDI MOUSSA BEN ALI\nMOhaMMEDIA\nMOROCCO\nEmail:ste.commerce.medaoui@gmail.com"
     },
     "consignee": {
-      "name": "",
-      "address": ""
+      "name": "BRAHEMS VVS AB",
+      "address": "S1GNALGATAN 4 - 442 40 KUNGALV SWEDEN\nVAT Number / SE559183412101\nEmail: info@brahemsvvs.se Heliumgatan\nTele : 0046708923332"
     },
-    "cargoDescription": "",
-    "grossWeight": "",
+    "cargoDescription": "containers said to contain 30 PACKAGES\nARBRE TAZA BEIGE BRILLANT",
+    "containerInfo": "LLU2429773 / 20 DRY 8'6\nSKU5527941 / 20 DRY 8'6\nSKU5456690 / 20 DRY B'6",
+    "grossWeight": "58020.000 KGS",
     "measurement": "",
     "issueDate": "2026-01-16",
-    "extractedAt": "2026-01-16T17:22:48.526835",
+    "extractedAt": "2026-01-16T17:30:20.248909",
     "accuracy": 41.67,
     "originalFilename": "20260116_171716_bealand.No._205607737.jpg",
-    "ocrConfidence": 0.792017852064482,
-    "imageIPFS": "QmVdBbeK4jxi8YaUyxXDKxgQ1RyZobbHseRAVubk1MLbXZ"
+    "ocrConfidence": 0.792017852064482
   },
   "ipfs": {
-    "dataHash": "QmPwXaXEWxFNhDrQfFdRKLWZXggehT36j2ndUHNefETmKJ",
-    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmPwXaXEWxFNhDrQfFdRKLWZXggehT36j2ndUHNefETmKJ",
-    "imageHash": "QmVdBbeK4jxi8YaUyxXDKxgQ1RyZobbHseRAVubk1MLbXZ",
-    "imageUrl": "https://gateway.pinata.cloud/ipfs/QmVdBbeK4jxi8YaUyxXDKxgQ1RyZobbHseRAVubk1MLbXZ"
+    "dataHash": "QmaaCdss8Ucsv3ZfrF6hZWjyLrdNbsFVjoQhnPHibpVmvv",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmaaCdss8Ucsv3ZfrF6hZWjyLrdNbsFVjoQhnPHibpVmvv",
+    "imageHash": null,
+    "imageUrl": null
   },
   "blockchain": {
-    "dataHash": "0xfee0e1ff57ed1adb7f2d0a4719e224b41a0b5f28106bdad2ba1e2c6f0e8f789b",
+    "dataHash": "0xf4bdcc8cfc96cdf3ebc2aae56704653a415bb66b07b4875845471ff2eb541885",
     "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
-    "mintResult": null
+    "mintResult": "=== 从OCR数据铸造NFT ===\n\n合约地址: 0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED\n铸造人地址: 0x2eb625bAb63Cf0da4BaA75a71f368BEdAAe4D962\n托运人地址: 0x2eb625bAb63Cf0da4BaA75a71f368BEdAAe4D962\n提单编号: M205607737\nIPFS哈希: QmaaCdss8Ucsv3ZfrF6hZWjyLrdNbsFVjoQhnPHibpVmvv\n数据哈希: f4bdcc8cfc96cdf3ebc2aae56704653a415bb66b07b4875845471ff2eb541885\n\n正在铸造NFT...\n交易已发送，哈希: 0xd1e09b08ff727dcc2922a146a02e837dba0ccb8da67126f2906629e4f8034d53\n等待确认...\n✅ 交易已确认!\nGas使用量: 361901\nToken ID: 0\n\n验证链上数据:\n- 提单编号: M205607737\n- IPFS哈希: QmaaCdss8Ucsv3ZfrF6hZWjyLrdNbsFVjoQhnPHibpVmvv\n- 数据哈希: f4bdcc8cfc96cdf3ebc2aae56704653a415bb66b07b4875845471ff2eb541885\n- 托运人: undefined\n\n🎉 NFT铸造成功!\n\n{\n  \"success\": true,\n  \"transactionHash\": \"0xd1e09b08ff727dcc2922a146a02e837dba0ccb8da67126f2906629e4f8034d53\",\n  \"tokenId\": \"0\",\n  \"gasUsed\": \"361901\",\n  \"blockNumber\": 10055348\n}\n"
   },
-  "timestamp": "2026-01-16T17:22:54.685906"
+  "timestamp": "2026-01-16T17:30:37.725652"
 }

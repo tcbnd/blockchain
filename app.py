@@ -335,8 +335,9 @@ def extract_bill_info(texts):
     # 加载环境变量
     load_dotenv()
     
+    # 使用新的 HKBU GenAI API 配置
     API_URL = os.getenv('API_URL', 'https://genai.hkbu.edu.hk/api/v0/rest/deployments/gemini-2.5-pro/chat/completions?api-version=v1')
-    API_KEY = os.getenv('API_KEY', '1cd1c0a0-6d63-4c4b-9aba-ab0f07f86d71')
+    API_KEY = os.getenv('API_KEY')
     
     # 合并所有OCR文本，保留行號方便定位
     full_text = "\n".join([f"[{i+1}] {str(t)}" for i, t in enumerate(texts) if t])
