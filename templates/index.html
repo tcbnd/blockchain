@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提单OCR识别系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 60px;
+            text-align: center;
+            background: #f8f9ff;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f0f2ff;
+        }
+        
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: #e8ebff;
+            transform: scale(1.02);
+        }
+        
+        .upload-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            pointer-events: none;
+        }
+        
+        .upload-text {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 10px;
+            pointer-events: none;
+        }
+        
+        .upload-hint {
+            color: #999;
+            font-size: 0.9em;
+            pointer-events: none;
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            margin-left: 10px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .result-section {
+            display: none;
+            margin-top: 40px;
+        }
+        
+        .result-header {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .result-header h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .stat-label {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            word-break: break-all;
+        }
+        
+        .extracted-info {
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .extracted-info h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .info-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .info-section-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .info-item {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .info-label {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .info-value {
+            color: #333;
+            font-weight: 500;
+            word-break: break-word;
+            line-height: 1.5;
+        }
+        
+        .address-list {
+            margin-top: 5px;
+        }
+        
+        .address-item {
+            padding: 5px 0;
+            color: #555;
+        }
+        
+        .cargo-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .cargo-item {
+            background: #f8f9ff;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .text-list {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            max-height: 600px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+        }
+        
+        .text-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        
+        .text-item:hover {
+            background: #f8f9ff;
+        }
+        
+        .text-item:last-child {
+            border-bottom: none;
+        }
+        
+        .text-number {
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 15px;
+            min-width: 50px;
+            text-align: right;
+        }
+        
+        .text-content {
+            flex: 1;
+            color: #333;
+            word-break: break-word;
+        }
+        
+        .confidence {
+            color: #999;
+            font-size: 0.9em;
+            min-width: 80px;
+            text-align: right;
+            font-weight: 600;
+        }
+        
+        .confidence.high {
+            color: #4caf50;
+        }
+        
+        .confidence.medium {
+            color: #ff9800;
+        }
+        
+        .confidence.low {
+            color: #f44336;
+        }
+        
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .preview-image {
+            max-width: 300px;
+            max-height: 200px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .action-buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📄 提单OCR识别系统</h1>
+            <p>Bill of Lading OCR Recognition System - Powered by PaddleOCR</p>
+        </div>
+        
+        <div class="content">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📤</div>
+                <div class="upload-text">点击上传或拖放提单图片</div>
+                <div class="upload-hint">支持 PNG, JPG, JPEG 格式，最大 16MB</div>
+                <input type="file" id="fileInput" accept="image/png,image/jpeg,image/jpg">
+                <div id="previewContainer"></div>
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="btn" id="uploadBtn" style="display:none;">🚀 开始识别</button>
+            </div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <div>正在识别中，请稍候...</div>
+            </div>
+            
+            <div class="error" id="error"></div>
+            
+            <div class="result-section" id="resultSection">
+                <div class="result-header">
+                    <h2>✅ 识别完成</h2>
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-label">识别行数</div>
+                            <div class="stat-value" id="totalLines">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">平均置信度</div>
+                            <div class="stat-value" id="avgConfidence">0%</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">准确率</div>
+                            <div class="stat-value" id="accuracy" style="color: #4caf50;">N/A</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">文件名</div>
+                            <div class="stat-value" id="fileName">-</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="extracted-info">
+                    <h3>📋 提取的关键信息</h3>
+                    
+                    <!-- 提单信息 -->
+                    <div class="info-section">
+                        <div class="info-section-title">📝 提单信息 (Bill Information)</div>
+                        <div class="info-grid" id="billInfo"></div>
+                    </div>
+                    
+                    <!-- 发货人信息 -->
+                    <div class="info-section">
+                        <div class="info-section-title">📦 发货人信息 (Shipper)</div>
+                        <div id="shipperInfo"></div>
+                    </div>
+                    
+                    <!-- 收货人信息 -->
+                    <div class="info-section">
+                        <div class="info-section-title">📬 收货人信息 (Consignee)</div>
+                        <div id="consigneeInfo"></div>
+                    </div>
+                    
+                    <!-- 货物信息 -->
+                    <div class="info-section">
+                        <div class="info-section-title">📊 货物信息 (Cargo)</div>
+                        <ul class="cargo-list" id="cargoInfo"></ul>
+                    </div>
+                    
+                    <!-- 准确率详情 -->
+                    <div class="info-section" id="accuracySection" style="display: none;">
+                        <div class="info-section-title">🎯 准确率详情 (Accuracy Details)</div>
+                        <div id="accuracyDetails"></div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-bottom: 15px; color: #667eea;">📝 完整识别结果</h3>
+                <div class="text-list" id="textList"></div>
+                
+                <div class="action-buttons">
+                    <button class="btn" onclick="location.reload()">🔄 重新识别</button>
+                    <button class="btn btn-secondary" id="downloadBtn">💾 下载结果</button>
+                    <button class="btn" id="uploadToBlockchainBtn" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">🔗 上传到区块链</button>
+                </div>
+                
+                <!-- Blockchain Upload Section -->
+                <div id="blockchainSection" style="display: none; margin-top: 40px;">
+                    <div class="result-header">
+                        <h2>⛓️ 区块链上传</h2>
+                        <div id="blockchainStatus"></div>
+                    </div>
+                    <div class="extracted-info">
+                        <div class="info-section">
+                            <div class="info-section-title">📡 IPFS 存储</div>
+                            <div id="ipfsInfo"></div>
+                        </div>
+                        <div class="info-section">
+                            <div class="info-section-title">🔐 区块链信息</div>
+                            <div id="blockchainInfo"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const loading = document.getElementById('loading');
+        const error = document.getElementById('error');
+        const resultSection = document.getElementById('resultSection');
+        const previewContainer = document.getElementById('previewContainer');
+        
+        let selectedFile = null;
+        let currentResult = null;
+        
+        console.log('页面加载完成');
+        
+        // 点击上传区域触发文件选择
+        uploadArea.addEventListener('click', (e) => {
+            console.log('点击上传区域');
+            if (e.target.id !== 'uploadBtn') {
+                fileInput.click();
+            }
+        });
+        
+        // 文件选择事件
+        fileInput.addEventListener('change', (e) => {
+            console.log('文件选择改变');
+            const file = e.target.files[0];
+            if (file) {
+                console.log('选择的文件:', file.name, file.type, file.size);
+                handleFileSelect(file);
+            }
+        });
+        
+        // 拖放功能
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.remove('dragover');
+            console.log('文件拖放');
+            
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                console.log('拖放的文件:', file.name, file.type, file.size);
+                handleFileSelect(file);
+            }
+        });
+        
+        // 处理文件选择
+        function handleFileSelect(file) {
+            const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+            if (!validTypes.includes(file.type)) {
+                showError('请选择 PNG 或 JPEG 格式的图片！');
+                return;
+            }
+            
+            if (file.size > 16 * 1024 * 1024) {
+                showError('文件大小超过 16MB！');
+                return;
+            }
+            
+            selectedFile = file;
+            
+            uploadArea.querySelector('.upload-text').textContent = '✅ 已选择: ' + file.name;
+            uploadBtn.style.display = 'inline-block';
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewContainer.innerHTML = '<img src="' + e.target.result + '" class="preview-image" alt="预览">';
+            };
+            reader.readAsDataURL(file);
+            
+            console.log('文件处理完成，准备上传');
+        }
+        
+        // 上传识别按钮
+        uploadBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            console.log('点击识别按钮');
+            
+            if (!selectedFile) {
+                showError('请先选择文件！');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            
+            console.log('开始上传...');
+            
+            loading.style.display = 'block';
+            error.style.display = 'none';
+            resultSection.style.display = 'none';
+            uploadBtn.disabled = true;
+            
+            try {
+                console.log('发送请求到服务器...');
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                console.log('收到响应:', response.status);
+                const data = await response.json();
+                console.log('响应数据:', data);
+                
+                if (data.success) {
+                    // 保存完整的返回数据，包括 result_file 和 uploaded_file
+                    currentResult = {
+                        ...data.data,
+                        result_file: data.result_file,
+                        uploaded_file: data.uploaded_file
+                    };
+                    console.log('保存的结果:', currentResult);
+                    displayResults(data.data);
+                } else {
+                    showError(data.error || '识别失败');
+                }
+            } catch (err) {
+                console.error('错误:', err);
+                showError('网络错误: ' + err.message);
+            } finally {
+                loading.style.display = 'none';
+                uploadBtn.disabled = false;
+            }
+        });
+        
+        function displayResults(data) {
+            console.log('显示结果:', data);
+            
+            // 显示统计信息
+            document.getElementById('totalLines').textContent = data.total_lines;
+            document.getElementById('fileName').textContent = data.filename;
+            
+            const avgConf = data.texts.reduce((sum, item) => sum + item.confidence, 0) / data.texts.length;
+            document.getElementById('avgConfidence').textContent = (avgConf * 100).toFixed(1) + '%';
+            
+            // 显示准确率
+            const accuracyElement = document.getElementById('accuracy');
+            const accuracySection = document.getElementById('accuracySection');
+            const accuracyDetails = document.getElementById('accuracyDetails');
+            
+            if (data.accuracy && data.accuracy.overall !== undefined) {
+                const acc = data.accuracy.overall;
+                accuracyElement.textContent = acc.toFixed(1) + '%';
+                accuracyElement.style.color = acc >= 80 ? '#4caf50' : (acc >= 60 ? '#ff9800' : '#f44336');
+                
+                // 显示详细信息
+                accuracySection.style.display = 'block';
+                
+                let detailsHTML = `
+                    <div style="margin-bottom: 15px; padding: 15px; background: white; border-radius: 8px;">
+                        <div style="font-size: 1.1em; margin-bottom: 10px;">
+                            <strong>总体准确率:</strong> 
+                            <span style="color: ${acc >= 80 ? '#4caf50' : (acc >= 60 ? '#ff9800' : '#f44336')}; font-size: 1.3em; font-weight: bold;">
+                                ${acc.toFixed(1)}%
+                            </span>
+                        </div>
+                        <div style="color: #666;">
+                            正确字段: ${data.accuracy.correct_fields} / ${data.accuracy.total_fields}
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px;">
+                `;
+                
+                const fieldLabels = {
+                    'bl_number': '提单号',
+                    'vessel': '船名',
+                    'voyage': '航次',
+                    'port_of_loading': '装货港',
+                    'port_of_discharge': '卸货港',
+                    'place_of_delivery': '交货地点',
+                    'gross_weight': '毛重',
+                    'measurement': '体积',
+                    'shipper_name': '发货人名称',
+                    'shipper_address': '发货人地址',
+                    'consignee_name': '收货人名称',
+                    'consignee_address': '收货人地址'
+                };
+                
+                for (const [field, detail] of Object.entries(data.accuracy.details)) {
+                    const isCorrect = detail.correct;
+                    const similarity = (detail.similarity * 100).toFixed(0);
+                    const label = fieldLabels[field] || field;
+                    
+                    detailsHTML += `
+                        <div style="background: ${isCorrect ? '#e8f5e9' : '#ffebee'}; padding: 12px; border-radius: 6px; border-left: 3px solid ${isCorrect ? '#4caf50' : '#f44336'};">
+                            <div style="font-weight: bold; margin-bottom: 8px; color: #333;">
+                                ${isCorrect ? '✅' : '❌'} ${label} (${similarity}%)
+                            </div>
+                            <div style="font-size: 0.85em; color: #666; margin-bottom: 4px;">
+                                <strong>提取:</strong> ${detail.extracted || '<空>'}
+                            </div>
+                            <div style="font-size: 0.85em; color: #666;">
+                                <strong>标准:</strong> ${detail.ground_truth || '<空>'}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                detailsHTML += '</div>';
+                accuracyDetails.innerHTML = detailsHTML;
+            } else {
+                accuracyElement.textContent = 'N/A';
+                accuracyElement.style.color = '#999';
+                accuracySection.style.display = 'none';
+            }
+            
+            // 显示提单信息
+            const billInfo = document.getElementById('billInfo');
+            billInfo.innerHTML = '';
+            
+            const billLabels = {
+                'B/L NO': '提单号',
+                'OTI NO': 'OTI编号',
+                'REF': '参考号',
+                'EIN': '税号',
+                'TEL': '电话',
+                'VESSEL': '船名',
+                'VOYAGE': '航次',
+                'PORT OF LOADING': '装货港',
+                'PORT OF DISCHARGE': '卸货港'
+            };
+            
+            for (const [key, value] of Object.entries(data.extracted.bill_info || {})) {
+                if (value) {
+                    const div = document.createElement('div');
+                    div.className = 'info-item';
+                    div.innerHTML = `
+                        <div class="info-label">${billLabels[key] || key}</div>
+                        <div class="info-value">${value}</div>
+                    `;
+                    billInfo.appendChild(div);
+                }
+            }
+            
+            // 显示发货人信息
+            const shipperInfo = document.getElementById('shipperInfo');
+            if (data.extracted.shipper && data.extracted.shipper.name) {
+                shipperInfo.innerHTML = `
+                    <div class="info-item">
+                        <div class="info-label">公司名称</div>
+                        <div class="info-value">${data.extracted.shipper.name}</div>
+                    </div>
+                    ${data.extracted.shipper.address && data.extracted.shipper.address.length > 0 ? `
+                    <div class="info-item">
+                        <div class="info-label">地址</div>
+                        <div class="address-list">
+                            ${data.extracted.shipper.address.map(addr => `<div class="address-item">${addr}</div>`).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+                `;
+            } else {
+                shipperInfo.innerHTML = '<div style="color: #999;">未提取到发货人信息</div>';
+            }
+            
+            // 显示收货人信息
+            const consigneeInfo = document.getElementById('consigneeInfo');
+            if (data.extracted.consignee && data.extracted.consignee.name) {
+                consigneeInfo.innerHTML = `
+                    <div class="info-item">
+                        <div class="info-label">公司名称</div>
+                        <div class="info-value">${data.extracted.consignee.name}</div>
+                    </div>
+                    ${data.extracted.consignee.address && data.extracted.consignee.address.length > 0 ? `
+                    <div class="info-item">
+                        <div class="info-label">地址</div>
+                        <div class="address-list">
+                            ${data.extracted.consignee.address.map(addr => `<div class="address-item">${addr}</div>`).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+                `;
+            } else {
+                consigneeInfo.innerHTML = '<div style="color: #999;">未提取到收货人信息</div>';
+            }
+            
+            // 显示货物信息
+            const cargoInfo = document.getElementById('cargoInfo');
+            cargoInfo.innerHTML = '';
+            
+            if (data.extracted.cargo && data.extracted.cargo.length > 0) {
+                data.extracted.cargo.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'cargo-item';
+                    li.textContent = item;
+                    cargoInfo.appendChild(li);
+                });
+            } else {
+                cargoInfo.innerHTML = '<li style="color: #999;">未提取到货物信息</li>';
+            }
+            
+            // 显示完整文本列表
+            // const textList = document.getElementById('textList');
+            // textList.innerHTML = '';
+            
+            // data.texts.forEach((item, index) => {
+            //     const div = document.createElement('div');
+            //     div.className = 'text-item';
+                
+            //     const confidence = item.confidence * 100;
+            //     let confClass = 'high';
+            //     if (confidence < 90) confClass = 'medium';
+            //     if (confidence < 70) confClass = 'low';
+                
+            //     div.innerHTML = `
+            //         <span class="text-number">${index + 1}</span>
+            //         <span class="text-content">${item.text}</span>
+            //         <span class="confidence ${confClass}">${confidence.toFixed(1)}%</span>
+            //     `;
+                
+            //     textList.appendChild(div);
+            // });
+            
+            resultSection.style.display = 'block';
+            resultSection.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Upload to Blockchain functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadToBlockchainBtn = document.getElementById('uploadToBlockchainBtn');
+            if (uploadToBlockchainBtn) {
+                uploadToBlockchainBtn.addEventListener('click', uploadToBlockchain);
+            }
+        });
+        
+        async function uploadToBlockchain() {
+            if (!currentResult || !currentResult.result_file) {
+                console.error('currentResult:', currentResult);
+                alert('没有可上传的OCR结果，请先进行OCR识别');
+                return;
+            }
+            
+            console.log('准备上传到区块链:', {
+                result_file: currentResult.result_file,
+                uploaded_file: currentResult.uploaded_file
+            });
+            
+            const blockchainSection = document.getElementById('blockchainSection');
+            const blockchainStatus = document.getElementById('blockchainStatus');
+            
+            // 显示区块链部分
+            blockchainSection.style.display = 'block';
+            blockchainStatus.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 15px; color: #667eea;">正在上传到 IPFS 并铸造 NFT...</p>
+                    <p style="font-size: 0.9em; color: #999; margin-top: 10px;">
+                        1️⃣ 上传图片到 Pinata IPFS<br>
+                        2️⃣ 上传数据到 Pinata IPFS<br>
+                        3️⃣ 在 Sepolia 区块链铸造 NFT
+                    </p>
+                </div>
+            `;
+            
+            blockchainSection.scrollIntoView({ behavior: 'smooth' });
+            
+            try {
+                const response = await fetch('/upload-to-blockchain', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ocr_result_file: currentResult.result_file,
+                        image_file: currentResult.uploaded_file
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayBlockchainResult(result);
+                } else {
+                    blockchainStatus.innerHTML = `
+                        <div style="background: #ffebee; padding: 20px; border-radius: 10px; color: #c62828;">
+                            <h3>❌ 上传失败</h3>
+                            <p>${result.error || '未知错误'}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('上传到区块链失败:', error);
+                blockchainStatus.innerHTML = `
+                    <div style="background: #ffebee; padding: 20px; border-radius: 10px; color: #c62828;">
+                        <h3>❌ 上传失败</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function displayBlockchainResult(result) {
+            const blockchainStatus = document.getElementById('blockchainStatus');
+            const ipfsInfo = document.getElementById('ipfsInfo');
+            const blockchainInfo = document.getElementById('blockchainInfo');
+            
+            // 成功状态
+            blockchainStatus.innerHTML = `
+                <div style="background: #e8f5e9; padding: 20px; border-radius: 10px; color: #2e7d32;">
+                    <h3>✅ 上传成功！</h3>
+                    <p>提单已成功上传到 IPFS 并铸造为 NFT</p>
+                </div>
+            `;
+            
+            // IPFS 信息
+            const ipfsData = result.ipfs || {};
+            ipfsInfo.innerHTML = `
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">📄 数据哈希</div>
+                        <div class="info-value" style="font-family: monospace; font-size: 0.85em;">
+                            ${ipfsData.dataHash || 'N/A'}
+                        </div>
+                        ${ipfsData.dataUrl ? `
+                        <a href="${ipfsData.dataUrl}" target="_blank" class="btn" style="margin-top: 10px; padding: 8px 20px; font-size: 0.9em;">
+                            🔗 查看数据
+                        </a>
+                        ` : ''}
+                    </div>
+                    ${ipfsData.imageHash ? `
+                    <div class="info-item">
+                        <div class="info-label">🖼️ 图片哈希</div>
+                        <div class="info-value" style="font-family: monospace; font-size: 0.85em;">
+                            ${ipfsData.imageHash}
+                        </div>
+                        <a href="${ipfsData.imageUrl}" target="_blank" class="btn btn-secondary" style="margin-top: 10px; padding: 8px 20px; font-size: 0.9em;">
+                            🔗 查看图片
+                        </a>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            // 区块链信息
+            const blockchainData = result.blockchain || {};
+            const billData = result.billData || {};
+            
+            let blockchainHTML = `
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">📝 提单编号</div>
+                        <div class="info-value">${billData.billNumber || 'N/A'}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">🔐 数据哈希</div>
+                        <div class="info-value" style="font-family: monospace; font-size: 0.75em;">
+                            ${blockchainData.dataHash || 'N/A'}
+                        </div>
+                    </div>
+            `;
+            
+            if (blockchainData.contractAddress) {
+                blockchainHTML += `
+                    <div class="info-item">
+                        <div class="info-label">📜 合约地址</div>
+                        <div class="info-value" style="font-family: monospace; font-size: 0.75em;">
+                            ${blockchainData.contractAddress}
+                        </div>
+                        <a href="https://sepolia.etherscan.io/address/${blockchainData.contractAddress}" target="_blank" class="btn btn-secondary" style="margin-top: 10px; padding: 8px 20px; font-size: 0.9em;">
+                            🔍 查看合约
+                        </a>
+                    </div>
+                `;
+            }
+            
+            // 如果有铸造结果
+            if (blockchainData.mintResult) {
+                try {
+                    const mintData = typeof blockchainData.mintResult === 'string' ? 
+                        JSON.parse(blockchainData.mintResult) : blockchainData.mintResult;
+                    
+                    if (mintData.success) {
+                        blockchainHTML += `
+                            <div class="info-item">
+                                <div class="info-label">🎫 Token ID</div>
+                                <div class="info-value">${mintData.tokenId || 'N/A'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">📡 交易哈希</div>
+                                <div class="info-value" style="font-family: monospace; font-size: 0.75em;">
+                                    ${mintData.transactionHash || 'N/A'}
+                                </div>
+                                ${mintData.transactionHash ? `
+                                <a href="https://sepolia.etherscan.io/tx/${mintData.transactionHash}" target="_blank" class="btn" style="margin-top: 10px; padding: 8px 20px; font-size: 0.9em;">
+                                    🔍 查看交易
+                                </a>
+                                ` : ''}
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">⛽ Gas 使用量</div>
+                                <div class="info-value">${mintData.gasUsed || 'N/A'}</div>
+                            </div>
+                        `;
+                    }
+                } catch (e) {
+                    console.error('解析铸造结果失败:', e);
+                }
+            } else {
+                blockchainHTML += `
+                    <div class="info-item" style="grid-column: 1 / -1;">
+                        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; color: #856404;">
+                            ⚠️ 未铸造 NFT（可能未配置 CONTRACT_ADDRESS）<br>
+                            数据已成功上传到 IPFS
+                        </div>
+                    </div>
+                `;
+            }
+            
+            blockchainHTML += `</div>`;
+            blockchainInfo.innerHTML = blockchainHTML;
+        }
+        
+        function showError(message) {
+            console.error('显示错误:', message);
+            error.textContent = '❌ ' + message;
+            error.style.display = 'block';
+        }
+        
+        // 下载结果
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            if (currentResult) {
+                const dataStr = JSON.stringify(currentResult, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `bill_ocr_${currentResult.filename.replace(/\.\w+$/, '')}.json`;
+                link.click();
+                URL.revokeObjectURL(url);
+            }
+        });
+    </script>
+</body>
+</html>

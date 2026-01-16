@@ -1,0 +1,502 @@
+{
+  "filename": "20260116_171247_acs-No._OH23040018.png",
+  "total_lines": 95,
+  "average_confidence": 0.988493383558173,
+  "texts": [
+    {
+      "text": "SHIPPER/EXPORTER",
+      "confidence": 0.9999136924743652
+    },
+    {
+      "text": "S/O NO. IT NO.",
+      "confidence": 0.9966376423835754
+    },
+    {
+      "text": "OTT NO. 023884N",
+      "confidence": 0.928195059299469
+    },
+    {
+      "text": "R. TORRE & COMPANY",
+      "confidence": 0.9992195963859558
+    },
+    {
+      "text": "REF#: RICDC5647600",
+      "confidence": 0.9928292036056519
+    },
+    {
+      "text": "B/L NO.",
+      "confidence": 0.9986973404884338
+    },
+    {
+      "text": "EIN#: 94-2590264",
+      "confidence": 0.9904760122299194
+    },
+    {
+      "text": "OH-23040018",
+      "confidence": 0.9998491406440735
+    },
+    {
+      "text": "2000 MARINA BOULEVARD",
+      "confidence": 0.9966298937797546
+    },
+    {
+      "text": "SAN LEANDRO, CA 94577, UNITED STATES",
+      "confidence": 0.9987335205078125
+    },
+    {
+      "text": "TEL: 650-624-2813",
+      "confidence": 0.9792436957359314
+    },
+    {
+      "text": "CONSIGNEE (NOT NEGOTIABLE UNLESS CONSIGNED TO ORDER)",
+      "confidence": 0.9846091866493225
+    },
+    {
+      "text": "LY GIA VIEN CO",
+      "confidence": 0.9968540072441101
+    },
+    {
+      "text": "NO. 9F STREET 30 TAN QUY DONG R A",
+      "confidence": 0.9821406006813049
+    },
+    {
+      "text": "TAN PHONG WARD DISTRICT 7",
+      "confidence": 0.9992244243621826
+    },
+    {
+      "text": "HO CHI MINH CITY, 700000, VIETNAM",
+      "confidence": 0.9983201622962952
+    },
+    {
+      "text": "NOTIFY PARTY (COMPLETE NAME AND ADDRESS)",
+      "confidence": 0.9912298917770386
+    },
+    {
+      "text": "SAME AS CONSIGNEE",
+      "confidence": 0.9754357933998108
+    },
+    {
+      "text": "Alliance Cargo System Inc.",
+      "confidence": 0.9739913940429688
+    },
+    {
+      "text": "OCEAN BILL OF LADING",
+      "confidence": 0.9956890344619751
+    },
+    {
+      "text": "FOR MULTIMODAL TRANSPORT AND PORT TO PORT SHIPMENT",
+      "confidence": 0.9951668381690979
+    },
+    {
+      "text": "PLACE OF RECEIPT",
+      "confidence": 0.9795212745666504
+    },
+    {
+      "text": "OAKLAND, CA (UNITED STATES)",
+      "confidence": 0.9983364939689636
+    },
+    {
+      "text": "PRE-CARRIAGE BY",
+      "confidence": 0.9716001152992249
+    },
+    {
+      "text": "FOR DELIVERY PLEASE APPLY TO:",
+      "confidence": 0.9758781790733337
+    },
+    {
+      "text": "TRUNG TIN TRANSPORT DELIVERY CO., LTD",
+      "confidence": 0.9920929670333862
+    },
+    {
+      "text": "OCEAN VESSEL & VOYAGE NO.",
+      "confidence": 0.9750179052352905
+    },
+    {
+      "text": "TAX CODE 0317270485",
+      "confidence": 0.9907411336898804
+    },
+    {
+      "text": "ONE SWAN 023W",
+      "confidence": 0.9962435364723206
+    },
+    {
+      "text": "PORT OF LOADING",
+      "confidence": 0.9954169392585754
+    },
+    {
+      "text": "A7/214A NATIONAL HIGHWAY 50, HAMLET 1, PHONG PHU COMMUNE,",
+      "confidence": 0.9919992685317993
+    },
+    {
+      "text": "OAKLAND, CA (UNITED STATES)",
+      "confidence": 0.9987552165985107
+    },
+    {
+      "text": "BINH CHANH DISTRICT, HO CHI MINH CITY, VIETNAM",
+      "confidence": 0.9961978197097778
+    },
+    {
+      "text": "PORT OF DISCHARGE",
+      "confidence": 0.9725314974784851
+    },
+    {
+      "text": "TEL: +84-353513470",
+      "confidence": 0.9990931749343872
+    },
+    {
+      "text": "HO CHI MINH CITY (VIETNAM)",
+      "confidence": 0.9769829511642456
+    },
+    {
+      "text": "PLACE OF DELIVERY",
+      "confidence": 0.9927123785018921
+    },
+    {
+      "text": "HO CHI MINH CITY (VIETNAM)",
+      "confidence": 0.9929342269897461
+    },
+    {
+      "text": "ATTN: (OPS@TTTRANSPORT.VN)",
+      "confidence": 0.9995193481445312
+    },
+    {
+      "text": "PARTICULARS FURNISHED BY MERCHANT",
+      "confidence": 0.9940345287322998
+    },
+    {
+      "text": "CONTAINER NO. AND SEAL NO.",
+      "confidence": 0.9934145212173462
+    },
+    {
+      "text": "MARKS & NOS.",
+      "confidence": 0.9910038113594055
+    },
+    {
+      "text": "NO.OF PAKGS.",
+      "confidence": 0.9996153712272644
+    },
+    {
+      "text": "DESCRIPTION OF PACKAGES AND GOOD",
+      "confidence": 0.9626614451408386
+    },
+    {
+      "text": "GROSS WEIGHT (KGS)",
+      "confidence": 0.9994841814041138
+    },
+    {
+      "text": "MEASUREMENT (CBM)",
+      "confidence": 0.973528265953064
+    },
+    {
+      "text": "20 PALLET(S)",
+      "confidence": 0.9937425255775452
+    },
+    {
+      "text": "SHIPPER'S LOAD & COUNT :",
+      "confidence": 0.9843623042106628
+    },
+    {
+      "text": "19,458.00 KGS",
+      "confidence": 0.9991937279701233
+    },
+    {
+      "text": "40HC X 1 STC: 20 PALLET(S)",
+      "confidence": 0.9874520897865295
+    },
+    {
+      "text": "42,897.55 LBS",
+      "confidence": 0.9987384080886841
+    },
+    {
+      "text": "20 PALLETS (1080 CASES) / 19458 KGS (TRN-2023-015)",
+      "confidence": 0.9822801947593689
+    },
+    {
+      "text": "TORANI FLAVORING SYRUP, HS CODE# 210690",
+      "confidence": 0.9847584366798401
+    },
+    {
+      "text": "AES ITN#: X20230417072832",
+      "confidence": 0.9799692630767822
+    },
+    {
+      "text": "FREIGHT COLLECT",
+      "confidence": 0.9809997081756592
+    },
+    {
+      "text": "EXPRESS RELEASE",
+      "confidence": 0.998957097530365
+    },
+    {
+      "text": "CTNR#:FFAU3699949 / SEAL#: 41749369 / 20 PALLET(S) / 19,458.00 KGS",
+      "confidence": 0.9837129712104797
+    },
+    {
+      "text": "CLEAN ON BOARD",
+      "confidence": 0.9992908835411072
+    },
+    {
+      "text": "04-23-2023",
+      "confidence": 0.9999852180480957
+    },
+    {
+      "text": "ONE SWAN 023W",
+      "confidence": 0.9992474317550659
+    },
+    {
+      "text": "CY/CY",
+      "confidence": 0.9865248799324036
+    },
+    {
+      "text": "OAKLAND, CA",
+      "confidence": 0.9689539074897766
+    },
+    {
+      "text": "Total No. of Package or Containers (In Words)",
+      "confidence": 0.9761806130409241
+    },
+    {
+      "text": "Freight rate charges, weights and / or",
+      "confidence": 0.9919912219047546
+    },
+    {
+      "text": "Prepaid",
+      "confidence": 0.9998646378517151
+    },
+    {
+      "text": "Collect",
+      "confidence": 0.9999423623085022
+    },
+    {
+      "text": "Temperature",
+      "confidence": 0.9999252557754517
+    },
+    {
+      "text": "Freight Status",
+      "confidence": 0.9933589100837708
+    },
+    {
+      "text": "No. of Original",
+      "confidence": 0.9987208247184753
+    },
+    {
+      "text": "Measurements subject to collection",
+      "confidence": 0.9953628778457642
+    },
+    {
+      "text": "Control Instructions",
+      "confidence": 0.9950113296508789
+    },
+    {
+      "text": "0",
+      "confidence": 0.999953031539917
+    },
+    {
+      "text": "COLLECT AS ARRANGED",
+      "confidence": 0.9997837543487549
+    },
+    {
+      "text": "The Goods, or the container(s) or package(s) said to contain the cargo herein mentioned, to be carried subject to all",
+      "confidence": 0.9861124753952026
+    },
+    {
+      "text": "the terms and conditions of this Bill of Lading by the vessel named herein or any substitute at the Carrier's option",
+      "confidence": 0.9693518877029419
+    },
+    {
+      "text": "and/or other means of transport, from the place of receipt or the port of loading to the port of discharge or the place of",
+      "confidence": 0.9722533226013184
+    },
+    {
+      "text": "delivery shown herein and there to be delivered unto order or assigns. In accepting this Bill of Lading. Merchant (as",
+      "confidence": 0.981164276599884
+    },
+    {
+      "text": "defined by Article 1 on the back hereof agrees to be bound by al stipulations, exceptions, terms and conditions on",
+      "confidence": 0.9516375064849854
+    },
+    {
+      "text": "the face and back hereof, whether written, typed, stamped or printed, as fully s if signed by the Merchant, any local",
+      "confidence": 0.9621554613113403
+    },
+    {
+      "text": "custom or privilege to the contrary notwithstanding and understands that Carrier's liability will be limited as set forth in",
+      "confidence": 0.9922102689743042
+    },
+    {
+      "text": "Article 25, unless Merchant declares ad valorem valuation in excess of $5o0 per container. per package, or in case of",
+      "confidence": 0.9868510961532593
+    },
+    {
+      "text": "Goods not shipped in packages, per customary freight unit, and pays extra freight as required by the Carrier's",
+      "confidence": 0.9801914095878601
+    },
+    {
+      "text": "published tariff.",
+      "confidence": 0.9415525794029236
+    },
+    {
+      "text": "IN WITNESS WHEREOF THE CARRIER BY ITS AGENT HAS SIGNED THE NUMBER OF BILL(S) OF",
+      "confidence": 0.9847233295440674
+    },
+    {
+      "text": "LADING STATED ABOVE, ALL OF THE SAME TENOR AND DATE, ONE OF WHICH BEING",
+      "confidence": 0.9949149489402771
+    },
+    {
+      "text": "ACCOMPLISHED, THE OTHERS TO STAND VOID.",
+      "confidence": 0.996304452419281
+    },
+    {
+      "text": "DATE AND PLACE ISSUED:",
+      "confidence": 0.9951202273368835
+    },
+    {
+      "text": "04-23-2023",
+      "confidence": 0.9999907612800598
+    },
+    {
+      "text": "OAKLAND, CA",
+      "confidence": 0.9979884624481201
+    },
+    {
+      "text": "TOTAL PREPAID",
+      "confidence": 0.9851232767105103
+    },
+    {
+      "text": "For Alliance Cargo System Inc.",
+      "confidence": 0.9944468140602112
+    },
+    {
+      "text": "TOTAL COLLECT",
+      "confidence": 0.9997900724411011
+    },
+    {
+      "text": "BY",
+      "confidence": 0.9999049305915833
+    },
+    {
+      "text": "AS AGENT FOR, THE CARRIER, OCEAN NETWORK EXPRESS",
+      "confidence": 0.9822283387184143
+    },
+    {
+      "text": "Signed on behalf of the Carrier",
+      "confidence": 0.9921889901161194
+    }
+  ],
+  "extracted": {
+    "shipper": {
+      "name": "R. TORRE & COMPANY",
+      "address": [
+        "2000 MARINA BOULEVARD",
+        "SAN LEANDRO, CA 94577, UNITED STATES"
+      ]
+    },
+    "consignee": {
+      "name": "LY GIA VIEN CO",
+      "address": [
+        "NO. 9F STREET 30 TAN QUY DONG R A",
+        "TAN PHONG WARD DISTRICT 7",
+        "HO CHI MINH CITY, 700000, VIETNAM"
+      ]
+    },
+    "bill_info": {
+      "B/L NO": "OH-23040018",
+      "VESSEL": "ONE SWAN",
+      "VOYAGE": "023W",
+      "PORT OF LOADING": "OAKLAND, CA (UNITED STATES)",
+      "PORT OF DISCHARGE": "HO CHI MINH CITY (VIETNAM)",
+      "PLACE OF DELIVERY": "HO CHI MINH CITY (VIETNAM)",
+      "GROSS WEIGHT": "19,458.00 KGS",
+      "MEASUREMENT": ""
+    },
+    "cargo": [
+      "20 PALLET(S)",
+      "SHIPPER'S LOAD & COUNT :",
+      "40HC X 1 STC: 20 PALLET(S)",
+      "20 PALLETS (1080 CASES) / 19458 KGS (TRN-2023-015)",
+      "TORANI FLAVORING SYRUP, HS CODE# 210690",
+      "AES ITN#: X20230417072832"
+    ],
+    "container_info": "FFAU3699949 (40HC)"
+  },
+  "accuracy": {
+    "overall": 75.0,
+    "correct_fields": 9,
+    "total_fields": 12,
+    "details": {
+      "bl_number": {
+        "extracted": "OH-23040018",
+        "ground_truth": "OH- 23040018",
+        "correct": false,
+        "similarity": 0.0
+      },
+      "vessel": {
+        "extracted": "ONE SWAN",
+        "ground_truth": "ONE SWAN 023W",
+        "correct": true,
+        "similarity": 0.8
+      },
+      "voyage": {
+        "extracted": "023W",
+        "ground_truth": "",
+        "correct": false,
+        "similarity": 0
+      },
+      "port_of_loading": {
+        "extracted": "OAKLAND, CA (UNITED STATES)",
+        "ground_truth": "OAKLAND, CA (UNITED STATES)",
+        "correct": true,
+        "similarity": 1.0
+      },
+      "port_of_discharge": {
+        "extracted": "HO CHI MINH CITY (VIETNAM)",
+        "ground_truth": "HỌ CHI MINH CITY (VIETNAM )",
+        "correct": true,
+        "similarity": 0.67
+      },
+      "place_of_delivery": {
+        "extracted": "HO CHI MINH CITY (VIETNAM)",
+        "ground_truth": "HỌ CHI MINH CITY (VIETNAM )",
+        "correct": true,
+        "similarity": 0.67
+      },
+      "gross_weight": {
+        "extracted": "19,458.00 KGS",
+        "ground_truth": "19,458.00",
+        "correct": true,
+        "similarity": 0.8
+      },
+      "measurement": {
+        "extracted": "",
+        "ground_truth": "42,897.55 CBM",
+        "correct": false,
+        "similarity": 0
+      },
+      "shipper_name": {
+        "extracted": "R. TORRE & COMPANY",
+        "ground_truth": "R. TORRE & COMPANY",
+        "correct": true,
+        "similarity": 1.0
+      },
+      "shipper_address": {
+        "extracted": "['2000 MARINA BOULEVARD', 'SAN LEANDRO, CA 94577, UNITED STATES']",
+        "ground_truth": "2000 MARINA BOULEVARD SAN LEANDRO, CA 94577, UNITED STATES",
+        "correct": true,
+        "similarity": 1.0
+      },
+      "consignee_name": {
+        "extracted": "LY GIA VIEN CO",
+        "ground_truth": "LY GIA VIÊN CO",
+        "correct": true,
+        "similarity": 0.6
+      },
+      "consignee_address": {
+        "extracted": "['NO. 9F STREET 30 TAN QUY DONG R A', 'TAN PHONG WARD DISTRICT 7', 'HO CHI MINH CITY, 700000, VIETNA",
+        "ground_truth": "NO. 9F STREET 30 TAN QUY DONG RA TAN PHONG WARD DISTRICT 7 HỌ CHI MINH CITY, 700000, VIETNAM",
+        "correct": true,
+        "similarity": 0.76
+      }
+    }
+  }
+}
