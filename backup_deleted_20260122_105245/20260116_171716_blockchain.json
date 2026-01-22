@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "M205607737",
+    "vessel": "BRAHEMS",
+    "voyage": "042E",
+    "portOfLoading": "Casablanca",
+    "portOfDischarge": "Gothenburg",
+    "placeOfDelivery": "Kungaelv",
+    "shipper": {
+      "name": "MEDAOUI COMMERCE",
+      "address": "DOUAR LETATMA SIDI MOUSSA BEN ALI\nMOhaMMEDIA\nMOROCCO\nEmail:ste.commerce.medaoui@gmail.com"
+    },
+    "consignee": {
+      "name": "BRAHEMS VVS AB",
+      "address": "S1GNALGATAN 4 - 442 40 KUNGALV SWEDEN\nVAT Number / SE559183412101\nEmail: info@brahemsvvs.se Heliumgatan\nTele : 0046708923332"
+    },
+    "cargoDescription": "containers said to contain 30 PACKAGES\nARBRE TAZA BEIGE BRILLANT",
+    "containerInfo": "LLU2429773 / 20 DRY 8'6\nSKU5527941 / 20 DRY 8'6\nSKU5456690 / 20 DRY B'6",
+    "grossWeight": "58020.000 KGS",
+    "measurement": "",
+    "issueDate": "2026-01-22",
+    "extractedAt": "2026-01-22T09:52:54.959485",
+    "accuracy": 41.67,
+    "originalFilename": "20260116_171716_bealand.No._205607737.jpg",
+    "ocrConfidence": 0.792017852064482
+  },
+  "ipfs": {
+    "dataHash": "QmefJEuAFPTbcEtrXBmXussb1voE8QVp5rA9bau5V1kife",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmefJEuAFPTbcEtrXBmXussb1voE8QVp5rA9bau5V1kife",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0x7a2e07fbc9d87bf3b52e8198d8c317032155428690f991fdc2f9112a84ed9e3a",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "mintResult": null
+  },
+  "timestamp": "2026-01-22T09:52:56.353176"
+}

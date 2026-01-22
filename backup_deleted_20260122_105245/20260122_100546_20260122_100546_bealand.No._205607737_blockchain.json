@@ -1,0 +1,41 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "",
+    "vessel": "",
+    "voyage": "",
+    "portOfLoading": "",
+    "portOfDischarge": "",
+    "placeOfDelivery": "",
+    "shipper": {
+      "name": "",
+      "address": ""
+    },
+    "consignee": {
+      "name": "",
+      "address": ""
+    },
+    "cargoDescription": "",
+    "containerInfo": "",
+    "grossWeight": "",
+    "measurement": "",
+    "issueDate": "2026-01-22",
+    "extractedAt": "2026-01-22T10:05:46.621137",
+    "accuracy": 0,
+    "originalFilename": "",
+    "ocrConfidence": 0.95,
+    "imageIPFS": "QmVdBbeK4jxi8YaUyxXDKxgQ1RyZobbHseRAVubk1MLbXZ"
+  },
+  "ipfs": {
+    "dataHash": "QmbjUmsDc5T1fQBKQq6kpNcgKSHWi5X85NrgQZbjPYUsS9",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmbjUmsDc5T1fQBKQq6kpNcgKSHWi5X85NrgQZbjPYUsS9",
+    "imageHash": "QmVdBbeK4jxi8YaUyxXDKxgQ1RyZobbHseRAVubk1MLbXZ",
+    "imageUrl": "https://gateway.pinata.cloud/ipfs/QmVdBbeK4jxi8YaUyxXDKxgQ1RyZobbHseRAVubk1MLbXZ"
+  },
+  "blockchain": {
+    "dataHash": "0x3a8b658096c0a61c038e0ec97dab3ce185bd2e9065bb18679c39daf6d3102534",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "mintResult": null
+  },
+  "timestamp": "2026-01-22T10:05:50.390121"
+}

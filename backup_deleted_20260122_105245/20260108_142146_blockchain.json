@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "217077365",
+    "vessel": "GALAN I",
+    "voyage": "217N",
+    "portOfLoading": "HOCHIMINH, VIETNAM",
+    "portOfDischarge": "INCHEON, KOREA",
+    "placeOfDelivery": "",
+    "shipper": {
+      "name": "IER Import and Export",
+      "address": "p69.Ql1A, khd pho 6, Thu Dúc, Thanh pho"
+    },
+    "consignee": {
+      "name": "OOCO MARTKINGXX CO., LTD",
+      "address": "3940o Cheongnam Building. Gangnam-daero, Seocho-gu, Seoul.\nRepublic of Korea"
+    },
+    "cargoDescription": "1 x 40' Reefer Container said to contain 1200 cartons\nNET WEIGHT: 6600.00 KGS\nGROSS WEIGHT: 7200.00 KGS\nMAINTENANCE TEMPERATURE: 2°C\nSHIPPER SEAL:\nFREIGHT PREPAID\nCY/CY",
+    "containerInfo": "1 x 40' Reefer Container",
+    "grossWeight": "7200.00 KGS",
+    "measurement": "60.000 CBM",
+    "issueDate": "2026-01-22",
+    "extractedAt": "2026-01-22T09:52:48.316389",
+    "accuracy": 75.0,
+    "originalFilename": "20260108_142146_Maersk-No._217077365.png",
+    "ocrConfidence": 0.885130766503237
+  },
+  "ipfs": {
+    "dataHash": "QmYq3BdebE64QCSFyhHDsKaGxCJHkc2yMk444PLwASrVL1",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmYq3BdebE64QCSFyhHDsKaGxCJHkc2yMk444PLwASrVL1",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0x5f75295642bc7cb556e867f7eee78e501b6b90cba21e02e7dd5c9d57427a2b6d",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "mintResult": null
+  },
+  "timestamp": "2026-01-22T09:52:49.652936"
+}

@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "",
+    "vessel": "",
+    "voyage": "",
+    "portOfLoading": "",
+    "portOfDischarge": "",
+    "placeOfDelivery": "",
+    "shipper": {
+      "name": "",
+      "address": ""
+    },
+    "consignee": {
+      "name": "3940o Cheongnam Building. Gangnam-daero, Seocho-gu, Seoul.",
+      "address": "Republic of Korea\nVesel (see clauz 1 + 19)\nVayage No.\nPla ofRe ipt. Applica bleanby when ocu ent uzasMu Umadal Tan sport BL (see clauz 1)\nGALAN I\n217N\nPart of Loa ding\nPorl of Diedharge\nPl of Deltvey. Applicab le anby r hen do cu ent uz as Mu lm adal Tan spart L (z clauz 1)\nHOCHIMINH, VIETNAM\nINCHEON, KOREA\nPARTICULARS FURNISHED BY SHIPPER"
+    },
+    "cargoDescription": "BLNo. 217077365\n217077365\n220311005700\n298440066\nKGS\nNET WEIGHT: 6600.00 KGS\nGROSS WEIGHT: 7200.00 KGS",
+    "containerInfo": "",
+    "grossWeight": "",
+    "measurement": "",
+    "issueDate": "2026-01-22",
+    "extractedAt": "2026-01-22T09:51:58.062096",
+    "accuracy": 0,
+    "originalFilename": "20260106_124602_Maersk-No._217077365.png",
+    "ocrConfidence": 0.885130766503237
+  },
+  "ipfs": {
+    "dataHash": "QmWKc33iQuJTSRDtfDgHtXRVxxc9H7sWPQ4qSbga7GJmRL",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmWKc33iQuJTSRDtfDgHtXRVxxc9H7sWPQ4qSbga7GJmRL",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0x9500ece83d055335ba58bcaed0644bbddcde370400735667933e8d79db3b6a4c",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "mintResult": null
+  },
+  "timestamp": "2026-01-22T09:51:59.513984"
+}

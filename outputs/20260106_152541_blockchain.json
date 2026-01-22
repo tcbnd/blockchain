@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "",
+    "vessel": "",
+    "voyage": "",
+    "portOfLoading": "",
+    "portOfDischarge": "",
+    "placeOfDelivery": "",
+    "shipper": {
+      "name": "",
+      "address": ""
+    },
+    "consignee": {
+      "name": "",
+      "address": ""
+    },
+    "cargoDescription": "",
+    "containerInfo": "",
+    "grossWeight": "",
+    "measurement": "",
+    "issueDate": "2026-01-22",
+    "extractedAt": "2026-01-22T09:52:01.518730",
+    "accuracy": 0,
+    "originalFilename": "20260106_152541_Maersk-No._217077365.png",
+    "ocrConfidence": 0.885130766503237
+  },
+  "ipfs": {
+    "dataHash": "QmdtWkZMCrXQf2K8bfQ1W2c7hBrcaWvio8DBcguNLCj4rQ",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmdtWkZMCrXQf2K8bfQ1W2c7hBrcaWvio8DBcguNLCj4rQ",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0x006b327171cb19eba69bb97b461edb53c0020bd24e26bf5328983d7fa60768d8",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "mintResult": null
+  },
+  "timestamp": "2026-01-22T09:52:02.871576"
+}

@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "",
+    "vessel": "",
+    "voyage": "NO",
+    "portOfLoading": "",
+    "portOfDischarge": "",
+    "placeOfDelivery": "",
+    "shipper": {
+      "name": "",
+      "address": ""
+    },
+    "consignee": {
+      "name": "dentitynd in the case f an agen, reasona ble proof of authority)without productin of this waybil.",
+      "address": "negligence.\nOnward inland routing (Nbt part of Carriage as de fined in cl ause 1. For accou nt and risk of Mer chant)"
+    },
+    "cargoDescription": "B/LNo. 720753508\n720753508\n299253769\n55200.000 KGS\nHS CODE:760612\n*TEL:+86 18553906251\nTELP : 081181187521\nSUDU7570750 ML-CN2002614 20 DRY 8'6 2050 PACKAGES 27600.000 KGS 18.3000\nMRKU7415384 ML-CN2002615 20 DRY 8'6 2050 PACKAGES 27600.000 KGS 18.3000",
+    "containerInfo": "",
+    "grossWeight": "",
+    "measurement": "",
+    "issueDate": "2026-01-22",
+    "extractedAt": "2026-01-22T09:51:54.601049",
+    "accuracy": 0,
+    "originalFilename": "20260105_223359_Maersk-No._720753508.png",
+    "ocrConfidence": 0.9599813418141727
+  },
+  "ipfs": {
+    "dataHash": "QmepNfDLAZhBpfZH3fmpnREYM8sn4LRmS5oeRSaBfW1xu4",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmepNfDLAZhBpfZH3fmpnREYM8sn4LRmS5oeRSaBfW1xu4",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0x22d8bf7f45b536cdf3984adf709b6ff815cf09be1ddbb7d45332955e7936594f",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "mintResult": null
+  },
+  "timestamp": "2026-01-22T09:51:56.057023"
+}

@@ -1,0 +1,155 @@
+{
+  "timestamp": "2026-01-22T09:53:06.697936",
+  "total": 25,
+  "success": 22,
+  "failed": 3,
+  "results": [
+    {
+      "file": "20260104_234340_result.json",
+      "success": true,
+      "ipfs_hash": "QmQ4EcXFUAQ8CUbU14k9Lx5ZqtiBuzKMFJ8gpk5DPSzzUg",
+      "bill_number": ""
+    },
+    {
+      "file": "20260104_234902_result.json",
+      "success": true,
+      "ipfs_hash": "QmRo4huAgm6jkh1h5HhdTgoJwbMbT6RTJsVf679sUVFtu6",
+      "bill_number": ""
+    },
+    {
+      "file": "20260105_220429_result.json",
+      "success": true,
+      "ipfs_hash": "QmRDRog243L2pBJTYKhCCTywxpw4CyBdL96CjYNVsrJXEp",
+      "bill_number": "OH-23040018"
+    },
+    {
+      "file": "20260105_221352_result.json",
+      "success": true,
+      "ipfs_hash": "QmUgC9nBRV4xHV6n91knzocgaEj7CHVnzVJzEjh1iujak6",
+      "bill_number": ""
+    },
+    {
+      "file": "20260105_223359_result.json",
+      "success": true,
+      "ipfs_hash": "QmepNfDLAZhBpfZH3fmpnREYM8sn4LRmS5oeRSaBfW1xu4",
+      "bill_number": ""
+    },
+    {
+      "file": "20260106_124602_result.json",
+      "success": true,
+      "ipfs_hash": "QmWKc33iQuJTSRDtfDgHtXRVxxc9H7sWPQ4qSbga7GJmRL",
+      "bill_number": ""
+    },
+    {
+      "file": "20260106_152541_result.json",
+      "success": true,
+      "ipfs_hash": "QmdtWkZMCrXQf2K8bfQ1W2c7hBrcaWvio8DBcguNLCj4rQ",
+      "bill_number": ""
+    },
+    {
+      "file": "20260106_153148_result.json",
+      "success": true,
+      "ipfs_hash": "QmeinnCgcuvMFpjxCuWT3E4jHw8dtE5oSxj2Kpy1w8pQ8B",
+      "bill_number": "217077365"
+    },
+    {
+      "file": "20260106_153734_result.json",
+      "success": true,
+      "ipfs_hash": "QmdSNegkFgbwidbhWkKVQtChJH8ZV2hJwoYENXnr2dzUjQ",
+      "bill_number": "S55230418"
+    },
+    {
+      "file": "20260106_160548_result.json",
+      "success": false,
+      "error": "'NoneType' object has no attribute 'get'"
+    },
+    {
+      "file": "20260106_161652_result.json",
+      "success": false,
+      "error": "'NoneType' object has no attribute 'get'"
+    },
+    {
+      "file": "20260106_162026_result.json",
+      "success": true,
+      "ipfs_hash": "QmUyva9WDB4Tyam4KmWjeUGyfzbuo36y8So6Nzk23TSfDn",
+      "bill_number": "S55230418"
+    },
+    {
+      "file": "20260106_162540_result.json",
+      "success": false,
+      "error": "'NoneType' object has no attribute 'get'"
+    },
+    {
+      "file": "20260106_163135_result.json",
+      "success": true,
+      "ipfs_hash": "QmdDiotHo4ZxFGNNXaUqmbesC9FJu6wEnausaNMXEXe3yv",
+      "bill_number": "OH-23040018"
+    },
+    {
+      "file": "20260106_164622_result.json",
+      "success": true,
+      "ipfs_hash": "QmTdBchYGEtMXcnGz1THSzwKZak684CbHjrTz7ngdajUmp",
+      "bill_number": "JKTM59538301"
+    },
+    {
+      "file": "20260106_165829_result.json",
+      "success": true,
+      "ipfs_hash": "QmRgikLJM8zpGTcZiEV7dvJqga4dBAQmVcFrNJdyzqEt6S",
+      "bill_number": ""
+    },
+    {
+      "file": "20260106_170319_result.json",
+      "success": true,
+      "ipfs_hash": "QmVtdczZcstb1JkitxEHx67oyDF6qaMsTR8jWAzCMfF6ZJ",
+      "bill_number": ""
+    },
+    {
+      "file": "20260106_171124_result.json",
+      "success": true,
+      "ipfs_hash": "QmNWEdgwouy87mLyxzLVhdskSRGvefuFyNGcu2BfRgm8si",
+      "bill_number": "JKTM59538301"
+    },
+    {
+      "file": "20260106_212532_result.json",
+      "success": true,
+      "ipfs_hash": "QmZ6H97WRWDVQKqxgDoye66FAAwdp9c1ZtPrUFHD74V2Pw",
+      "bill_number": "HDMUJKTM59538301"
+    },
+    {
+      "file": "20260106_212933_result.json",
+      "success": true,
+      "ipfs_hash": "QmZYvFxEXDW2vjCvAfd3RocdT3RxD9JTaFoB3CNsbvkvf1",
+      "bill_number": "JKTM59538301"
+    },
+    {
+      "file": "20260106_213358_result.json",
+      "success": true,
+      "ipfs_hash": "QmT5xLh6vdTsQ312Dj1BtvDgvVEUsKbWvuLe4upYhx8mUE",
+      "bill_number": "OH-23040018"
+    },
+    {
+      "file": "20260108_142146_result.json",
+      "success": true,
+      "ipfs_hash": "QmYq3BdebE64QCSFyhHDsKaGxCJHkc2yMk444PLwASrVL1",
+      "bill_number": "217077365"
+    },
+    {
+      "file": "20260116_171247_result.json",
+      "success": true,
+      "ipfs_hash": "QmR3wRDFkCRUCyiFoLXF1uuK85p5b5K2sYHp8G4wv4wbH3",
+      "bill_number": "OH-23040018"
+    },
+    {
+      "file": "20260116_171716_result.json",
+      "success": true,
+      "ipfs_hash": "QmefJEuAFPTbcEtrXBmXussb1voE8QVp5rA9bau5V1kife",
+      "bill_number": "M205607737"
+    },
+    {
+      "file": "20260116_180131_result.json",
+      "success": true,
+      "ipfs_hash": "QmS8A4JN9FMEvL4Jkx3xcK4B6JzNvnLbFjTc82iMsmgwNX",
+      "bill_number": ""
+    }
+  ]
+}

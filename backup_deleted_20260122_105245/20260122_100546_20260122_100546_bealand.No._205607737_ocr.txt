@@ -1,0 +1,10 @@
+BILL OF LADING
+B/L No: 123456789
+Vessel: MAERSK SHIP
+Port of Loading: Shanghai
+Port of Discharge: Los Angeles
+Shipper: ABC Company Ltd
+Consignee: XYZ Corp
+Description of Goods: Electronics
+Gross Weight: 1000 KGS
+Processed: 2026-01-22 10:05:46

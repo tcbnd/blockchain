@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "OH-23040018",
+    "vessel": "",
+    "voyage": "NO",
+    "portOfLoading": "delivery shown herein and there to be delivered unto order or assigns. In accepting this Bill of Lading. Merchant (as",
+    "portOfDischarge": "delivery shown herein and there to be delivered unto order or assigns. In accepting this Bill of Lading. Merchant (as",
+    "placeOfDelivery": "",
+    "shipper": {
+      "name": "R. TORRE & COMPANY",
+      "address": ""
+    },
+    "consignee": {
+      "name": "Alliance Cargo System Inc.",
+      "address": "OCEAN BILL OF LADING\nFOR MULTIMODAL TRANSPORT AND PORT TO PORT SHIPMENT\nPLACE OF RECEIPT\nOAKLAND, CA (UNITED STATES)\nPRE-CARRIAGE BY\nFOR DELIVERY PLEASE APPLY TO:\nTRUNG TIN TRANSPORT DELIVERY CO., LTD"
+    },
+    "cargoDescription": "OTT NO. 023884N\nREF#: RICDC5647600\nEIN#: 94-2590264\nOH-23040018\nHO CHI MINH CITY, 700000, VIETNAM\nTAX CODE 0317270485\nTEL: +84-353513470\nNO.OF PAKGS.\nGROSS WEIGHT (KGS)\n19,458.00 KGS\n20 PALLETS (1080 CASES) / 19458 KGS (TRN-2023-015)\nTORANI FLAVORING SYRUP, HS CODE# 210690\nAES ITN#: X20230417072832\nCTNR#:FFAU3699949 / SEAL#: 41749369 / 20 PALLET(S) / 19,458.00 KGS",
+    "containerInfo": "",
+    "grossWeight": "",
+    "measurement": "",
+    "issueDate": "2026-01-22",
+    "extractedAt": "2026-01-22T09:51:47.721475",
+    "accuracy": 0,
+    "originalFilename": "20260105_220429_acs-No._OH23040018.png",
+    "ocrConfidence": 0.9880133315136558
+  },
+  "ipfs": {
+    "dataHash": "QmRDRog243L2pBJTYKhCCTywxpw4CyBdL96CjYNVsrJXEp",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmRDRog243L2pBJTYKhCCTywxpw4CyBdL96CjYNVsrJXEp",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0xc68e34fa18d3657daa5e971d6ef7407c862e0c61ccb5eb7fede909f5ba728d70",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "mintResult": null
+  },
+  "timestamp": "2026-01-22T09:51:49.319405"
+}

@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "",
+    "vessel": "",
+    "voyage": "NO",
+    "portOfLoading": "Port of Discharge",
+    "portOfDischarge": "Place of Delivery. Applicable only when document used as Multimodal Transport B/L. (see clause 1)",
+    "placeOfDelivery": "",
+    "shipper": {
+      "name": "",
+      "address": ""
+    },
+    "consignee": {
+      "name": "",
+      "address": ""
+    },
+    "cargoDescription": "SSZ716110\n0608354E17\nTEL: 853-83941168\n27.608,270KGS\nTOTAL NW:25.994,000KGS\nTOTAL GW:27.608,270KGS\nSEAL AGENCY:ML-BR5030894\nSEAL SIF: 009883/SIF 1215\nRE.18/1251426-004\nSD.2161045085/0\nNCM.02071400\nNALADI.020758\nMNBU3977737 ML-BR5030894 40 REEF 9'6 1,716 CARTONS 27.608,270 KGS 45.2500",
+    "containerInfo": "",
+    "grossWeight": "",
+    "measurement": "",
+    "issueDate": "2026-01-22",
+    "extractedAt": "2026-01-22T09:51:40.809311",
+    "accuracy": 0,
+    "originalFilename": "20260104_234340_Maersk-No._SSZ716110.png",
+    "ocrConfidence": 0.941197358071804
+  },
+  "ipfs": {
+    "dataHash": "QmQ4EcXFUAQ8CUbU14k9Lx5ZqtiBuzKMFJ8gpk5DPSzzUg",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmQ4EcXFUAQ8CUbU14k9Lx5ZqtiBuzKMFJ8gpk5DPSzzUg",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0x638bcbf26da9a444e7a051b25e92fa80f12201cce687643daa9d709a825082f3",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "mintResult": null
+  },
+  "timestamp": "2026-01-22T09:51:42.276929"
+}

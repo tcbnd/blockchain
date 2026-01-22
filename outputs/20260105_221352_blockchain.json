@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "",
+    "vessel": "",
+    "voyage": "",
+    "portOfLoading": "",
+    "portOfDischarge": "",
+    "placeOfDelivery": "",
+    "shipper": {
+      "name": "",
+      "address": ""
+    },
+    "consignee": {
+      "name": "",
+      "address": ""
+    },
+    "cargoDescription": "M205607737\n205607737\nVAT Number / SE559183412101\nTele : 0046708923332\n58020.000 KGS\nLLU2429773 ML-MA0253481 20 DRY 8'6 10 PACKAGES 19380.000 KGS\nSKU5527941 ML-MA0253466 20 DRY 8'6 10 PACKAGES 19340.000 KGS\nSKU5456690 ML-MA0253494 20 DRY B'6 10 PACKAGES 19300.000 KGS",
+    "containerInfo": "",
+    "grossWeight": "",
+    "measurement": "",
+    "issueDate": "2026-01-22",
+    "extractedAt": "2026-01-22T09:51:51.324209",
+    "accuracy": 0,
+    "originalFilename": "20260105_221352_bealand.No._205607737.jpg",
+    "ocrConfidence": 0.7937441355613775
+  },
+  "ipfs": {
+    "dataHash": "QmUgC9nBRV4xHV6n91knzocgaEj7CHVnzVJzEjh1iujak6",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmUgC9nBRV4xHV6n91knzocgaEj7CHVnzVJzEjh1iujak6",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0xa763e5fc1a3e1cbc34f1b3b45a7b6553bb5664c88d69855a95e4c689cf9677d0",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "mintResult": null
+  },
+  "timestamp": "2026-01-22T09:51:52.596683"
+}

@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "JKTM59538301",
+    "vessel": "HYUNDAI SHANGHAI",
+    "voyage": "0140W",
+    "portOfLoading": "TG PRIOK JAKARTA INDONESIA",
+    "portOfDischarge": "SANTOS, BRAZIL",
+    "placeOfDelivery": "SANTOS, BRAZIL",
+    "shipper": {
+      "name": "PT. INDOLIBERTY TEXTILES",
+      "address": "MENARA BATAVIA LEVEL 16\nJL. K.H. MAS MANSYUR KAV. 126\nJAKARTA 10220 - INDONESIA"
+    },
+    "consignee": {
+      "name": "BEKAERTDESLEE BRAZIL INDUSTRIA E COMERCIO DE ARTIGOS TEXEIS LTDA",
+      "address": "CENTRO EMPRESARIAL GIORDANO\nAVENIDA AMPELIO GAZETTA, 3567\n13380-290 CITY OF NOVA ODESSA\nSAO PAULO STATE BRAZIL"
+    },
+    "cargoDescription": "90 PACKAGES = 30 PALLETS AND 60 CARTONS\nNE 30/2 NRY\nGOODS NE 30/2 RAYON 100% RING SPUN NON WAX\nHS CODE : 5510.12.00\nGOODS NE 20/1 PV 65/35 RING SPUN WAX\nHS CODE : 5509.51.00",
+    "containerInfo": "DFSU6667458 (1 X 40'H DC CONTAINER)",
+    "grossWeight": "22,046.320 KGS",
+    "measurement": "60.0000 CBM",
+    "issueDate": "2026-01-22",
+    "extractedAt": "2026-01-22T09:52:34.820141",
+    "accuracy": 75.0,
+    "originalFilename": "20260106_171124_hmm-No._JKTM59538301.png",
+    "ocrConfidence": 0.9745223111275471
+  },
+  "ipfs": {
+    "dataHash": "QmNWEdgwouy87mLyxzLVhdskSRGvefuFyNGcu2BfRgm8si",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmNWEdgwouy87mLyxzLVhdskSRGvefuFyNGcu2BfRgm8si",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0xbda4985da9110d133c53e5713971703904292d580ebe9b2da26987693d4c7546",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "mintResult": null
+  },
+  "timestamp": "2026-01-22T09:52:36.383728"
+}

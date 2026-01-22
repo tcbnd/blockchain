@@ -1,0 +1,62 @@
+{
+  "original_filename": "20260122_100546_bealand.No._205607737.jpg",
+  "timestamp": "20260122_100546",
+  "extracted_texts": [
+    {
+      "text": "BILL OF LADING",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "B/L No: 123456789",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Vessel: MAERSK SHIP",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Port of Loading: Shanghai",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Port of Discharge: Los Angeles",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Shipper: ABC Company Ltd",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Consignee: XYZ Corp",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Description of Goods: Electronics",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Gross Weight: 1000 KGS",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Processed: 2026-01-22 10:05:46",
+      "confidence": 0.95,
+      "bbox": null
+    }
+  ],
+  "average_confidence": 0.95,
+  "total_lines": 10,
+  "processing_info": {
+    "engine": "mock",
+    "processed_at": "2026-01-22T10:05:46.619401"
+  }
+}

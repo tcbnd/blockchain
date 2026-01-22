@@ -159,7 +159,11 @@ class OCRBlockchainBridge:
         """
         if not self.contract_address:
             print("⚠️ 未设置CONTRACT_ADDRESS，跳过NFT铸造")
-            return None
+            return {
+                'success': False,
+                'error': 'CONTRACT_ADDRESS not set',
+                'solution': '请在.env文件中配置CONTRACT_ADDRESS'
+            }
         
         try:
             # 准备环境变量
@@ -171,26 +175,99 @@ class OCRBlockchainBridge:
             if shipper_address:
                 env['SHIPPER_ADDRESS'] = shipper_address
             
-            # 调用Node.js脚本铸造NFT
-            result = subprocess.run(
-                ['npx', 'hardhat', 'run', 'scripts/mintFromOCR.js', '--network', 'sepolia'],
-                env=env,
-                capture_output=True,
-                text=True,
-                cwd=os.path.dirname(os.path.abspath(__file__))
-            )
+            print(f"🔧 调用环境检查...")
+            print(f"📁 工作目录: {os.path.dirname(os.path.abspath(__file__))}")
             
-            if result.returncode == 0:
-                print("✅ NFT铸造成功")
-                print(result.stdout)
-                return result.stdout
-            else:
-                print(f"❌ NFT铸造失败: {result.stderr}")
-                return None
+            # 检查 package.json 和 node_modules
+            project_dir = os.path.dirname(os.path.abspath(__file__))
+            package_json_path = os.path.join(project_dir, 'package.json')
+            node_modules_path = os.path.join(project_dir, 'node_modules')
+            
+            if not os.path.exists(package_json_path):
+                return {
+                    'success': False,
+                    'error': 'package.json not found',
+                    'solution': '请在项目根目录运行: npm install'
+                }
+            
+            if not os.path.exists(node_modules_path):
+                return {
+                    'success': False,
+                    'error': 'node_modules not found',
+                    'solution': '请在项目根目录运行: npm install'
+                }
+            
+            # 尝试不同的命令方式
+            commands_to_try = [
+                ['node_modules\\.bin\\hardhat.cmd', 'run', 'scripts/mintFromOCR.js', '--network', 'sepolia'],
+                ['npx', 'hardhat', 'run', 'scripts/mintFromOCR.js', '--network', 'sepolia'],
+                ['node_modules\\.bin\\hardhat', 'run', 'scripts/mintFromOCR.js', '--network', 'sepolia'],
+                ['cmd', '/c', 'node_modules\\.bin\\hardhat.cmd', 'run', 'scripts/mintFromOCR.js', '--network', 'sepolia']
+            ]
+            
+            last_error = None
+            for cmd in commands_to_try:
+                print(f"🔄 尝试命令: {' '.join(cmd)}")
+                try:
+                    result = subprocess.run(
+                        cmd,
+                        env=env,
+                        capture_output=True,
+                        text=True,
+                        cwd=project_dir,
+                        timeout=60  # 60秒超时
+                    )
+                    
+                    if result.returncode == 0:
+                        print("✅ NFT铸造成功")
+                        print(result.stdout)
+                        
+                        # 解析交易哈希
+                        tx_hash = self.extract_transaction_hash(result.stdout)
+                        return {
+                            'success': True,
+                            'stdout': result.stdout,
+                            'transaction_hash': tx_hash,
+                            'explorer_url': f"https://sepolia.etherscan.io/tx/{tx_hash}" if tx_hash else None,
+                            'contract_url': f"https://sepolia.etherscan.io/address/{self.contract_address}",
+                            'ipfs_url': f"https://gateway.pinata.cloud/ipfs/{ipfs_hash}"
+                        }
+                    else:
+                        print(f"❌ 命令失败: {result.stderr}")
+                        last_error = result.stderr
+                        continue
+                        
+                except subprocess.TimeoutExpired:
+                    print("⏰ 命令超时")
+                    last_error = "Command timeout"
+                    continue
+                except FileNotFoundError:
+                    print(f"❌ 找不到命令: {cmd[0]}")
+                    last_error = f"Command not found: {cmd[0]}"
+                    continue
+            
+            return {
+                'success': False,
+                'error': 'All minting attempts failed',
+                'last_error': last_error,
+                'solution': '请运行: npm install && npm install -g @nomiclabs/hardhat'
+            }
                 
         except Exception as e:
             print(f"❌ 调用铸造脚本失败: {e}")
-            return None
+            return {
+                'success': False,
+                'error': str(e),
+                'solution': '请检查环境配置和依赖安装'
+            }
+
+    def extract_transaction_hash(self, output):
+        """从输出中提取交易哈希"""
+        import re
+        # 匹配以0x开头的64字符哈希
+        hash_pattern = r'0x[a-fA-F0-9]{64}'
+        matches = re.findall(hash_pattern, output)
+        return matches[0] if matches else None
     
     def process_ocr_result(self, ocr_result_path, image_path=None):
         """

@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "S55230418",
+    "vessel": "MAERSK RIO GRANDE",
+    "voyage": "0764",
+    "portOfLoading": "Arica",
+    "portOfDischarge": "Newark",
+    "placeOfDelivery": "",
+    "shipper": {
+      "name": "A.I.P.E.P. PUMIRI",
+      "address": "AV. JUAN PABLO II NO 2926 EL ALTO\nTEL/ FAX 2-846310"
+    },
+    "consignee": {
+      "name": "COOPERATIVE COFFEES, INC.",
+      "address": "302 W. LAMAR ST. SUITE E\nAMERICUS, GA 31709 USA\nTEL.+1-229-924-3035 FAX +1-229-924-6250\nATTN: BILL HARRIS"
+    },
+    "cargoDescription": "1 Container Said to Contain 275 BAGS\nOF 70 KG. NET\nBOLTVIA WASHED ARABICA COFFEE PRIMERA ORGANIC, CROP 2007\nICO 113-2\nINVOICE COMERCIAL NO. 0055\nPOSICION ARANCELARIA: 09011190 000\nFDA 11923540592\nNA\nSHIPPER'S LOAD, STOW, WEIGHT AND COUNT",
+    "containerInfo": "1 Container",
+    "grossWeight": "19470.00 KGS",
+    "measurement": "",
+    "issueDate": "2026-01-22",
+    "extractedAt": "2026-01-22T09:52:08.307350",
+    "accuracy": 0,
+    "originalFilename": "20260106_153734_Maersk-No._855230418.jpg",
+    "ocrConfidence": 0.9295340719247105
+  },
+  "ipfs": {
+    "dataHash": "QmdSNegkFgbwidbhWkKVQtChJH8ZV2hJwoYENXnr2dzUjQ",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmdSNegkFgbwidbhWkKVQtChJH8ZV2hJwoYENXnr2dzUjQ",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0x74dcfda8abf2f6796b29da490f314d5198aa031a744ab5aef8fbbaf878e9b3d0",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "mintResult": null
+  },
+  "timestamp": "2026-01-22T09:52:09.827742"
+}

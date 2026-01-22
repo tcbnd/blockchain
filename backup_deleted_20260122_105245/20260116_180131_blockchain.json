@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "",
+    "vessel": "",
+    "voyage": "",
+    "portOfLoading": "",
+    "portOfDischarge": "",
+    "placeOfDelivery": "",
+    "shipper": {
+      "name": "",
+      "address": ""
+    },
+    "consignee": {
+      "name": "",
+      "address": ""
+    },
+    "cargoDescription": "",
+    "containerInfo": "",
+    "grossWeight": "",
+    "measurement": "",
+    "issueDate": "2026-01-22",
+    "extractedAt": "2026-01-22T09:52:58.357769",
+    "accuracy": 16.67,
+    "originalFilename": "20260116_180131_bealand.No._205607737.jpg",
+    "ocrConfidence": 0.792017852064482
+  },
+  "ipfs": {
+    "dataHash": "QmS8A4JN9FMEvL4Jkx3xcK4B6JzNvnLbFjTc82iMsmgwNX",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmS8A4JN9FMEvL4Jkx3xcK4B6JzNvnLbFjTc82iMsmgwNX",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0xd4f84429b4a7c2ab4401bbcd7b0dbfef5f8a272eb8623beeda25ce6c2b4f7131",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "mintResult": null
+  },
+  "timestamp": "2026-01-22T09:53:06.695773"
+}

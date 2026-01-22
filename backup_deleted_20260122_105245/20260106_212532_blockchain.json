@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "HDMUJKTM59538301",
+    "vessel": "HYUNDAI SHANGHAI",
+    "voyage": "0140W",
+    "portOfLoading": "TG PRIOK JAKARTA INDONESIA",
+    "portOfDischarge": "SANTOS, BRAZIL",
+    "placeOfDelivery": "SANTOS, BRAZIL",
+    "shipper": {
+      "name": "PT. INDOLIBERTY TEXTILES",
+      "address": "MENARA BATAVIA LEVEL 16\nJL. K.H. MAS MANSYUR KAV. 126\nJAKARTA 10220 - INDONESIA"
+    },
+    "consignee": {
+      "name": "BEKAERTDESLEE BRAZIL INDUSTRIA E COMERCIO DE ARTIGOS TEXEIS LTDA",
+      "address": "CENTRO EMPRESARIAL GIORDANO\nAVENIDA AMPELIO GAZETTA, 3567\n13380-290 CITY OF NOVA ODESSA\nSAO PAULO STATE BRAZIL"
+    },
+    "cargoDescription": "SHIPPER'S LOAD,COUNT,SEALED & WEIGHT S.T.C.\n1 X 40'H DC CONTAINER\n90 PACKAGES = 30 PALLETS AND 60 CARTONS\nNE 30/2 NRY\nSC 5050012874, BD PO NO 4500199856,\nLOT NO: K17A\nGOODS NE 30/2 RAYON 100% RING SPUN NON WAX\nHS CODE : 5510.12.00\nNET WEIGHT: 186.8593 KGS\nSC 5050012874, BD PO NO 4500199856\nGOODS NE 20/1 PV 65/35 RING SPUN WAX\nHS CODE : 5509.51.00\n=FREIGHT PREPAID\nORIGIN OF PRODUCT: MADE IN INDONESIA\nNET WEIGHT 20,734.65 KGS",
+    "containerInfo": "DFSU6667458 (1 X 40'H DC CONTAINER)",
+    "grossWeight": "22,046.320 KGS",
+    "measurement": "60.0000 CBM",
+    "issueDate": "2026-01-22",
+    "extractedAt": "2026-01-22T09:52:38.388495",
+    "accuracy": 75.0,
+    "originalFilename": "20260106_212532_hmm-No._JKTM59538301.png",
+    "ocrConfidence": 0.9745223111275471
+  },
+  "ipfs": {
+    "dataHash": "QmZ6H97WRWDVQKqxgDoye66FAAwdp9c1ZtPrUFHD74V2Pw",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmZ6H97WRWDVQKqxgDoye66FAAwdp9c1ZtPrUFHD74V2Pw",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0x3024260d81d385ff7df45a6a4a1b6bfacbdd3110990df457118ae9df4c5d29b1",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "mintResult": null
+  },
+  "timestamp": "2026-01-22T09:52:39.725562"
+}

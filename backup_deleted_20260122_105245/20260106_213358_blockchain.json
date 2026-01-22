@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "OH-23040018",
+    "vessel": "ONE SWAN",
+    "voyage": "023W",
+    "portOfLoading": "OAKLAND, CA (UNITED STATES)",
+    "portOfDischarge": "HO CHI MINH CITY (VIETNAM)",
+    "placeOfDelivery": "HO CHI MINH CITY (VIETNAM)",
+    "shipper": {
+      "name": "R. TORRE & COMPANY",
+      "address": "2000 MARINA BOULEVARD\nSAN LEANDRO, CA 94577, UNITED STATES\nTEL: 650-624-2813"
+    },
+    "consignee": {
+      "name": "LY GIA VIEN CO",
+      "address": "NO. 9F STREET 30 TAN QUY DONG R A\nTAN PHONG WARD DISTRICT 7\nHO CHI MINH CITY, 700000, VIETNAM"
+    },
+    "cargoDescription": "20 PALLET(S)\nSHIPPER'S LOAD & COUNT :\n40HC X 1 STC: 20 PALLET(S)\n20 PALLETS (1080 CASES) / 19458 KGS (TRN-2023-015)\nTORANI FLAVORING SYRUP, HS CODE# 210690",
+    "containerInfo": "FFAU3699949 / 40HC",
+    "grossWeight": "19,458.00 KGS",
+    "measurement": "",
+    "issueDate": "2026-01-22",
+    "extractedAt": "2026-01-22T09:52:45.059298",
+    "accuracy": 75.0,
+    "originalFilename": "20260106_213358_acs-No._OH23040018.png",
+    "ocrConfidence": 0.9880133315136558
+  },
+  "ipfs": {
+    "dataHash": "QmT5xLh6vdTsQ312Dj1BtvDgvVEUsKbWvuLe4upYhx8mUE",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmT5xLh6vdTsQ312Dj1BtvDgvVEUsKbWvuLe4upYhx8mUE",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0x88019f2851f0946f57f6feb7d06a93a262b3d8c33503d0d83d9c108732d73dda",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "mintResult": null
+  },
+  "timestamp": "2026-01-22T09:52:46.312467"
+}

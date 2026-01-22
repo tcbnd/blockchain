@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "",
+    "vessel": "",
+    "voyage": "",
+    "portOfLoading": "",
+    "portOfDischarge": "",
+    "placeOfDelivery": "",
+    "shipper": {
+      "name": "",
+      "address": ""
+    },
+    "consignee": {
+      "name": "",
+      "address": ""
+    },
+    "cargoDescription": "",
+    "containerInfo": "",
+    "grossWeight": "",
+    "measurement": "",
+    "issueDate": "2026-01-22",
+    "extractedAt": "2026-01-22T09:52:31.397329",
+    "accuracy": 25.0,
+    "originalFilename": "20260106_170319_hmm-No._JKTM59538301.png",
+    "ocrConfidence": 0.9745223111275471
+  },
+  "ipfs": {
+    "dataHash": "QmVtdczZcstb1JkitxEHx67oyDF6qaMsTR8jWAzCMfF6ZJ",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmVtdczZcstb1JkitxEHx67oyDF6qaMsTR8jWAzCMfF6ZJ",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0x621307326df96c23cee1914758801313fc37fc2ceabff4901b616e2a5873ffdd",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "mintResult": null
+  },
+  "timestamp": "2026-01-22T09:52:32.815458"
+}
