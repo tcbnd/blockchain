@@ -258,16 +258,28 @@ def save_ocr_result(extracted_texts, avg_confidence, original_filename):
     
     # 生成结果文件名
     base_name = os.path.splitext(original_filename)[0]
-    safe_name = re.sub(r'[^\w\-_.]', '_', base_name)
     
-    result_filename = f"{timestamp}_{safe_name}_result.json"
-    ocr_filename = f"{timestamp}_{safe_name}_ocr.txt"
+    # 检查是否已经包含时间戳 (格式: YYYYMMDD_HHMMSS_)
+    import re
+    has_timestamp = re.match(r'^\d{8}_\d{6}_', base_name)
     
-    # 保存详细结果
+    if has_timestamp:
+        # 如果已经有时间戳，直接使用base_name
+        safe_name = re.sub(r'[^\w\-_.]', '_', base_name)
+        result_filename = f"{safe_name}_result.json"
+        ocr_filename = f"{safe_name}_ocr.txt"
+    else:
+        # 如果没有时间戳，添加时间戳
+        safe_name = re.sub(r'[^\w\-_.]', '_', base_name)
+        result_filename = f"{timestamp}_{safe_name}_result.json"
+        ocr_filename = f"{timestamp}_{safe_name}_ocr.txt"
+    
+    # 保存详细结果 - 使用统一格式
     result_data = {
-        "original_filename": original_filename,
+        "filename": original_filename,
         "timestamp": timestamp,
-        "extracted_texts": extracted_texts,
+        "texts": extracted_texts,  # 使用 'texts' 作为主键，与OCR结果一致
+        "extracted_texts": extracted_texts,  # 保留兼容性
         "average_confidence": avg_confidence,
         "total_lines": len(extracted_texts),
         "processing_info": {
@@ -310,11 +322,28 @@ def list_ocr_files():
                     # 检查是否已经处理过
                     blockchain_file = filename.replace('_result.json', '_blockchain.json')
                     blockchain_path = os.path.join(output_dir, blockchain_file)
-                    processed = os.path.exists(blockchain_path)
+                    
+                    processed = False
+                    pending_mint = False
+                    
+                    if os.path.exists(blockchain_path):
+                        # 读取blockchain文件检查状态
+                        try:
+                            with open(blockchain_path, 'r', encoding='utf-8') as bf:
+                                blockchain_data = json.load(bf)
+                                # 只有当tokenId存在时才视为已处理
+                                if blockchain_data.get('blockchain', {}).get('tokenId'):
+                                    processed = True
+                                else:
+                                    # IPFS已上传但还未NFT铸造
+                                    pending_mint = True
+                        except Exception as be:
+                            print(f'Error reading blockchain file {blockchain_file}: {be}')
                     
                     ocr_files.append({
                         'filename': filename,
                         'processed': processed,
+                        'pending_mint': pending_mint,
                         'confidence': data.get('average_confidence', 0),
                         'text_lines': len(data.get('extracted_texts', [])),
                         'original_filename': data.get('original_filename', filename)
@@ -339,6 +368,7 @@ def list_ocr_files():
 
 @app.route('/api/process-ocr', methods=['POST'])
 def process_ocr_file():
+
     """处理指定的OCR结果文件 - 只上传到IPFS，不铸造NFT"""
     try:
         data = request.get_json()

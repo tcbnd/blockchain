@@ -114,51 +114,117 @@ class OCRBlockchainBridge:
             # 將文本列表轉為可搜索的字符串
             all_text = '\n'.join([item.get('text', '') if isinstance(item, dict) else str(item) for item in texts_list])
             
-            # 嘗試提取關鍵信息（簡單版本）
+            # 智能提取所有字段
+            import re
+            
+            # 初始化所有字段
             bill_number = ''
-            for item in texts_list:
+            vessel = ''
+            voyage = ''
+            port_of_loading = ''
+            port_of_discharge = ''
+            place_of_delivery = ''
+            shipper_name = ''
+            consignee_name = ''
+            cargo_desc = ''
+            container_no = ''
+            gross_weight = ''
+            seal_no = ''
+            
+            # 遍歷所有文本行進行智能匹配
+            for i, item in enumerate(texts_list):
                 text = item.get('text', '') if isinstance(item, dict) else str(item)
-                if 'B/L' in text.upper() or 'BL NO' in text.upper():
-                    # 嘗試從相鄰文本中提取提單號
-                    idx = texts_list.index(item)
-                    if idx + 1 < len(texts_list):
-                        next_item = texts_list[idx + 1]
-                        bill_number = next_item.get('text', '') if isinstance(next_item, dict) else str(next_item)
-                    break
+                text_upper = text.upper()
+                
+                # B/L No 提取 - 優先級最高
+                if 'B/L NO' in text_upper or 'BL NO' in text_upper:
+                    # 同一行提取
+                    bl_match = re.search(r'(?:B/L\s*NO|BL\s*NO)[:\s]*(BL\d+)', text, re.IGNORECASE)
+                    if bl_match:
+                        bill_number = bl_match.group(1).upper()
+                    # 下一行提取
+                    elif i + 1 < len(texts_list):
+                        next_text = texts_list[i + 1].get('text', '') if isinstance(texts_list[i + 1], dict) else str(texts_list[i + 1])
+                        bl_match = re.search(r'(BL\d+)', next_text, re.IGNORECASE)
+                        if bl_match:
+                            bill_number = bl_match.group(1).upper()
+                
+                # Vessel 提取
+                if 'VESSEL' in text_upper and ':' in text:
+                    vessel = re.sub(r'^.*VESSEL[:\s]*', '', text, flags=re.IGNORECASE).strip()
+                
+                # Voyage 提取
+                if 'VOYAGE' in text_upper and ':' in text:
+                    voyage = re.sub(r'^.*VOYAGE[:\s]*', '', text, flags=re.IGNORECASE).strip()
+                
+                # Port of Loading 提取
+                if 'PORT OF LOADING' in text_upper:
+                    port_of_loading = re.sub(r'^.*PORT OF LOADING[:\s]*', '', text, flags=re.IGNORECASE).strip()
+                
+                # Port of Discharge 提取
+                if 'PORT OF DISCHARGE' in text_upper:
+                    port_of_discharge = re.sub(r'^.*PORT OF DISCHARGE[:\s]*', '', text, flags=re.IGNORECASE).strip()
+                
+                # Place of Delivery 提取
+                if 'PLACE OF DELIVERY' in text_upper:
+                    place_of_delivery = re.sub(r'^.*PLACE OF DELIVERY[:\s]*', '', text, flags=re.IGNORECASE).strip()
+                
+                # Shipper 提取
+                if 'SHIPPER' in text_upper and ':' in text:
+                    shipper_name = re.sub(r'^.*SHIPPER[:\s]*', '', text, flags=re.IGNORECASE).strip()
+                
+                # Consignee 提取
+                if 'CONSIGNEE' in text_upper and ':' in text:
+                    consignee_name = re.sub(r'^.*CONSIGNEE[:\s]*', '', text, flags=re.IGNORECASE).strip()
+                
+                # Description of Goods 提取
+                if 'DESCRIPTION OF GOODS' in text_upper or 'DESCRIPTION' in text_upper:
+                    cargo_desc = re.sub(r'^.*DESCRIPTION[:\s]*(?:OF GOODS[:\s]*)?', '', text, flags=re.IGNORECASE).strip()
+                
+                # Container No 提取
+                if 'CONTAINER NO' in text_upper or 'CONTAINER' in text_upper:
+                    container_no = re.sub(r'^.*CONTAINER[:\s]*(?:NO[:\s]*)?', '', text, flags=re.IGNORECASE).strip()
+                
+                # Gross Weight 提取
+                if 'GROSS WEIGHT' in text_upper:
+                    gross_weight = re.sub(r'^.*GROSS WEIGHT[:\s]*', '', text, flags=re.IGNORECASE).strip()
+                
+                # Seal No 提取
+                if 'SEAL NO' in text_upper:
+                    seal_no = re.sub(r'^.*SEAL NO[:\s]*', '', text, flags=re.IGNORECASE).strip()
             
-            # 如果沒找到，使用檔案名作為提單號
+            # 如果沒找到Bill Number，嘗試從檔案名提取
             if not bill_number:
-                filename = ocr_result.get('filename', '')
-                # 從檔案名中提取可能的提單號
-                if '_' in filename:
-                    parts = filename.split('_')
-                    if len(parts) >= 2:
-                        bill_number = parts[-1].replace('.png', '').replace('.jpg', '').replace('.jpeg', '')
+                filename = ocr_result.get('filename', '') or ocr_result.get('original_filename', '')
+                bl_match = re.search(r'(BL\d{10,})', filename, re.IGNORECASE)
+                if bl_match:
+                    bill_number = bl_match.group(1).upper()
             
-            # 構建簡化的提單數據
+            # 構建完整的提單數據 - 匹配UI顯示的結構
             bill_data = {
                 "billNumber": bill_number or f"BL-{datetime.now().strftime('%Y%m%d%H%M%S')}",
-                "vessel": "",
-                "voyage": "",
-                "portOfLoading": "",
-                "portOfDischarge": "",
-                "placeOfDelivery": "",
+                "vessel": vessel,
+                "voyage": voyage,
+                "portOfLoading": port_of_loading,
+                "portOfDischarge": port_of_discharge,
+                "placeOfDelivery": place_of_delivery,
                 "shipper": {
-                    "name": "",
+                    "name": shipper_name,
                     "address": ""
                 },
                 "consignee": {
-                    "name": "",
+                    "name": consignee_name,
                     "address": ""
                 },
-                "cargoDescription": all_text[:500] if all_text else "",  # 前500字符作為描述
-                "containerInfo": "",
-                "grossWeight": "",
+                "cargoDescription": cargo_desc,
+                "containerInfo": container_no,
+                "sealNumber": seal_no,
+                "grossWeight": gross_weight,
                 "measurement": "",
                 "issueDate": datetime.now().isoformat().split('T')[0],
                 "extractedAt": datetime.now().isoformat(),
                 "accuracy": 0,
-                "originalFilename": ocr_result.get('filename', ''),
+                "originalFilename": ocr_result.get('filename', '') or ocr_result.get('original_filename', ''),
                 "ocrConfidence": ocr_result.get('average_confidence', 0),
                 "rawText": all_text  # 保存原始文本供參考
             }

@@ -482,6 +482,8 @@
             }
         }
     </style>
+    <!-- Add Web3.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -492,8 +494,7 @@
         
         <div class="nav-tabs">
             <button class="nav-tab active" onclick="switchTab('dashboard', this)">📊 儀表板</button>
-            <button class="nav-tab" onclick="switchTab('upload', this)">📤 新增處理</button>
-            <button class="nav-tab" onclick="switchTab('compare', this)">🔍 結果比較</button>
+            <button class="nav-tab" onclick="switchTab('upload', this)">📤 新增與比較</button>
             <button class="nav-tab" onclick="switchTab('blockchain', this)">⛓️ 區塊鏈</button>
             <button class="nav-tab" onclick="switchTab('files', this)">📁 文件管理</button>
         </div>
@@ -566,26 +567,8 @@
             <div class="progress-bar" id="progressBar">
                 <div class="progress-fill" id="progressFill"></div>
             </div>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 40px;">
-                <div style="background: white; border: 2px solid #e9ecef; border-radius: 15px; padding: 30px; text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 15px;">🔍</div>
-                    <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; color: #333;">僅OCR處理</div>
-                    <div style="color: #666; margin-bottom: 20px;">只進行OCR文字識別，保存結果文件</div>
-                    <button class="btn" id="ocrOnlyBtn" onclick="processingActionTriggered=true; processOCROnly()" disabled>開始OCR</button>
-                </div>
-                
-                <div style="background: white; border: 2px solid #e9ecef; border-radius: 15px; padding: 30px; text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 15px;">⛓️</div>
-                    <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; color: #333;">完整流程</div>
-                    <div style="color: #666; margin-bottom: 20px;">OCR + IPFS上傳 + 區塊鏈鑄造NFT</div>
-                    <button class="btn btn-secondary" id="fullProcessBtn" onclick="processingActionTriggered=true; processFullWorkflow()" disabled>完整處理</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- 結果比較 -->
-        <div id="compare" class="tab-content">
+                        
+            <!-- OCR結果比較區域 -->
             <h3 style="margin-bottom: 20px; color: #333;">🔍 OCR結果比較</h3>
             
             <div class="comparison-container">
@@ -600,6 +583,22 @@
                         </div>
                     </div>
                 </div>
+
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 40px;">
+                <div style="background: white; border: 2px solid #e9ecef; border-radius: 15px; padding: 30px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">🔍</div>
+                    <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; color: #333;">僅OCR處理</div>
+                    <div style="color: #666; margin-bottom: 20px;">只進行OCR文字識別，保存結果文件</div>
+                    <button class="btn" id="ocrOnlyBtn" onclick="processingActionTriggered=true; processOCROnly()" disabled>開始OCR</button>
+                </div>
+                
+                <div style="background: white; border: 2px solid #e9ecef; border-radius: 15px; padding: 30px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">⛓️</div>
+                    <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; color: #333;">完整流程</div>
+                    <div style="color: #666; margin-bottom: 20px;">OCR + IPFS上傳 + 區塊鏈鑄造NFT</div>
+                    <button class="btn btn-secondary" id="fullProcessBtn" onclick="processingActionTriggered=true; processFullWorkflow()" disabled>完整處理</button>
+                </div>
+            </div>
                 
                 <div class="text-section">
                     <div class="section-title">
@@ -642,8 +641,28 @@
                             </div>
                             <div class="info-row">
                                 <span class="info-label">IPFS Hash:</span>
-                                <span class="info-value hash-short" id="ipfsHash">-</span>
+                                <span class="info-value hash-short" id="ipfsHash" style="cursor: pointer; text-decoration: underline;" title="點擊查看IPFS數據" onclick="openIPFSData()">-</span>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="blockchain-card">
+                        <h4>👛 錢包連接</h4>
+                        <div class="blockchain-info">
+                            <div style="margin-bottom: 15px;">
+                                <div style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">當前錢包:</div>
+                                <div id="walletAddress" style="font-family: monospace; font-size: 0.85rem; color: #333; background: #f8f9fa; padding: 10px; border-radius: 5px; word-break: break-all;">未連接</div>
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <div style="color: #666; font-size: 0.9rem; margin-bottom: 5px;">網絡:</div>
+                                <div id="networkName" style="color: #4ECDC4; font-weight: bold;">-</div>
+                            </div>
+                            <button id="connectWalletBtn" class="btn" style="width: 100%;" onclick="connectWallet()">
+                                🔗 連接 MetaMask
+                            </button>
+                            <button id="disconnectWalletBtn" class="btn btn-secondary" style="width: 100%; margin-top: 10px; display: none;" onclick="disconnectWallet()">
+                                🔓 斷開連接
+                            </button>
                         </div>
                     </div>
                     
@@ -664,6 +683,11 @@
                             <div style="margin-bottom: 15px;">
                                 <a href="#" id="ipfsLink" class="external-link" target="_blank">
                                     ☁️ IPFS 數據
+                                </a>
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <a href="https://app.pinata.cloud/pinmanager" class="external-link" target="_blank">
+                                    📊 Pinata 管理面板
                                 </a>
                             </div>
                             <div>
@@ -967,6 +991,24 @@
                     const filename = file.filename || 'unknown';
                     const originalFilename = file.original_filename || filename;
                     const processed = file.processed || false;
+                    const pendingMint = file.pending_mint || false;
+                    
+                    // 決定狀態顯示
+                    let statusBadge, actionButton;
+                    
+                    if (processed) {
+                        // 已鑄造NFT
+                        statusBadge = `<span style="padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; background: #d4edda; color: #155724;">✅ NFT已鑄造</span>`;
+                        actionButton = `<button class="btn" style="padding: 8px 16px; font-size: 0.9rem;" onclick="viewResult('${filename}')">查看結果</button>`;
+                    } else if (pendingMint) {
+                        // IPFS已上傳，等待鑄造NFT
+                        statusBadge = `<span style="padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; background: #cfe2ff; color: #084298;">⏳ 等待鑄造</span>`;
+                        actionButton = `<button class="btn" style="padding: 8px 16px; font-size: 0.9rem; background: linear-gradient(45deg, #FF6B6B, #FF8E8E);" onclick="viewResult('${filename}')">鑄造 NFT</button>`;
+                    } else {
+                        // 尚未處理
+                        statusBadge = `<span style="padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; background: #fff3cd; color: #856404;">⚠️ 待處理</span>`;
+                        actionButton = `<button class="btn" style="padding: 8px 16px; font-size: 0.9rem;" onclick="processFile('${filename}')">處理到區塊鏈</button>`;
+                    }
                     
                     return `
                     <div style="background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
@@ -979,13 +1021,8 @@
                             </div>
                         </div>
                         <div style="display: flex; gap: 10px; align-items: center;">
-                            <span style="padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; ${processed ? 'background: #d4edda; color: #155724;' : 'background: #fff3cd; color: #856404;'}">
-                                ${processed ? '已處理' : '待處理'}
-                            </span>
-                            ${processed ? 
-                                `<button class="btn" style="padding: 8px 16px; font-size: 0.9rem;" onclick="viewResult('${filename}')">查看結果</button>` :
-                                `<button class="btn" style="padding: 8px 16px; font-size: 0.9rem;" onclick="processFile('${filename}')">處理到區塊鏈</button>`
-                            }
+                            ${statusBadge}
+                            ${actionButton}
                         </div>
                     </div>
                 `;
@@ -1038,18 +1075,16 @@
                 document.getElementById('tokenId').textContent = tokenId;
                 console.log('Updated tokenId to:', tokenId);
                 
-                // 更新提單編號（保持不變，不應該被Token ID覆蓋）
+                // 更新提單編號
                 if (result.billData && result.billData.billNumber) {
-                    const currentBillNumber = document.getElementById('billNumber').textContent;
-                    // 只在尚未設置或為'-'時更新
-                    if (currentBillNumber === '-' || !currentBillNumber) {
-                        document.getElementById('billNumber').textContent = result.billData.billNumber;
-                    }
+                    document.getElementById('billNumber').textContent = result.billData.billNumber;
+                    console.log('Updated billNumber to:', result.billData.billNumber);
                 }
                 
                 if (result.ipfs && result.ipfs.dataHash) {
-                    document.getElementById('ipfsHash').textContent = 
-                        result.ipfs.dataHash.substring(0, 20) + '...';
+                    const shortHash = result.ipfs.dataHash.substring(0, 20) + '...';
+                    document.getElementById('ipfsHash').textContent = shortHash;
+                    console.log('Updated IPFS hash to:', result.ipfs.dataHash);
                 }
                 
                 // 更新交易連結（根據狀態顯示不同內容）
@@ -1063,9 +1098,14 @@
                     noTxYet.style.display = 'none';
                     console.log('Transaction link updated:', result.blockchain.transactionHash);
                 } else {
-                    // 還沒有交易 - 顯示等待消息
+                    // 還沒有交易 - 根據狀態顯示不同消息
                     etherscanLink.style.display = 'none';
                     noTxYet.style.display = 'inline';
+                    if (result.ipfs && result.ipfs.dataHash) {
+                        noTxYet.textContent = '✅ 已上傳IPFS，等待鑄造NFT...';
+                    } else {
+                        noTxYet.textContent = '⏳ 等待NFT鑄造...';
+                    }
                 }
                 
                 // 更新NFT詳情連結
@@ -1082,6 +1122,9 @@
                 if (result.ipfs && result.ipfs.dataUrl) {
                     const ipfsLink = document.getElementById('ipfsLink');
                     ipfsLink.href = result.ipfs.dataUrl;
+                    ipfsLink.style.display = 'inline-block';
+                    console.log('IPFS link updated:', result.ipfs.dataUrl);
+                    console.log('IPFS hash:', result.ipfs.dataHash);
                 }
                 
                 // 更新智能合約連結
@@ -1118,6 +1161,8 @@
             try {
                 showMessage('正在鑄造NFT到區塊鏈...', 'info');
                 
+                console.log('Minting NFT for file:', currentResultFilename);
+                
                 const response = await fetch('/api/mint-nft', {
                     method: 'POST',
                     headers: {
@@ -1129,6 +1174,7 @@
                 });
                 
                 const data = await response.json();
+                console.log('Mint NFT response:', data);
                 
                 if (data.success) {
                     updateBlockchainDisplay(data.result);
@@ -1136,9 +1182,11 @@
                     loadStats();
                     loadFiles();
                 } else {
+                    console.error('Mint NFT error:', data.error);
                     showMessage(data.error, 'error');
                 }
             } catch (error) {
+                console.error('Mint NFT exception:', error);
                 showMessage('鑄造NFT失敗: ' + error.message, 'error');
             } finally {
                 btn.disabled = false;
@@ -1147,7 +1195,27 @@
             }
         }
         
-        function showFunctionDialog(functionName) {
+        // Web3 and Wallet Variables
+        let web3;
+        let userAccount = null;
+        let contract;
+        const contractAddress = '0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED';
+        const contractABI = [
+            {"inputs":[],"stateMutability":"nonpayable","type":"constructor"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"},{"indexed":true,"internalType":"address","name":"financier","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"BillFinanced","type":"event"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"},{"indexed":true,"internalType":"address","name":"shipper","type":"address"},{"indexed":false,"internalType":"string","name":"billNumber","type":"string"}],"name":"BillMinted","type":"event"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"BillReleased","type":"event"},
+            {"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"getBillData","outputs":[{"components":[{"internalType":"string","name":"billNumber","type":"string"},{"internalType":"string","name":"ipfsHash","type":"string"},{"internalType":"string","name":"dataHash","type":"string"},{"internalType":"string","name":"tokenURI","type":"string"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"bool","name":"isFinanced","type":"bool"},{"internalType":"address","name":"financier","type":"address"},{"internalType":"uint256","name":"financedAmount","type":"uint256"},{"internalType":"bool","name":"isReleased","type":"bool"}],"internalType":"struct BillOfLadingNFT.BillData","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"isTransferable","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"address","name":"shipper","type":"address"},{"internalType":"string","name":"billNumber","type":"string"},{"internalType":"string","name":"ipfsHash","type":"string"},{"internalType":"string","name":"dataHash","type":"string"},{"internalType":"string","name":"_tokenURI","type":"string"}],"name":"mintBill","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"address","name":"financier","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"pledgeForFinancing","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"releaseOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"tokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ownerOf","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"}
+        ];
+        
+        // Connect Wallet
+        async function connectWallet() {
             let message = '';
             switch (functionName) {
                 case 'mintBill':
@@ -1170,6 +1238,16 @@
                     break;
             }
             alert(message);
+        }
+        
+        // 打開IPFS數據
+        function openIPFSData() {
+            const ipfsLink = document.getElementById('ipfsLink');
+            if (ipfsLink && ipfsLink.href && ipfsLink.href !== '#') {
+                window.open(ipfsLink.href, '_blank');
+            } else {
+                alert('尚未上傳IPFS數據');
+            }
         }
         
         // 文件上傳處理函數保持不變
@@ -1232,13 +1310,7 @@
                     
                     showMessage('文件上傳成功！可以開始處理了。', 'success');
                     
-                    // Only switch to compare tab if no processing action was triggered
-                    if (!processingActionTriggered) {
-                        setTimeout(() => {
-                            switchTab('compare');
-                        }, 500); // Small delay to allow processing button clicks to register
-                    }
-                    
+                    // Keep user on current tab - don't auto-switch
                     // Reset the flag for next upload
                     processingActionTriggered = false;
                 } else {
@@ -1429,11 +1501,15 @@
                     // 切換到區塊鏈標籤
                     switchTab('blockchain');
                     
-                    showMessage('結果已載入到區塊鏈標籤', 'success');
+                    // 檢查是否為等待鑄造狀態
+                    const hasPendingMint = result.blockchain && result.blockchain.status === 'pending' && !result.blockchain.tokenId;
                     
-                    // 在新標籤頁中打開IPFS連結
-                    if (result.ipfs && result.ipfs.dataUrl) {
-                        window.open(result.ipfs.dataUrl, '_blank');
+                    if (hasPendingMint) {
+                        showMessage('已載入，點擊「鑄造 NFT」按鈕完成鑄造', 'info');
+                    } else if (result.blockchain && result.blockchain.tokenId) {
+                        showMessage('NFT已鑄造，Token ID: ' + result.blockchain.tokenId, 'success');
+                    } else {
+                        showMessage('結果已載入到區塊鏈標籤', 'success');
                     }
                 } else {
                     showMessage(data.error, 'error');

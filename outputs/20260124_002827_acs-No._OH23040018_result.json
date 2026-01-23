@@ -1,0 +1,154 @@
+{
+  "filename": "20260124_002827_acs-No._OH23040018.png",
+  "timestamp": "20260124_002833",
+  "texts": [
+    {
+      "text": "BILL OF LADING",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "B/L No: BL20260124002833",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Vessel: MAERSK CONTAINER SHIP",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Port of Loading: Shanghai, China",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Port of Discharge: Los Angeles, USA",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Shipper: Global Export Company Ltd",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Consignee: International Import Corp",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Description of Goods: Electronics & Components",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Gross Weight: 2500 KGS",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Container No: MSKU1234567",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Seal No: 987654321",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Processed: 2026-01-24 00:28:33",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Freight: Prepaid",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Terms: CIF Los Angeles",
+      "confidence": 0.95,
+      "bbox": null
+    }
+  ],
+  "extracted_texts": [
+    {
+      "text": "BILL OF LADING",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "B/L No: BL20260124002833",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Vessel: MAERSK CONTAINER SHIP",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Port of Loading: Shanghai, China",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Port of Discharge: Los Angeles, USA",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Shipper: Global Export Company Ltd",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Consignee: International Import Corp",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Description of Goods: Electronics & Components",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Gross Weight: 2500 KGS",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Container No: MSKU1234567",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Seal No: 987654321",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Processed: 2026-01-24 00:28:33",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Freight: Prepaid",
+      "confidence": 0.95,
+      "bbox": null
+    },
+    {
+      "text": "Terms: CIF Los Angeles",
+      "confidence": 0.95,
+      "bbox": null
+    }
+  ],
+  "average_confidence": 0.95,
+  "total_lines": 14,
+  "processing_info": {
+    "engine": "mock",
+    "processed_at": "2026-01-24T00:28:33.078953"
+  }
+}
