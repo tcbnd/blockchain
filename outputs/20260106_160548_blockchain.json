@@ -1,0 +1,45 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "855230418",
+    "vessel": "",
+    "voyage": "",
+    "portOfLoading": "",
+    "portOfDischarge": "",
+    "placeOfDelivery": "",
+    "shipper": {
+      "name": "",
+      "address": ""
+    },
+    "consignee": {
+      "name": "",
+      "address": ""
+    },
+    "cargoDescription": "MAERSK LINE\nBILL OF LADING FOR OCEAN TRANSPORT\nSX MAEU\nOR MULTIMODAL TRANSPORT\naM S55230418\nA.I.P.E.P.\n855230418\nPUMIRI\nAV. JUAN PABLO II NO 2926 EL ALTO\n182020\nTEL/ FAX 2-846310\nConpagnne (nngamabe anly if comsaigned tn ordel\", \"Iin e\nCOOPERATIVE COFFEES, INC.\nGAINAC CLAWINARUAPAN E\nCOOPERATIVE COFFEES\n302 W. LAMAR ST. SUITE E\n302 W LAMAR STREET SUITE E\nAMERICUS, GA 31709 USA\nAMERICUS, GA 31709 USA\nTEL.+1-229-924-3035 FAX +1-229-924-6250\nTEL (229) 924-3035\nATTN: BILL HARRIS\nATTN. BILL HARRIS\nVi",
+    "containerInfo": "",
+    "grossWeight": "",
+    "measurement": "",
+    "issueDate": "2026-01-23",
+    "extractedAt": "2026-01-23T11:37:08.601381",
+    "accuracy": 0,
+    "originalFilename": "20260106_160548_Maersk-No._855230418.jpg",
+    "ocrConfidence": 0.9295340719247105,
+    "rawText": "MAERSK LINE\nBILL OF LADING FOR OCEAN TRANSPORT\nSX MAEU\nOR MULTIMODAL TRANSPORT\naM S55230418\nA.I.P.E.P.\n855230418\nPUMIRI\nAV. JUAN PABLO II NO 2926 EL ALTO\n182020\nTEL/ FAX 2-846310\nConpagnne (nngamabe anly if comsaigned tn ordel\", \"Iin e\nCOOPERATIVE COFFEES, INC.\nGAINAC CLAWINARUAPAN E\nCOOPERATIVE COFFEES\n302 W. LAMAR ST. SUITE E\n302 W LAMAR STREET SUITE E\nAMERICUS, GA 31709 USA\nAMERICUS, GA 31709 USA\nTEL.+1-229-924-3035 FAX +1-229-924-6250\nTEL (229) 924-3035\nATTN: BILL HARRIS\nATTN. BILL HARRIS\nVincan Det clouon I +15)\nMAERSK RIO GRANDE\n0764\nV2yape Nic\nas Mutanodal Tompot M. [ine deuse I)\nArica\nPurt of Lonting\nint of Dixmanen\nNewark\nPace of Celivery. Nopmcatie only when dodunect uobd as Mutanocal Transport B/ [uee clanze I]\nPARTICULARS FURNISHED BY SHIPPER\nCortuiner 1 tals\n1 Container Said to Contain 275 BAGS\n19470.00 KGS\nOF 70 KG. NET\nBOLTVIA WASHED ARABICA COFFEE PRIMERA ORGANIC, CROP 2007\nICO 113-2\nINVOICE COMERCIAL NO. 0055\nORIGINAL\nPOSICION ARANCELARIA: 09011190 000\nFDA 11923540592\nNA\nSHIPPER'S LOAD, STOW, WEIGHT AND COUNT\nBasic Ocean Freight\nFregt & Charjes\nkpd\n1500.00\nPer Container\nUSD\nBunker Adjustment Factor\nPer Container\n1500.00\n0.00\nUSD\nChassis Usage\n0.00\nPer Contalner\nUSD\n0.00\nDocumentation Fee - Destina\n0.00\nPer Bill of Lading\nUSD\n0.00\nHandling Charge - Destinatio\n0.00\n0.00\nEmergency Bunker Surcharge\n0.00\nPer Container\nPer Container\nUSD\nUSD\n0.00\nDocumentation Fee - Origin\n0.00\nPer Bill of Lading\nUSD\n0.00\n0.00\nmer's Reompt (see clause I and 14]. Toal\nLa Paz\nPlace of Issue of Bl\n1 container(s)\nMoae A pligia sadnced  Luousnguco\nFumber & Segunct of OrgralBo2L\n2007-10-04\nDose of linsue of M\n2/THREE\n7.3)\nShpped on foend Date\n2007-09-25\nZua h\nDEL MAR SHIPPING SRL\nAd Ageric for the Camer\nThis transport document has one or more numbered attachments"
+  },
+  "ipfs": {
+    "dataHash": "QmXbwXptGhyQLUeBbr6BF5f282NABwReaQWoi1frccdd8A",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmXbwXptGhyQLUeBbr6BF5f282NABwReaQWoi1frccdd8A",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0x21a89c69df42b56ccbfee0f19de18ac691286a77edfa97f387cb90158242d214",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "status": "failed",
+    "tokenId": null,
+    "transactionHash": null,
+    "message": "等待鑄造NFT",
+    "error": "expected string or bytes-like object, got 'NoneType'"
+  },
+  "timestamp": "2026-01-23T11:37:10.648411"
+}

@@ -339,7 +339,7 @@ def list_ocr_files():
 
 @app.route('/api/process-ocr', methods=['POST'])
 def process_ocr_file():
-    """处理指定的OCR结果文件到区块链"""
+    """处理指定的OCR结果文件 - 只上传到IPFS，不铸造NFT"""
     try:
         data = request.get_json()
         filename = data.get('filename')
@@ -363,19 +363,89 @@ def process_ocr_file():
                 'error': '区块链桥接未初始化'
             }), 500
         
-        # 处理OCR结果
-        result = bridge.process_ocr_result(file_path)
+        # 只上传到IPFS，不铸造NFT
+        result = bridge.upload_to_ipfs_only(file_path)
+        
+        # 保存中间結果（只有IPFS數據，blockchain部分為pending）
+        blockchain_filename = filename.replace('_result.json', '_blockchain.json')
+        blockchain_path = os.path.join(app.config['OUTPUT_FOLDER'], blockchain_filename)
+        
+        with open(blockchain_path, 'w', encoding='utf-8') as f:
+            json.dump(result, f, ensure_ascii=False, indent=2)
         
         return jsonify({
             'success': True,
             'result': result,
-            'message': f'文件 {filename} 处理完成'
+            'message': f'已上傳到IPFS，等待鑄造NFT',
+            'ipfs_ready': True,
+            'nft_minted': False
         })
     
     except Exception as e:
         return jsonify({
             'success': False,
-            'error': f'处理失败: {str(e)}'
+            'error': f'處理失敗: {str(e)}'
+        }), 500
+
+@app.route('/api/mint-nft', methods=['POST'])
+def mint_nft():
+    """鑄造NFT - 基於已上傳到IPFS的數據"""
+    try:
+        data = request.get_json()
+        filename = data.get('filename')
+        
+        if not filename:
+            return jsonify({
+                'success': False,
+                'error': '未指定文件名'
+            }), 400
+        
+        # 讀取中間結果
+        blockchain_filename = filename.replace('_result.json', '_blockchain.json')
+        blockchain_path = os.path.join(app.config['OUTPUT_FOLDER'], blockchain_filename)
+        
+        if not os.path.exists(blockchain_path):
+            return jsonify({
+                'success': False,
+                'error': '請先上傳到IPFS'
+            }), 404
+        
+        with open(blockchain_path, 'r', encoding='utf-8') as f:
+            ipfs_result = json.load(f)
+        
+        if not bridge:
+            return jsonify({
+                'success': False,
+                'error': '区块链桥接未初始化'
+            }), 500
+        
+        # 檢查是否已經鑄造過
+        if ipfs_result.get('blockchain', {}).get('tokenId'):
+            return jsonify({
+                'success': True,
+                'result': ipfs_result,
+                'message': 'NFT已經鑄造過了',
+                'already_minted': True
+            })
+        
+        # 鑄造NFT
+        nft_result = bridge.mint_nft_from_ipfs(ipfs_result)
+        
+        # 更新結果文件
+        with open(blockchain_path, 'w', encoding='utf-8') as f:
+            json.dump(nft_result, f, ensure_ascii=False, indent=2)
+        
+        return jsonify({
+            'success': True,
+            'result': nft_result,
+            'message': f'NFT鑄造成功！Token ID: {nft_result["blockchain"]["tokenId"]}',
+            'nft_minted': True
+        })
+    
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': f'鑄造NFT失敗: {str(e)}'
         }), 500
 
 @app.route('/api/batch-process', methods=['POST'])
@@ -601,16 +671,26 @@ def full_process():
         # 3. 保存OCR结果
         result_filename, result_data = save_ocr_result(extracted_texts, avg_confidence, safe_filename)
         
-        # 4. 区块链处理
+        # 4. 只上傳到IPFS（不自動鑄造NFT）
         result_path = os.path.join(app.config['OUTPUT_FOLDER'], result_filename)
-        blockchain_result = bridge.process_ocr_result(result_path, file_path)
+        blockchain_result = bridge.upload_to_ipfs_only(result_path, file_path)
+        
+        # 5. 保存中間結果
+        blockchain_filename = result_filename.replace('_result.json', '_blockchain.json')
+        blockchain_path = os.path.join(app.config['OUTPUT_FOLDER'], blockchain_filename)
+        
+        with open(blockchain_path, 'w', encoding='utf-8') as f:
+            json.dump(blockchain_result, f, ensure_ascii=False, indent=2)
         
         return jsonify({
             'success': True,
             'ocr_result': result_data,
             'blockchain_result': blockchain_result,
-            'message': '完整流程处理成功',
-            'engine_used': str(ocr_engine)
+            'result_filename': result_filename,
+            'message': '已完成OCR和IPFS上傳，請點擊「鑄造NFT」按鈕完成',
+            'engine_used': str(ocr_engine),
+            'ipfs_ready': True,
+            'nft_minted': False
         })
     
     except Exception as e:

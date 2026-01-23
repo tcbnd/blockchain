@@ -2,10 +2,6 @@
 
 ## 📋 应用整合说明
 
-之前您的系统有两个分离的应用：
-- `app_enhanced.py` - 功能丰富版本
-- `app_windows.py` - Windows兼容版本
-
 现在已经**合并为一个统一应用**：`app_unified.py`
 
 ## 🚀 统一版特性

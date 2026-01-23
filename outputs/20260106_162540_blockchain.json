@@ -1,0 +1,45 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "EIN#: 94-2590264",
+    "vessel": "",
+    "voyage": "",
+    "portOfLoading": "",
+    "portOfDischarge": "",
+    "placeOfDelivery": "",
+    "shipper": {
+      "name": "",
+      "address": ""
+    },
+    "consignee": {
+      "name": "",
+      "address": ""
+    },
+    "cargoDescription": "SHIPPER/EXPORTER\nS/O NO. IT NO.\nOTT NO. 023884N\nR. TORRE & COMPANY\nREF#: RICDC5647600\nB/L NO.\nEIN#: 94-2590264\nOH-23040018\n2000 MARINA BOULEVARD\nSAN LEANDRO, CA 94577, UNITED STATES\nTEL: 650-624-2813\nCONSIGNEE (NOT NEGOTIABLE UNLESS CONSIGNED TO ORDER)\nLY GIA VIEN CO\nNO. 9F STREET 30 TAN QUY DONG R A\nTAN PHONG WARD DISTRICT 7\nHO CHI MINH CITY, 700000, VIETNAM\nNOTIFY PARTY (COMPLETE NAME AND ADDRESS)\nSAME AS CONSIGNEE\nAlliance Cargo System Inc.\nOCEAN BILL OF LADING\nFOR MULTIMODAL TRANSPORT AND PO",
+    "containerInfo": "",
+    "grossWeight": "",
+    "measurement": "",
+    "issueDate": "2026-01-23",
+    "extractedAt": "2026-01-23T11:27:23.462490",
+    "accuracy": 0,
+    "originalFilename": "20260106_162540_acs-No._OH23040018.png",
+    "ocrConfidence": 0.9880133315136558,
+    "rawText": "SHIPPER/EXPORTER\nS/O NO. IT NO.\nOTT NO. 023884N\nR. TORRE & COMPANY\nREF#: RICDC5647600\nB/L NO.\nEIN#: 94-2590264\nOH-23040018\n2000 MARINA BOULEVARD\nSAN LEANDRO, CA 94577, UNITED STATES\nTEL: 650-624-2813\nCONSIGNEE (NOT NEGOTIABLE UNLESS CONSIGNED TO ORDER)\nLY GIA VIEN CO\nNO. 9F STREET 30 TAN QUY DONG R A\nTAN PHONG WARD DISTRICT 7\nHO CHI MINH CITY, 700000, VIETNAM\nNOTIFY PARTY (COMPLETE NAME AND ADDRESS)\nSAME AS CONSIGNEE\nAlliance Cargo System Inc.\nOCEAN BILL OF LADING\nFOR MULTIMODAL TRANSPORT AND PORT TO PORT SHIPMENT\nPLACE OF RECEIPT\nOAKLAND, CA (UNITED STATES)\nPRE-CARRIAGE BY\nFOR DELIVERY PLEASE APPLY TO:\nTRUNG TIN TRANSPORT DELIVERY CO., LTD\nOCEAN VESSEL & VOYAGE NO.\nTAX CODE 0317270485\nONE SWAN 023W\nPORT OF LOADING\nA7/214A NATIONAL HIGHWAY 50, HAMLET 1, PHONG PHU COMMUNE,\nOAKLAND, CA (UNITED STATES)\nBINH CHANH DISTRICT, HO CHI MINH CITY, VIETNAM\nPORT OF DISCHARGE\nTEL: +84-353513470\nHO CHI MINH CITY (VIETNAM)\nPLACE OF DELIVERY\nHO CHI MINH CITY (VIETNAM)\nATTN: (OPS@TTTRANSPORT.VN)\nPARTICULARS FURNISHED BY MERCHANT\nCONTAINER NO. AND SEAL NO.\nMARKS & NOS.\nNO.OF PAKGS.\nDESCRIPTION OF PACKAGES AND GOOD\nGROSS WEIGHT (KGS)\nMEASUREMENT (CBM)\n20 PALLET(S)\nSHIPPER'S LOAD & COUNT :\n19,458.00 KGS\n40HC X 1 STC: 20 PALLET(S)\n42,897.55 LBS\n20 PALLETS (1080 CASES) / 19458 KGS (TRN-2023-015)\nTORANI FLAVORING SYRUP, HS CODE# 210690\nAES ITN#: X20230417072832\nFREIGHT COLLECT\nEXPRESS RELEASE\nCTNR#:FFAU3699949 / SEAL#: 41749369 / 20 PALLET(S) / 19,458.00 KGS\nCLEAN ON BOARD\n04-23-2023\nONE SWAN 023W\nCY/CY\nOAKLAND, CA\nTotal No. of Package or Containers (In Words)\nFreight rate charges, weights and / or\nPrepaid\nCollect\nTemperature\nFreight Status\nNo. of Original\nMeasurements subject to collection\nControl Instructions\n0\nCOLLECT AS ARRANGED\nThe Goods, or the container(s) or package(s) said to contain the cargo herein mentioned, to be carried subject to all\nthe terms and conditions of this Bill of Lading by the vessel named herein or any substitute at the Carrier's option\nand/or other means of transport, from the place of receipt or the port of loading to the port of discharge or the place of\ndelivery shown herein and there to be delivered unto order or assigns. In accepting this Bill of Lading. Merchant (as\ndefined by Article 1 on the back hereof agrees to be bound by al stipulations, exceptions, terms and conditions on\nthe face and back hereof, whether written, typed, stamped or printed, as fully s if signed by the Merchant, any local\ncustom or privilege to the contrary notwithstanding and understands that Carrier's liability will be limited as set forth in\nArticle 25, unless Merchant declares ad valorem valuation in excess of $5o0 per container. per package, or in case of\nGoods not shipped in packages, per customary freight unit, and pays extra freight as required by the Carrier's\npublished tariff.\nIN WITNESS WHEREOF THE CARRIER BY ITS AGENT HAS SIGNED THE NUMBER OF BILL(S) OF\nLADING STATED ABOVE, ALL OF THE SAME TENOR AND DATE, ONE OF WHICH BEING\nACCOMPLISHED, THE OTHERS TO STAND VOID.\nDATE AND PLACE ISSUED:\n04-23-2023\nOAKLAND, CA\nTOTAL PREPAID\nFor Alliance Cargo System Inc.\nTOTAL COLLECT\nBY\nAS AGENT FOR, THE CARRIER, OCEAN NETWORK EXPRESS\nSigned on behalf of the Carrier"
+  },
+  "ipfs": {
+    "dataHash": "QmVuKgTZkk9u4tiA5Avt7x5EAXLf7KSvthqwAcsgyobwUZ",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmVuKgTZkk9u4tiA5Avt7x5EAXLf7KSvthqwAcsgyobwUZ",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0x67e072920bc19a0f7d458314f49dee5cb569e64a29c25871aa9af63c6935811c",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "status": "failed",
+    "tokenId": null,
+    "transactionHash": null,
+    "message": "等待鑄造NFT",
+    "error": "All minting attempts failed"
+  },
+  "timestamp": "2026-01-23T11:27:25.481093"
+}

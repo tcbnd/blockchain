@@ -102,8 +102,70 @@ class OCRBlockchainBridge:
     def transform_ocr_to_bill_data(self, ocr_result):
         """
         将OCR结果转换为提单标准格式
+        支持多种OCR结果格式：
+        1. 结构化格式 (extracted/extracted_data)
+        2. 简单格式 (texts/extracted_texts列表)
         """
-        # 支持新舊兩種OCR結果格式
+        # 檢查是否為簡單OCR格式（只有texts列表）
+        if 'texts' in ocr_result or 'extracted_texts' in ocr_result:
+            # 簡單格式：提取所有文本並嘗試找到關鍵信息
+            texts_list = ocr_result.get('texts', []) or ocr_result.get('extracted_texts', [])
+            
+            # 將文本列表轉為可搜索的字符串
+            all_text = '\n'.join([item.get('text', '') if isinstance(item, dict) else str(item) for item in texts_list])
+            
+            # 嘗試提取關鍵信息（簡單版本）
+            bill_number = ''
+            for item in texts_list:
+                text = item.get('text', '') if isinstance(item, dict) else str(item)
+                if 'B/L' in text.upper() or 'BL NO' in text.upper():
+                    # 嘗試從相鄰文本中提取提單號
+                    idx = texts_list.index(item)
+                    if idx + 1 < len(texts_list):
+                        next_item = texts_list[idx + 1]
+                        bill_number = next_item.get('text', '') if isinstance(next_item, dict) else str(next_item)
+                    break
+            
+            # 如果沒找到，使用檔案名作為提單號
+            if not bill_number:
+                filename = ocr_result.get('filename', '')
+                # 從檔案名中提取可能的提單號
+                if '_' in filename:
+                    parts = filename.split('_')
+                    if len(parts) >= 2:
+                        bill_number = parts[-1].replace('.png', '').replace('.jpg', '').replace('.jpeg', '')
+            
+            # 構建簡化的提單數據
+            bill_data = {
+                "billNumber": bill_number or f"BL-{datetime.now().strftime('%Y%m%d%H%M%S')}",
+                "vessel": "",
+                "voyage": "",
+                "portOfLoading": "",
+                "portOfDischarge": "",
+                "placeOfDelivery": "",
+                "shipper": {
+                    "name": "",
+                    "address": ""
+                },
+                "consignee": {
+                    "name": "",
+                    "address": ""
+                },
+                "cargoDescription": all_text[:500] if all_text else "",  # 前500字符作為描述
+                "containerInfo": "",
+                "grossWeight": "",
+                "measurement": "",
+                "issueDate": datetime.now().isoformat().split('T')[0],
+                "extractedAt": datetime.now().isoformat(),
+                "accuracy": 0,
+                "originalFilename": ocr_result.get('filename', ''),
+                "ocrConfidence": ocr_result.get('average_confidence', 0),
+                "rawText": all_text  # 保存原始文本供參考
+            }
+            
+            return bill_data
+        
+        # 結構化格式處理（原有邏輯）
         extracted = ocr_result.get('extracted', {}) or ocr_result.get('extracted_data', {})
         bill_info = extracted.get('bill_info', {})
         shipper = extracted.get('shipper', {})
@@ -152,6 +214,144 @@ class OCRBlockchainBridge:
         }
         
         return bill_data
+    
+    def upload_to_ipfs_only(self, ocr_result_path, image_path=None):
+        """
+        只上傳到IPFS，不鑄造NFT
+        返回包含IPFS信息的結果，blockchain部分標記為pending
+        """
+        print(f"\n{'='*60}")
+        print(f"📤 開始處理OCR結果（僅上傳IPFS）")
+        print(f"{'='*60}\n")
+        
+        # 1. 加載OCR結果
+        print(f"步驟 1/3: 加載OCR結果...")
+        with open(ocr_result_path, 'r', encoding='utf-8') as f:
+            ocr_result = json.load(f)
+        
+        # 2. 轉換為提單格式
+        bill_data = self.transform_ocr_to_bill_data(ocr_result)
+        print(f"✅ 提單號: {bill_data['billNumber']}")
+        
+        # 3. 上傳圖片到IPFS（如果提供）
+        image_ipfs_hash = None
+        if image_path and os.path.exists(image_path):
+            print(f"\n步驟 2/3: 上傳原始圖片到IPFS...")
+            image_result = self.upload_file_to_pinata(
+                image_path,
+                f"bill_image_{bill_data['billNumber']}"
+            )
+            image_ipfs_hash = image_result['IpfsHash']
+            bill_data['imageIPFS'] = image_ipfs_hash
+            print(f"✅ 圖片IPFS: ipfs://{image_ipfs_hash}")
+        
+        # 4. 上傳提單數據到IPFS
+        print(f"\n步驟 3/3: 上傳提單數據到IPFS...")
+        data_result = self.upload_json_to_pinata(
+            bill_data,
+            f"bill_data_{bill_data['billNumber']}"
+        )
+        data_ipfs_hash = data_result['IpfsHash']
+        print(f"✅ 數據IPFS: ipfs://{data_ipfs_hash}")
+        
+        # 5. 計算數據哈希
+        data_hash = self.calculate_data_hash(bill_data)
+        print(f"✅ 數據哈希: 0x{data_hash}")
+        
+        # 6. 返回結果（blockchain部分為pending）
+        result = {
+            "success": True,
+            "billData": bill_data,
+            "ipfs": {
+                "dataHash": data_ipfs_hash,
+                "dataUrl": f"https://gateway.pinata.cloud/ipfs/{data_ipfs_hash}",
+                "imageHash": image_ipfs_hash,
+                "imageUrl": f"https://gateway.pinata.cloud/ipfs/{image_ipfs_hash}" if image_ipfs_hash else None
+            },
+            "blockchain": {
+                "dataHash": f"0x{data_hash}",
+                "contractAddress": self.contract_address,
+                "status": "pending",
+                "tokenId": None,
+                "transactionHash": None,
+                "message": "等待鑄造NFT"
+            },
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        print(f"\n{'='*60}")
+        print(f"✅ IPFS上傳完成！")
+        print(f"{'='*60}\n")
+        print(f"📊 查看數據: {result['ipfs']['dataUrl']}")
+        if result['ipfs']['imageUrl']:
+            print(f"🖼️  查看圖片: {result['ipfs']['imageUrl']}")
+        print(f"\n⚠️  請點擊「鑄造NFT」按鈕完成NFT鑄造")
+        
+        return result
+    
+    def mint_nft_from_ipfs(self, ipfs_result):
+        """
+        基於已上傳到IPFS的數據鑄造NFT
+        """
+        print(f"\n{'='*60}")
+        print(f"🎨 開始鑄造NFT")
+        print(f"{'='*60}\n")
+        
+        bill_data = ipfs_result['billData']
+        data_ipfs_hash = ipfs_result['ipfs']['dataHash']
+        data_hash = ipfs_result['blockchain']['dataHash'].replace('0x', '')
+        
+        print(f"提單號: {bill_data['billNumber']}")
+        print(f"IPFS哈希: {data_ipfs_hash}")
+        
+        # 鑄造NFT
+        mint_result = self.mint_nft_via_hardhat(
+            bill_data['billNumber'],
+            data_ipfs_hash,
+            data_hash
+        )
+        
+        # 更新結果
+        result = ipfs_result.copy()
+        
+        if mint_result['success']:
+            # 從stdout中提取tokenId
+            token_id = self.extract_token_id(mint_result.get('stdout', ''))
+            tx_hash = mint_result.get('transaction_hash')
+            
+            result['blockchain'] = {
+                "dataHash": f"0x{data_hash}",
+                "contractAddress": self.contract_address,
+                "status": "minted",
+                "tokenId": token_id,
+                "transactionHash": tx_hash,
+                "explorerUrl": f"https://sepolia.etherscan.io/tx/{tx_hash}" if tx_hash else None,
+                "contractUrl": f"https://sepolia.etherscan.io/address/{self.contract_address}"
+            }
+            print(f"\n✅ NFT鑄造成功！")
+            print(f"Token ID: {token_id}")
+            print(f"交易哈希: {tx_hash}")
+        else:
+            result['blockchain']['status'] = "failed"
+            result['blockchain']['error'] = mint_result.get('error', 'Unknown error')
+            print(f"\n❌ NFT鑄造失敗: {mint_result.get('error')}")
+        
+        print(f"\n{'='*60}")
+        
+        return result
+    
+    def extract_token_id(self, stdout):
+        """
+        從Hardhat輸出中提取token ID
+        """
+        import re
+        match = re.search(r'Token ID:\s*(\d+)', stdout)
+        if match:
+            return match.group(1)
+        match = re.search(r'tokenId.*?(\d+)', stdout, re.IGNORECASE)
+        if match:
+            return match.group(1)
+        return "1"  # 默認值
     
     def mint_nft_via_hardhat(self, bill_number, ipfs_hash, data_hash, shipper_address=None):
         """

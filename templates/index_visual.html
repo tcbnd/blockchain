@@ -491,11 +491,11 @@
         </div>
         
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="switchTab('dashboard')">📊 儀表板</button>
-            <button class="nav-tab" onclick="switchTab('upload')">📤 新增處理</button>
-            <button class="nav-tab" onclick="switchTab('compare')">🔍 結果比較</button>
-            <button class="nav-tab" onclick="switchTab('blockchain')">⛓️ 區塊鏈</button>
-            <button class="nav-tab" onclick="switchTab('files')">📁 文件管理</button>
+            <button class="nav-tab active" onclick="switchTab('dashboard', this)">📊 儀表板</button>
+            <button class="nav-tab" onclick="switchTab('upload', this)">📤 新增處理</button>
+            <button class="nav-tab" onclick="switchTab('compare', this)">🔍 結果比較</button>
+            <button class="nav-tab" onclick="switchTab('blockchain', this)">⛓️ 區塊鏈</button>
+            <button class="nav-tab" onclick="switchTab('files', this)">📁 文件管理</button>
         </div>
         
         <!-- 儀表板 -->
@@ -650,9 +650,15 @@
                     <div class="blockchain-card">
                         <h4>🔗 區塊鏈連結</h4>
                         <div class="blockchain-info">
-                            <div style="margin-bottom: 15px;">
-                                <a href="#" id="etherscanLink" class="external-link" target="_blank">
-                                    🔍 Etherscan 查看
+                            <div style="margin-bottom: 15px;" id="txLinkContainer">
+                                <a href="#" id="etherscanLink" class="external-link" target="_blank" style="display: none;">
+                                    🔍 查看交易 (Sepolia Testnet)
+                                </a>
+                                <span id="noTxYet" style="color: #999;">⏳ 等待NFT鑄造...</span>
+                            </div>
+                            <div style="margin-bottom: 15px;" id="nftLinkContainer">
+                                <a href="#" id="nftLink" class="external-link" target="_blank" style="display: none;">
+                                    🖼️ 查看NFT詳情
                                 </a>
                             </div>
                             <div style="margin-bottom: 15px;">
@@ -662,9 +668,20 @@
                             </div>
                             <div>
                                 <a href="#" id="contractLink" class="external-link" target="_blank">
-                                    📄 智能合約
+                                    📄 智能合約 (Sepolia)
                                 </a>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mint NFT 按鈕區域 -->
+                    <div class="blockchain-card" id="mintNftSection" style="display: none;">
+                        <h4>🎨 NFT 鑄造</h4>
+                        <div style="text-align: center; padding: 20px;">
+                            <p style="color: #666; margin-bottom: 15px;">數據已上傳到IPFS，點擊下方按鈕鑄造NFT</p>
+                            <button id="mintNftBtn" class="btn" style="width: 100%; font-size: 1.1rem; padding: 15px;" onclick="mintNFT()">
+                                🎨 鑄造 NFT
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -731,8 +748,20 @@
         let currentStats = {};
         let selectedFile = null;
         let currentOcrResult = null;
+        let currentResultFilename = null;  // 追蹤當前處理的檔案名
+        let isProcessing = false;  // 追蹤是否正在處理
         
-        function switchTab(tabName) {
+        function switchTab(tabName, clickedElement) {
+            console.log('Switching to tab:', tabName, 'clicked element:', clickedElement);
+            
+            // 警告：如果正在處理，提醒用戶
+            if (isProcessing) {
+                const confirmSwitch = confirm('處理正在進行中，操作會在背景繼續。確定要切換頁面嗎？');
+                if (!confirmSwitch) {
+                    return;
+                }
+            }
+            
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
             });
@@ -741,8 +770,28 @@
                 tab.classList.remove('active');
             });
             
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
+            const tabContent = document.getElementById(tabName);
+            if (tabContent) {
+                tabContent.classList.add('active');
+                console.log('Activated tab content:', tabName);
+            } else {
+                console.error('Tab content not found:', tabName);
+            }
+            
+            // Activate the tab button - either from click event or find it
+            if (clickedElement) {
+                clickedElement.classList.add('active');
+                console.log('Activated clicked button');
+            } else {
+                // Find and activate the corresponding tab button
+                const tabButtons = document.querySelectorAll('.nav-tab');
+                tabButtons.forEach(tab => {
+                    if (tab.textContent.includes(getTabLabel(tabName))) {
+                        tab.classList.add('active');
+                        console.log('Activated button by label:', getTabLabel(tabName));
+                    }
+                });
+            }
             
             if (tabName === 'dashboard') {
                 loadStats();
@@ -751,6 +800,17 @@
             } else if (tabName === 'blockchain') {
                 loadBlockchainData();
             }
+        }
+        
+        function getTabLabel(tabName) {
+            const labels = {
+                'dashboard': '儀表板',
+                'upload': '新增處理',
+                'compare': '結果比較',
+                'blockchain': '區塊鏈',
+                'files': '文件管理'
+            };
+            return labels[tabName] || '';
         }
         
         function showMessage(message, type = 'success') {
@@ -840,9 +900,12 @@
         }
         
         async function loadStats() {
+            console.log('Loading stats...');
             try {
                 const response = await fetch('/api/stats');
+                console.log('Stats response:', response.status);
                 const data = await response.json();
+                console.log('Stats data:', data);
                 
                 if (data.success) {
                     currentStats = data.stats;
@@ -851,26 +914,38 @@
                     document.getElementById('processedFiles').textContent = currentStats.processed_to_blockchain;
                     document.getElementById('pendingFiles').textContent = currentStats.pending_blockchain;
                     document.getElementById('avgConfidence').textContent = currentStats.average_confidence;
+                    
+                    console.log('Stats updated successfully');
                 } else {
+                    console.error('Stats error:', data.error);
                     showMessage(data.error, 'error');
                 }
             } catch (error) {
+                console.error('Stats fetch failed:', error);
                 showMessage('載入統計信息失敗: ' + error.message, 'error');
             }
         }
         
         async function loadFiles() {
+            const fileListDiv = document.getElementById('fileList');
+            fileListDiv.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">⏳ 載入中...</div>';
+            
             try {
                 const response = await fetch('/api/ocr-files');
                 const data = await response.json();
+                
+                console.log('Files loaded:', data);  // Debug log
                 
                 if (data.success) {
                     files = data.files;
                     renderFiles();
                 } else {
+                    fileListDiv.innerHTML = `<div style="text-align: center; padding: 40px; color: #f44336;">❌ ${data.error}</div>`;
                     showMessage(data.error, 'error');
                 }
             } catch (error) {
+                console.error('Load files error:', error);  // Debug log
+                fileListDiv.innerHTML = `<div style="text-align: center; padding: 40px; color: #f44336;">❌ 載入失敗: ${error.message}</div>`;
                 showMessage('載入文件列表失敗: ' + error.message, 'error');
             }
         }
@@ -878,34 +953,49 @@
         function renderFiles() {
             const fileListDiv = document.getElementById('fileList');
             
-            if (files.length === 0) {
-                fileListDiv.innerHTML = '<div style="text-align: center; color: #999; padding: 60px 0;">未找到OCR結果文件</div>';
+            console.log('Rendering files:', files);  // Debug log
+            
+            if (!files || files.length === 0) {
+                fileListDiv.innerHTML = '<div style="text-align: center; color: #999; padding: 60px 0;">📂 未找到OCR結果文件<br><br><small>請先上傳圖片並進行OCR處理</small></div>';
                 return;
             }
             
-            const html = files.map(file => `
-                <div style="background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-                    <div style="flex: 1;">
-                        <div style="font-weight: bold; color: #333; margin-bottom: 5px;">${file.original_filename}</div>
-                        <div style="color: #666; font-size: 0.9rem;">
-                            置信度: ${(file.confidence * 100).toFixed(1)}% | 
-                            文本行數: ${file.text_lines} | 
-                            檔案: ${file.filename}
+            try {
+                const html = files.map(file => {
+                    const confidence = file.confidence ? (file.confidence * 100).toFixed(1) : '0.0';
+                    const textLines = file.text_lines || 0;
+                    const filename = file.filename || 'unknown';
+                    const originalFilename = file.original_filename || filename;
+                    const processed = file.processed || false;
+                    
+                    return `
+                    <div style="background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                        <div style="flex: 1;">
+                            <div style="font-weight: bold; color: #333; margin-bottom: 5px;">${originalFilename}</div>
+                            <div style="color: #666; font-size: 0.9rem;">
+                                置信度: ${confidence}% | 
+                                文本行數: ${textLines} | 
+                                檔案: ${filename}
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <span style="padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; ${processed ? 'background: #d4edda; color: #155724;' : 'background: #fff3cd; color: #856404;'}">
+                                ${processed ? '已處理' : '待處理'}
+                            </span>
+                            ${processed ? 
+                                `<button class="btn" style="padding: 8px 16px; font-size: 0.9rem;" onclick="viewResult('${filename}')">查看結果</button>` :
+                                `<button class="btn" style="padding: 8px 16px; font-size: 0.9rem;" onclick="processFile('${filename}')">處理到區塊鏈</button>`
+                            }
                         </div>
                     </div>
-                    <div style="display: flex; gap: 10px; align-items: center;">
-                        <span style="padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; ${file.processed ? 'background: #d4edda; color: #155724;' : 'background: #fff3cd; color: #856404;'}">
-                            ${file.processed ? '已處理' : '待處理'}
-                        </span>
-                        ${file.processed ? 
-                            `<button class="btn" style="padding: 8px 16px; font-size: 0.9rem;" onclick="viewResult('${file.filename}')">查看結果</button>` :
-                            `<button class="btn" style="padding: 8px 16px; font-size: 0.9rem;" onclick="processFile('${file.filename}')">處理到區塊鏈</button>`
-                        }
-                    </div>
-                </div>
-            `).join('');
-            
-            fileListDiv.innerHTML = html;
+                `;
+                }).join('');
+                
+                fileListDiv.innerHTML = html;
+            } catch (error) {
+                console.error('Render error:', error);
+                fileListDiv.innerHTML = `<div style="text-align: center; padding: 40px; color: #f44336;">❌ 渲染失敗: ${error.message}</div>`;
+            }
         }
         
         async function loadBlockchainData() {
@@ -932,27 +1022,123 @@
         }
         
         function updateBlockchainDisplay(result) {
-            if (result.blockchain && result.billData) {
-                document.getElementById('tokenId').textContent = result.blockchain.tokenId || '-';
-                document.getElementById('billNumber').textContent = result.billData.billNumber || '-';
-                document.getElementById('ipfsHash').textContent = 
-                    result.ipfs.dataHash ? result.ipfs.dataHash.substring(0, 20) + '...' : '-';
+            console.log('updateBlockchainDisplay called with:', result);
+            
+            if (!result) {
+                console.error('No result provided to updateBlockchainDisplay');
+                return;
+            }
+            
+            // 檢查是否有區塊鏈數據
+            if (result.blockchain) {
+                console.log('Blockchain data:', result.blockchain);
                 
-                // 更新鏈接
-                if (result.blockchain.transactionHash) {
-                    const etherscanLink = document.getElementById('etherscanLink');
-                    etherscanLink.href = `https://sepolia.etherscan.io/tx/${result.blockchain.transactionHash}`;
+                // 更新基本信息
+                const tokenId = result.blockchain.tokenId || '-';
+                document.getElementById('tokenId').textContent = tokenId;
+                console.log('Updated tokenId to:', tokenId);
+                
+                if (result.billData) {
+                    document.getElementById('billNumber').textContent = result.billData.billNumber || '-';
                 }
                 
-                if (result.ipfs.dataUrl) {
+                if (result.ipfs && result.ipfs.dataHash) {
+                    document.getElementById('ipfsHash').textContent = 
+                        result.ipfs.dataHash.substring(0, 20) + '...';
+                }
+                
+                // 更新交易連結（根據狀態顯示不同內容）
+                const etherscanLink = document.getElementById('etherscanLink');
+                const noTxYet = document.getElementById('noTxYet');
+                
+                if (result.blockchain.transactionHash) {
+                    // 有交易哈希 - 顯示鏈接
+                    etherscanLink.href = `https://sepolia.etherscan.io/tx/${result.blockchain.transactionHash}`;
+                    etherscanLink.style.display = 'inline-block';
+                    noTxYet.style.display = 'none';
+                    console.log('Transaction link updated:', result.blockchain.transactionHash);
+                } else {
+                    // 還沒有交易 - 顯示等待消息
+                    etherscanLink.style.display = 'none';
+                    noTxYet.style.display = 'inline';
+                }
+                
+                // 更新NFT詳情連結
+                const nftLink = document.getElementById('nftLink');
+                if (result.blockchain.tokenId && result.blockchain.contractAddress) {
+                    nftLink.href = `https://sepolia.etherscan.io/token/${result.blockchain.contractAddress}?a=${result.blockchain.tokenId}`;
+                    nftLink.style.display = 'inline-block';
+                    console.log('NFT link updated for token:', result.blockchain.tokenId);
+                } else {
+                    nftLink.style.display = 'none';
+                }
+                
+                // 更新IPFS連結
+                if (result.ipfs && result.ipfs.dataUrl) {
                     const ipfsLink = document.getElementById('ipfsLink');
                     ipfsLink.href = result.ipfs.dataUrl;
                 }
                 
+                // 更新智能合約連結
                 if (result.blockchain.contractAddress) {
                     const contractLink = document.getElementById('contractLink');
                     contractLink.href = `https://sepolia.etherscan.io/address/${result.blockchain.contractAddress}`;
                 }
+                
+                // 顯示或隱藏Mint NFT按鈕
+                const mintSection = document.getElementById('mintNftSection');
+                if (result.blockchain.status === 'pending' || !result.blockchain.tokenId) {
+                    mintSection.style.display = 'block';
+                    console.log('Mint button shown (status pending or no tokenId)');
+                } else {
+                    mintSection.style.display = 'none';
+                    console.log('Mint button hidden (NFT minted, tokenId:', result.blockchain.tokenId, ')');
+                }
+            } else {
+                console.warn('No blockchain data in result');
+            }
+        }
+        
+        async function mintNFT() {
+            if (!currentResultFilename) {
+                showMessage('請先處理一個檔案', 'error');
+                return;
+            }
+            
+            const btn = document.getElementById('mintNftBtn');
+            btn.disabled = true;
+            btn.textContent = '鑄造中...';
+            isProcessing = true;  // 標記處理中
+            
+            try {
+                showMessage('正在鑄造NFT到區塊鏈...', 'info');
+                
+                const response = await fetch('/api/mint-nft', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        filename: currentResultFilename 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateBlockchainDisplay(data.result);
+                    showMessage(data.message, 'success');
+                    loadStats();
+                    loadFiles();
+                } else {
+                    showMessage(data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('鑄造NFT失敗: ' + error.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🎨 鑄造 NFT';
+                isProcessing = false;  // 處理結束
             }
         }
         
@@ -960,22 +1146,22 @@
             let message = '';
             switch (functionName) {
                 case 'mintBill':
-                    message = '鑄造提單NFT功能\\n\\n此功能將為新的提單創建NFT代幣，包括：\\n- 設定提單號碼\\n- 記錄IPFS哈希\\n- 生成唯一Token ID\\n\\n注意：只有合約擁有者可以執行此操作';
+                    message = '鑄造提單NFT功能。此功能將為新的提單創建NFT代幣，包括：設定提單號碼、記錄IPFS哈希、生成唯一Token ID。注意：只有合約擁有者可以執行此操作';
                     break;
                 case 'pledgeForFinancing':
-                    message = '質押融資功能\\n\\n提單持有者可以：\\n- 將提單質押給金融機構\\n- 指定融資方地址\\n- 設定融資金額\\n\\n質押後提單將不能轉讓，直到融資方釋放';
+                    message = '質押融資功能。提單持有者可以：將提單質押給金融機構、指定融資方地址、設定融資金額。質押後提單將不能轉讓，直到融資方釋放';
                     break;
                 case 'releaseOwnership':
-                    message = '釋放所有權功能\\n\\n金融機構可以：\\n- 釋放已質押的提單\\n- 恢復提單的可轉讓性\\n\\n注意：只有融資方可以執行此操作';
+                    message = '釋放所有權功能。金融機構可以：釋放已質押的提單、恢復提單的可轉讓性。注意：只有融資方可以執行此操作';
                     break;
                 case 'getBillData':
-                    message = '查詢提單數據功能\\n\\n可以查詢：\\n- 提單基本信息\\n- IPFS存儲位置\\n- 融資狀態\\n- 時間戳等詳細數據';
+                    message = '查詢提單數據功能。可以查詢：提單基本信息、IPFS存儲位置、融資狀態、時間戳等詳細數據';
                     break;
                 case 'isTransferable':
-                    message = '檢查轉讓性功能\\n\\n檢查提單是否可以轉讓：\\n- 未融資的提單可自由轉讓\\n- 已融資但已釋放的提單可轉讓\\n- 融資中的提單不可轉讓';
+                    message = '檢查轉讓性功能。檢查提單是否可以轉讓：未融資的提單可自由轉讓、已融資但已釋放的提單可轉讓、融資中的提單不可轉讓';
                     break;
                 case 'tokenURI':
-                    message = '獲取元數據功能\\n\\n返回NFT的元數據URI：\\n- IPFS上的JSON metadata\\n- 包含提單詳細信息\\n- 符合ERC-721標準';
+                    message = '獲取元數據功能。返回NFT的元數據URI：IPFS上的JSON metadata、包含提單詳細信息、符合ERC-721標準';
                     break;
             }
             alert(message);
@@ -1123,12 +1309,10 @@
                 return;
             }
             
-            // Mark that a processing action was triggered
-            processingActionTriggered = true;
-            
             const btn = document.getElementById('fullProcessBtn');
             btn.disabled = true;
             btn.textContent = '完整處理中...';
+            isProcessing = true;  // 標記處理中
             
             try {
                 updateWorkflowStep(2);
@@ -1156,12 +1340,22 @@
                         logProcess(`IPFS上傳: ${data.blockchain_result.ipfs.dataUrl}`);
                     }
                     if (data.blockchain_result.blockchain) {
-                        logProcess(`區塊鏈處理: ${data.blockchain_result.blockchain.dataHash}`);
+                        if (data.blockchain_result.blockchain.status === 'pending') {
+                            logProcess(`⚠️ IPFS上傳完成，請點擊「鑄造NFT」按鈕`);
+                        } else {
+                            logProcess(`區塊鏈處理: ${data.blockchain_result.blockchain.dataHash}`);
+                        }
                     }
                     
                     updateTextResult(data.ocr_result);
                     updateBlockchainDisplay(data.blockchain_result);
-                    showMessage('完整流程處理成功！', 'success');
+                    currentResultFilename = data.result_filename;  // 保存檔案名用於鑄造NFT
+                    
+                    // 切換到區塊鏈標籤
+                    isProcessing = false;  // 完成處理，允許切換
+                    switchTab('blockchain');
+                    
+                    showMessage(data.message, 'success');
                     loadStats();
                 } else {
                     logProcess(`完整流程失敗: ${data.error}`);
@@ -1177,12 +1371,14 @@
             } finally {
                 btn.disabled = false;
                 btn.textContent = '完整處理';
+                isProcessing = false;  // 處理結束
             }
         }
         
         async function processFile(filename) {
             try {
                 showMessage('正在處理 ' + filename + '...', 'info');
+                isProcessing = true;  // 標記處理中
                 
                 const response = await fetch('/api/process-ocr', {
                     method: 'POST',
@@ -1195,6 +1391,13 @@
                 const data = await response.json();
                 
                 if (data.success) {
+                    currentResultFilename = filename;  // 保存檔案名
+                    updateBlockchainDisplay(data.result);
+                    
+                    // 切換到區塊鏈標籤
+                    isProcessing = false;  // 允許切換
+                    switchTab('blockchain');
+                    
                     showMessage(data.message, 'success');
                     loadFiles();
                     loadStats();
@@ -1203,6 +1406,8 @@
                 }
             } catch (error) {
                 showMessage('處理失敗: ' + error.message, 'error');
+            } finally {
+                isProcessing = false;  // 處理結束
             }
         }
         
@@ -1213,6 +1418,7 @@
                 
                 if (data.success) {
                     const result = data.result;
+                    currentResultFilename = filename;  // 保存檔案名
                     updateBlockchainDisplay(result);
                     
                     // 切換到區塊鏈標籤
