@@ -1033,13 +1033,18 @@
             if (result.blockchain) {
                 console.log('Blockchain data:', result.blockchain);
                 
-                // 更新基本信息
+                // 更新Token ID（NFT編號）
                 const tokenId = result.blockchain.tokenId || '-';
                 document.getElementById('tokenId').textContent = tokenId;
                 console.log('Updated tokenId to:', tokenId);
                 
-                if (result.billData) {
-                    document.getElementById('billNumber').textContent = result.billData.billNumber || '-';
+                // 更新提單編號（保持不變，不應該被Token ID覆蓋）
+                if (result.billData && result.billData.billNumber) {
+                    const currentBillNumber = document.getElementById('billNumber').textContent;
+                    // 只在尚未設置或為'-'時更新
+                    if (currentBillNumber === '-' || !currentBillNumber) {
+                        document.getElementById('billNumber').textContent = result.billData.billNumber;
+                    }
                 }
                 
                 if (result.ipfs && result.ipfs.dataHash) {
@@ -1146,22 +1151,22 @@
             let message = '';
             switch (functionName) {
                 case 'mintBill':
-                    message = '鑄造提單NFT功能。此功能將為新的提單創建NFT代幣，包括：設定提單號碼、記錄IPFS哈希、生成唯一Token ID。注意：只有合約擁有者可以執行此操作';
+                    message = '【演示說明】鑄造提單NFT功能。此功能將為新的提單創建NFT代幣，包括：設定提單號碼、記錄IPFS哈希、生成唯一Token ID。注意：只有合約擁有者可以執行此操作。本系統已自動處理鑄造功能，此處僅為功能說明展示。';
                     break;
                 case 'pledgeForFinancing':
-                    message = '質押融資功能。提單持有者可以：將提單質押給金融機構、指定融資方地址、設定融資金額。質押後提單將不能轉讓，直到融資方釋放';
+                    message = '【演示說明】質押融資功能。提單持有者可以：將提單質押給金融機構、指定融資方地址、設定融資金額。質押後提單將不能轉讓，直到融資方釋放。此功能需要在實際應用中通過智能合約接口調用，本演示不會執行實際操作。';
                     break;
                 case 'releaseOwnership':
-                    message = '釋放所有權功能。金融機構可以：釋放已質押的提單、恢復提單的可轉讓性。注意：只有融資方可以執行此操作';
+                    message = '【演示說明】釋放所有權功能。金融機構可以：釋放已質押的提單、恢復提單的可轉讓性。注意：只有融資方可以執行此操作。此功能需要在實際應用中通過智能合約接口調用，本演示不會執行實際操作。';
                     break;
                 case 'getBillData':
-                    message = '查詢提單數據功能。可以查詢：提單基本信息、IPFS存儲位置、融資狀態、時間戳等詳細數據';
+                    message = '【演示說明】查詢提單數據功能。可以查詢：提單基本信息、IPFS存儲位置、融資狀態、時間戳等詳細數據。此功能需要連接到區塊鏈節點進行查詢，本演示不會執行實際操作。';
                     break;
                 case 'isTransferable':
-                    message = '檢查轉讓性功能。檢查提單是否可以轉讓：未融資的提單可自由轉讓、已融資但已釋放的提單可轉讓、融資中的提單不可轉讓';
+                    message = '【演示說明】檢查轉讓性功能。檢查提單是否可以轉讓：未融資的提單可自由轉讓、已融資但已釋放的提單可轉讓、融資中的提單不可轉讓。此功能需要連接到區塊鏈節點進行查詢，本演示不會執行實際操作。';
                     break;
                 case 'tokenURI':
-                    message = '獲取元數據功能。返回NFT的元數據URI：IPFS上的JSON metadata、包含提單詳細信息、符合ERC-721標準';
+                    message = '【演示說明】獲取元數據功能。返回NFT的元數據URI：IPFS上的JSON metadata、包含提單詳細信息、符合ERC-721標準。此功能需要連接到區塊鏈節點進行查詢，本演示不會執行實際操作。';
                     break;
             }
             alert(message);
