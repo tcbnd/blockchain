@@ -1406,6 +1406,7 @@
         
         function updateBlockchainDisplay(result) {
             console.log('updateBlockchainDisplay called with:', result);
+            console.log('Current result filename:', currentResultFilename);
             
             if (!result) {
                 console.error('No result provided to updateBlockchainDisplay');
@@ -1415,6 +1416,8 @@
             // 檢查是否有區塊鏈數據
             if (result.blockchain) {
                 console.log('Blockchain data:', result.blockchain);
+                console.log('Bill data:', result.billData);
+                console.log('IPFS data:', result.ipfs);
                 
                 // 更新Token ID（NFT編號）
                 const tokenId = result.blockchain.tokenId || '-';
@@ -1425,12 +1428,16 @@
                 if (result.billData && result.billData.billNumber) {
                     document.getElementById('billNumber').textContent = result.billData.billNumber;
                     console.log('Updated billNumber to:', result.billData.billNumber);
+                } else {
+                    console.warn('No billNumber in result');
                 }
                 
                 if (result.ipfs && result.ipfs.dataHash) {
                     const shortHash = result.ipfs.dataHash.substring(0, 20) + '...';
                     document.getElementById('ipfsHash').textContent = shortHash;
                     console.log('Updated IPFS hash to:', result.ipfs.dataHash);
+                } else {
+                    console.warn('No IPFS dataHash in result');
                 }
                 
                 // 更新交易連結（根據狀態顯示不同內容）
