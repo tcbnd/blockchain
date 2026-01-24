@@ -26,8 +26,8 @@ async function main() {
 
   console.log("=== 从OCR数据铸造NFT ===\n");
 
-  // 连接合约
-  const BillOfLadingNFT = await hre.ethers.getContractFactory("BillOfLadingNFT");
+  // 连接合约 - 使用v2版本（18位Token ID）
+  const BillOfLadingNFT = await hre.ethers.getContractFactory("contracts/BillOfLadingNFT_v2.sol:BillOfLadingNFT");
   const contract = BillOfLadingNFT.attach(contractAddress);
   
   // 获取签名者

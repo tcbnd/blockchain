@@ -31,8 +31,19 @@ async function connectWallet() {
     }
     
     try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        console.log('Requesting wallet connection...');
+        
+        // Force wallet popup by requesting accounts (this will show MetaMask popup)
+        const accounts = await window.ethereum.request({ 
+            method: 'eth_requestAccounts'
+        });
+        
+        if (!accounts || accounts.length === 0) {
+            throw new Error('未獲取到錢包地址');
+        }
+        
         userAccount = accounts[0];
+        console.log('Account connected:', userAccount);
         
         web3 = new Web3(window.ethereum);
         contract = new web3.eth.Contract(contractABI, contractAddress);

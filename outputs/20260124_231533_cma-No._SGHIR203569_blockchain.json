@@ -1,0 +1,46 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "BL20260124231537",
+    "vessel": "MAERSK CONTAINER SHIP",
+    "voyage": "",
+    "portOfLoading": "Shanghai, China",
+    "portOfDischarge": "Los Angeles, USA",
+    "placeOfDelivery": "",
+    "shipper": {
+      "name": "Global Export Company Ltd",
+      "address": ""
+    },
+    "consignee": {
+      "name": "International Import Corp",
+      "address": ""
+    },
+    "cargoDescription": "Electronics & Components",
+    "containerInfo": "MSKU1234567",
+    "sealNumber": "987654321",
+    "grossWeight": "2500 KGS",
+    "measurement": "",
+    "issueDate": "2026-01-24",
+    "extractedAt": "2026-01-24T23:16:07.185573",
+    "accuracy": 0,
+    "originalFilename": "20260124_231533_cma-No._SGHIR203569.png",
+    "ocrConfidence": 0.95,
+    "rawText": "BILL OF LADING\nB/L No: BL20260124231537\nVessel: MAERSK CONTAINER SHIP\nPort of Loading: Shanghai, China\nPort of Discharge: Los Angeles, USA\nShipper: Global Export Company Ltd\nConsignee: International Import Corp\nDescription of Goods: Electronics & Components\nGross Weight: 2500 KGS\nContainer No: MSKU1234567\nSeal No: 987654321\nProcessed: 2026-01-24 23:15:37\nFreight: Prepaid\nTerms: CIF Los Angeles"
+  },
+  "ipfs": {
+    "dataHash": "QmNcPokCbDQvrDPzQhSPa965jVkTbHHjhGy4SR5PDXTSMD",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmNcPokCbDQvrDPzQhSPa965jVkTbHHjhGy4SR5PDXTSMD",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0xdd2a44990851ef189d0e8ac4c720683d7caf418f09ba3f1a39cee3ff831098e5",
+    "contractAddress": "0xf425b7fB1eE4A788Dd00b817be09915EAECbaa1a",
+    "status": "minted",
+    "tokenId": "100000000000000001",
+    "transactionHash": "0x28788c748d274aa34b5ddc906c1abe3a6e56e4e06d79e16fc1437c64bf22e6be",
+    "explorerUrl": "https://sepolia.etherscan.io/tx/0x28788c748d274aa34b5ddc906c1abe3a6e56e4e06d79e16fc1437c64bf22e6be",
+    "contractUrl": "https://sepolia.etherscan.io/address/0xf425b7fB1eE4A788Dd00b817be09915EAECbaa1a"
+  },
+  "timestamp": "2026-01-24T23:16:16.160117"
+}

@@ -818,19 +818,23 @@
                 <div class="blockchain-grid">
                     <div class="blockchain-card">
                         <h4>📋 最新NFT信息</h4>
-                        <div class="blockchain-info" id="latestNftInfo">
+                        <div class="blockchain-info" id="latestNftInfo" style="display: none;">
                             <div class="info-row">
                                 <span class="info-label">Token ID:</span>
-                                <span class="info-value" id="tokenId">-</span>
+                                <span class="info-value" id="tokenId"></span>
                             </div>
                             <div class="info-row">
                                 <span class="info-label">提單編號:</span>
-                                <span class="info-value" id="billNumber">-</span>
+                                <span class="info-value" id="billNumber"></span>
                             </div>
                             <div class="info-row">
                                 <span class="info-label">IPFS Hash:</span>
-                                <span class="info-value hash-short" id="ipfsHash" style="cursor: pointer; text-decoration: underline;" title="點擊查看IPFS數據" onclick="openIPFSData()">-</span>
+                                <span class="info-value hash-short" id="ipfsHash" style="cursor: pointer; text-decoration: underline;" title="點擊查看IPFS數據" onclick="openIPFSData()"></span>
                             </div>
+                        </div>
+                        <div id="noNftDataYet" style="text-align: center; padding: 30px; color: #999;">
+                            <div style="font-size: 3rem; margin-bottom: 10px;">📎</div>
+                            <div>請選擇檔案查看 NFT 信息</div>
                         </div>
                     </div>
                     
@@ -1091,9 +1095,8 @@
                 loadStats();
             } else if (tabName === 'files') {
                 loadFiles();
-            } else if (tabName === 'blockchain') {
-                loadBlockchainData();
             }
+            // blockchain tab: 不執行任何操作，保持當前狀態
         }
         
         function getTabLabel(tabName) {
@@ -1381,131 +1384,198 @@
             }
         }
         
-        async function loadBlockchainData() {
-            // 載入最新的區塊鏈數據
-            try {
-                const response = await fetch('/api/ocr-files');
-                const data = await response.json();
-                
-                if (data.success && data.files.length > 0) {
-                    const processedFiles = data.files.filter(f => f.processed);
-                    if (processedFiles.length > 0) {
-                        const latest = processedFiles[0];
-                        const resultResponse = await fetch(`/api/results/${latest.filename}`);
-                        const resultData = await resultResponse.json();
-                        
-                        if (resultData.success) {
-                            updateBlockchainDisplay(resultData.result);
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('載入區塊鏈數據失敗:', error);
+        function initBlockchainTab() {
+            // 初始化區塊鏈標籤為空狀態（僅在頁面載入時調用）
+            console.log('Initializing blockchain tab to empty state');
+            
+            const latestNftInfo = document.getElementById('latestNftInfo');
+            const noNftDataYet = document.getElementById('noNftDataYet');
+            
+            if (latestNftInfo && noNftDataYet) {
+                latestNftInfo.style.display = 'none';
+                noNftDataYet.style.display = 'block';
             }
+            
+            // 清空所有顯示
+            const tokenId = document.getElementById('tokenId');
+            const billNumber = document.getElementById('billNumber');
+            const ipfsHash = document.getElementById('ipfsHash');
+            
+            if (tokenId) tokenId.textContent = '';
+            if (billNumber) billNumber.textContent = '';
+            if (ipfsHash) ipfsHash.textContent = '';
+            
+            // 清空鏈接
+            const nftLink = document.getElementById('nftLink');
+            const ipfsLink = document.getElementById('ipfsLink');
+            const etherscanLink = document.getElementById('etherscanLink');
+            const mintNftSection = document.getElementById('mintNftSection');
+            
+            if (nftLink) nftLink.style.display = 'none';
+            if (ipfsLink) ipfsLink.style.display = 'none';
+            if (etherscanLink) etherscanLink.style.display = 'none';
+            if (mintNftSection) mintNftSection.style.display = 'none';
+            
+            const noTxYet = document.getElementById('noTxYet');
+            if (noTxYet) {
+                noTxYet.textContent = '⏳ 等待NFT鑄造...';
+                noTxYet.style.color = '#999';
+                noTxYet.style.display = 'inline';
+            }
+            
+            // 清空當前檔案名
+            currentResultFilename = null;
         }
         
         function updateBlockchainDisplay(result) {
-            console.log('updateBlockchainDisplay called with:', result);
+            console.log('=== updateBlockchainDisplay START ===');
+            console.log('Full result object:', JSON.stringify(result, null, 2));
             console.log('Current result filename:', currentResultFilename);
             
             if (!result) {
-                console.error('No result provided to updateBlockchainDisplay');
+                console.error('❌ No result provided to updateBlockchainDisplay');
                 return;
             }
             
+            // 獲取DOM元素並檢查是否存在
+            const latestNftInfo = document.getElementById('latestNftInfo');
+            const noNftDataYet = document.getElementById('noNftDataYet');
+            
+            if (!latestNftInfo || !noNftDataYet) {
+                console.error('❌ DOM elements not found!', {
+                    latestNftInfo: !!latestNftInfo,
+                    noNftDataYet: !!noNftDataYet
+                });
+                return;
+            }
+            
+            // 先清空所有鏈接和按鈕，防止顯示舊數據
+            const nftLink = document.getElementById('nftLink');
+            const ipfsLink = document.getElementById('ipfsLink');
+            const etherscanLink = document.getElementById('etherscanLink');
+            const mintNftSection = document.getElementById('mintNftSection');
+            
+            if (nftLink) nftLink.style.display = 'none';
+            if (ipfsLink) ipfsLink.style.display = 'none';
+            if (etherscanLink) etherscanLink.style.display = 'none';
+            if (mintNftSection) mintNftSection.style.display = 'none';
+            
             // 檢查是否有區塊鏈數據
-            if (result.blockchain) {
-                console.log('Blockchain data:', result.blockchain);
-                console.log('Bill data:', result.billData);
-                console.log('IPFS data:', result.ipfs);
-                
-                // 更新Token ID（NFT編號）
-                const tokenId = result.blockchain.tokenId || '-';
+            if (!result.blockchain) {
+                console.warn('❌ No blockchain data in result - keeping empty state');
+                // 保持空狀態，不顯示NFT信息
+                latestNftInfo.style.display = 'none';
+                noNftDataYet.style.display = 'block';
+                return;
+            }
+            
+            // 有區塊鏈數據，顯示NFT信息區塊
+            console.log('✅ Blockchain data found:', result.blockchain);
+            console.log('📋 Bill data:', result.billData);
+            console.log('🔗 IPFS data:', result.ipfs);
+            
+            console.log('Setting latestNftInfo display to flex...');
+            latestNftInfo.style.display = 'flex';
+            noNftDataYet.style.display = 'none';
+            
+            // 強制觸發重繪
+            latestNftInfo.style.visibility = 'visible';
+            latestNftInfo.style.opacity = '1';
+            
+            console.log('Display changed - checking actual computed style...');
+            const computedStyle = window.getComputedStyle(latestNftInfo);
+            console.log('Computed display:', computedStyle.display);
+            console.log('Inline style display:', latestNftInfo.style.display);
+            console.log('latestNftInfo should now be visible');
+            
+            // 更新Token ID（NFT編號）- 如果為null則顯示"待鑄造"
+            const tokenId = result.blockchain.tokenId;
+            if (tokenId) {
                 document.getElementById('tokenId').textContent = tokenId;
                 console.log('Updated tokenId to:', tokenId);
-                
-                // 更新提單編號
-                if (result.billData && result.billData.billNumber) {
-                    document.getElementById('billNumber').textContent = result.billData.billNumber;
-                    console.log('Updated billNumber to:', result.billData.billNumber);
-                } else {
-                    console.warn('No billNumber in result');
-                }
-                
-                if (result.ipfs && result.ipfs.dataHash) {
-                    const shortHash = result.ipfs.dataHash.substring(0, 20) + '...';
-                    document.getElementById('ipfsHash').textContent = shortHash;
-                    console.log('Updated IPFS hash to:', result.ipfs.dataHash);
-                } else {
-                    console.warn('No IPFS dataHash in result');
-                }
-                
-                // 更新交易連結（根據狀態顯示不同內容）
-                const etherscanLink = document.getElementById('etherscanLink');
-                const noTxYet = document.getElementById('noTxYet');
-                
-                if (result.blockchain.transactionHash) {
-                    // 有交易哈希 - 顯示鏈接
-                    etherscanLink.href = `https://sepolia.etherscan.io/tx/${result.blockchain.transactionHash}`;
-                    etherscanLink.style.display = 'inline-block';
-                    noTxYet.style.display = 'none';
-                    console.log('Transaction link updated:', result.blockchain.transactionHash);
-                } else {
-                    // 還沒有交易 - 根據Token ID和狀態顯示不同消息
-                    etherscanLink.style.display = 'none';
-                    noTxYet.style.display = 'inline';
-                    
-                    if (result.blockchain.tokenId) {
-                        // 已經有Token ID = NFT已鑄造
-                        noTxYet.textContent = '✅ NFT已鑄造完成 (Token ID: ' + result.blockchain.tokenId + ')';
-                        noTxYet.style.color = '#4caf50';
-                    } else if (result.ipfs && result.ipfs.dataHash) {
-                        // 有IPFS但沒有Token ID = 等待鑄造
-                        noTxYet.textContent = '⏳ 已上傳IPFS，等待鑄造NFT...';
-                        noTxYet.style.color = '#ff9800';
-                    } else {
-                        // 什麼都沒有 = 還沒開始
-                        noTxYet.textContent = '⏳ 等待處理...';
-                        noTxYet.style.color = '#999';
-                    }
-                }
-                
-                // 更新NFT詳情連結
-                const nftLink = document.getElementById('nftLink');
-                if (result.blockchain.tokenId && result.blockchain.contractAddress) {
-                    nftLink.href = `https://sepolia.etherscan.io/token/${result.blockchain.contractAddress}?a=${result.blockchain.tokenId}`;
-                    nftLink.style.display = 'inline-block';
-                    console.log('NFT link updated for token:', result.blockchain.tokenId);
-                } else {
-                    nftLink.style.display = 'none';
-                }
-                
-                // 更新IPFS連結
-                if (result.ipfs && result.ipfs.dataUrl) {
-                    const ipfsLink = document.getElementById('ipfsLink');
-                    ipfsLink.href = result.ipfs.dataUrl;
-                    ipfsLink.style.display = 'inline-block';
-                    console.log('IPFS link updated:', result.ipfs.dataUrl);
-                    console.log('IPFS hash:', result.ipfs.dataHash);
-                }
-                
-                // 更新智能合約連結
-                if (result.blockchain.contractAddress) {
-                    const contractLink = document.getElementById('contractLink');
-                    contractLink.href = `https://sepolia.etherscan.io/address/${result.blockchain.contractAddress}`;
-                }
-                
-                // 顯示或隱藏Mint NFT按鈕
-                const mintSection = document.getElementById('mintNftSection');
-                if (result.blockchain.status === 'pending' || !result.blockchain.tokenId) {
-                    mintSection.style.display = 'block';
-                    console.log('Mint button shown (status pending or no tokenId)');
-                } else {
-                    mintSection.style.display = 'none';
-                    console.log('Mint button hidden (NFT minted, tokenId:', result.blockchain.tokenId, ')');
-                }
             } else {
-                console.warn('No blockchain data in result');
+                document.getElementById('tokenId').textContent = '⏳ 待鑄造';
+                console.log('Token ID is null - showing pending status');
+            }
+            
+            // 更新提單編號
+            if (result.billData && result.billData.billNumber) {
+                document.getElementById('billNumber').textContent = result.billData.billNumber;
+                console.log('Updated billNumber to:', result.billData.billNumber);
+            } else {
+                document.getElementById('billNumber').textContent = '未提取';
+                console.warn('No billNumber in result');
+            }
+            
+            if (result.ipfs && result.ipfs.dataHash) {
+                const shortHash = result.ipfs.dataHash.substring(0, 20) + '...';
+                document.getElementById('ipfsHash').textContent = shortHash;
+                console.log('Updated IPFS hash to:', result.ipfs.dataHash);
+            } else {
+                document.getElementById('ipfsHash').textContent = '未上傳';
+                console.warn('No IPFS dataHash in result');
+            }
+            
+            // 更新交易連結（根據狀態顯示不同內容）
+            const noTxYet = document.getElementById('noTxYet');
+            
+            if (result.blockchain.transactionHash) {
+                // 有交易哈希 - 顯示鏈接
+                etherscanLink.href = `https://sepolia.etherscan.io/tx/${result.blockchain.transactionHash}`;
+                etherscanLink.style.display = 'inline-block';
+                noTxYet.style.display = 'none';
+                console.log('Transaction link updated:', result.blockchain.transactionHash);
+            } else {
+                // 還沒有交易 - 根據Token ID和狀態顯示不同消息
+                etherscanLink.style.display = 'none';
+                noTxYet.style.display = 'inline';
+                
+                if (result.blockchain.tokenId) {
+                    // 已經有Token ID = NFT已鑄造
+                    noTxYet.textContent = '✅ NFT已鑄造完成 (Token ID: ' + result.blockchain.tokenId + ')';
+                    noTxYet.style.color = '#4caf50';
+                } else if (result.ipfs && result.ipfs.dataHash) {
+                    // 有IPFS但沒有Token ID = 等待鑄造
+                    noTxYet.textContent = '⏳ 已上傳IPFS，等待鑄造NFT...';
+                    noTxYet.style.color = '#ff9800';
+                } else {
+                    // 什麼都沒有 = 還沒開始
+                    noTxYet.textContent = '⏳ 等待處理...';
+                    noTxYet.style.color = '#999';
+                }
+            }
+            
+            // 更新NFT詳情連結
+            if (result.blockchain.tokenId && result.blockchain.contractAddress) {
+                nftLink.href = `https://sepolia.etherscan.io/token/${result.blockchain.contractAddress}?a=${result.blockchain.tokenId}`;
+                nftLink.style.display = 'inline-block';
+                console.log('NFT link updated for token:', result.blockchain.tokenId);
+            } else {
+                nftLink.style.display = 'none';
+            }
+            
+            // 更新IPFS連結
+            if (result.ipfs && result.ipfs.dataUrl) {
+                ipfsLink.href = result.ipfs.dataUrl;
+                ipfsLink.style.display = 'inline-block';
+                console.log('IPFS link updated:', result.ipfs.dataUrl);
+                console.log('IPFS hash:', result.ipfs.dataHash);
+            }
+            
+            // 更新智能合約連結
+            if (result.blockchain.contractAddress) {
+                const contractLink = document.getElementById('contractLink');
+                contractLink.href = `https://sepolia.etherscan.io/address/${result.blockchain.contractAddress}`;
+            }
+            
+            // 顯示或隱藏Mint NFT按鈕
+            const mintSection = document.getElementById('mintNftSection');
+            if (result.blockchain.status === 'pending' || !result.blockchain.tokenId) {
+                mintSection.style.display = 'block';
+                console.log('Mint button shown (status pending or no tokenId)');
+            } else {
+                mintSection.style.display = 'none';
+                console.log('Mint button hidden (NFT minted, tokenId:', result.blockchain.tokenId, ')');
             }
         }
         
@@ -1789,7 +1859,7 @@
                     
                     // 切換到區塊鏈標籤
                     isProcessing = false;  // 完成處理，允許切換
-                    const blockchainTab = document.querySelector('.nav-tab:nth-child(2)');
+                    const blockchainTab = document.querySelector('.nav-tab:nth-child(3)');
                     switchTab('blockchain', blockchainTab);
                     
                     showMessage(data.message, 'success');
@@ -1814,6 +1884,18 @@
         
         async function processFile(filename) {
             try {
+                // 立即清空所有顯示，防止舊數據殘留
+                document.getElementById('latestNftInfo').style.display = 'none';
+                document.getElementById('noNftDataYet').style.display = 'block';
+                document.getElementById('tokenId').textContent = '';
+                document.getElementById('billNumber').textContent = '';
+                document.getElementById('ipfsHash').textContent = '';
+                const noTxYet = document.getElementById('noTxYet');
+                noTxYet.textContent = '⏳ 處理中...';
+                noTxYet.style.color = '#999';
+                noTxYet.style.display = 'inline';
+                document.getElementById('etherscanLink').style.display = 'none';
+                
                 showMessage('正在處理 ' + filename + '...', 'info');
                 isProcessing = true;  // 標記處理中
                 
@@ -1847,7 +1929,7 @@
                     
                     // 切換到區塊鏈標籤
                     isProcessing = false;  // 允許切換
-                    const blockchainTab = document.querySelector('.nav-tab:nth-child(2)');
+                    const blockchainTab = document.querySelector('.nav-tab:nth-child(3)');
                     switchTab('blockchain', blockchainTab);
                     
                     // Show message based on actual status
@@ -1878,8 +1960,30 @@
         
         async function viewResult(filename) {
             try {
-                console.log('Loading result for file:', filename);
-                const response = await fetch(`/api/results/${filename}`);
+                console.log('=== Loading result for file:', filename, '===');
+                
+                // 清空全局變量
+                currentResultFilename = null;
+                
+                // 隱藏NFT信息區块，顯示等待提示
+                document.getElementById('latestNftInfo').style.display = 'none';
+                document.getElementById('noNftDataYet').style.display = 'block';
+                
+                // 清空所有顯示
+                document.getElementById('tokenId').textContent = '';
+                document.getElementById('billNumber').textContent = '';
+                document.getElementById('ipfsHash').textContent = '';
+                const noTxYet = document.getElementById('noTxYet');
+                noTxYet.textContent = '⏳ 載入中...';
+                noTxYet.style.color = '#999';
+                noTxYet.style.display = 'inline';
+                document.getElementById('etherscanLink').style.display = 'none';
+                document.getElementById('nftLink').style.display = 'none';
+                document.getElementById('mintNftSection').style.display = 'none';
+                
+                // 添加時間戳防止緩存
+                const timestamp = new Date().getTime();
+                const response = await fetch(`/api/results/${filename}?t=${timestamp}`);
                 const data = await response.json();
                 
                 if (data.success) {
@@ -1888,28 +1992,22 @@
                     
                     console.log('Loaded result data:', result);
                     
-                    // 清空之前的顯示
-                    document.getElementById('tokenId').textContent = '-';
-                    document.getElementById('billNumber').textContent = '-';
-                    document.getElementById('ipfsHash').textContent = '-';
-                    const noTxYet = document.getElementById('noTxYet');
-                    noTxYet.textContent = '⏳ 等待處理...';
-                    noTxYet.style.color = '#999';
-                    
                     // 更新區塊鏈顯示
                     updateBlockchainDisplay(result);
                     
                     // 切換到區塊鏈標籤
-                    const blockchainTab = document.querySelector('.nav-tab:nth-child(2)');
+                    const blockchainTab = document.querySelector('.nav-tab:nth-child(3)');
                     switchTab('blockchain', blockchainTab);
                     
-                    // 根據實際狀態顯示消息
+                    // 根據實際狀態顯示消息（重點是區塊鏈信息，不是IPFS）
                     if (result.blockchain && result.blockchain.tokenId) {
-                        // NFT已鑄造
-                        showMessage(`✅ NFT已鑄造完成！Token ID: ${result.blockchain.tokenId}`, 'success');
+                        // NFT已鑄造 - 顯示區塊鏈信息
+                        const tokenIdStr = result.blockchain.tokenId;
+                        const billNum = result.billData && result.billData.billNumber ? result.billData.billNumber : '未知';
+                        showMessage(`✅ 區塊鏈NFT: Token ID ${tokenIdStr} | 提單號: ${billNum}`, 'success');
                     } else if (result.ipfs && result.ipfs.dataHash) {
                         // 已上傳IPFS但未鑄造
-                        showMessage('⏳ 已上傳到IPFS，點擊「鑄造 NFT」完成鑄造', 'info');
+                        showMessage('⏳ 已上傳到IPFS，點擊「鑄造 NFT」完成上鏈', 'info');
                     } else {
                         // 只有OCR結果
                         showMessage('📋 結果已載入，可點擊「處理到區塊鏈」', 'info');
@@ -1926,6 +2024,8 @@
         // 頁面載入時自動載入數據
         window.onload = function() {
             loadStats();
+            // 初始化區塊鏈標籤為空狀態
+            initBlockchainTab();
         };
     </script>
     

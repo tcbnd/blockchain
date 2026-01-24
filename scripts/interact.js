@@ -11,8 +11,8 @@ async function main() {
   
   console.log("连接到合约:", contractAddress);
   
-  // 获取合约实例
-  const BillOfLadingNFT = await hre.ethers.getContractFactory("BillOfLadingNFT");
+  // 获取合约实例 - use v2 version (18 digit Token ID)
+  const BillOfLadingNFT = await hre.ethers.getContractFactory("contracts/BillOfLadingNFT_v2.sol:BillOfLadingNFT");
   const contract = BillOfLadingNFT.attach(contractAddress);
   
   // 获取签名者

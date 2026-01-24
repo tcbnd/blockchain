@@ -1,0 +1,14 @@
+BILL OF LADING
+B/L No: BL20260124230059
+Vessel: MAERSK CONTAINER SHIP
+Port of Loading: Shanghai, China
+Port of Discharge: Los Angeles, USA
+Shipper: Global Export Company Ltd
+Consignee: International Import Corp
+Description of Goods: Electronics & Components
+Gross Weight: 2500 KGS
+Container No: MSKU1234567
+Seal No: 987654321
+Processed: 2026-01-24 23:00:59
+Freight: Prepaid
+Terms: CIF Los Angeles

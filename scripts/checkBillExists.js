@@ -15,8 +15,8 @@ async function main() {
   }
 
   try {
-    // Connect to contract
-    const BillOfLadingNFT = await hre.ethers.getContractFactory("BillOfLadingNFT");
+    // Connect to contract - use v2 version (18 digit Token ID)
+    const BillOfLadingNFT = await hre.ethers.getContractFactory("contracts/BillOfLadingNFT_v2.sol:BillOfLadingNFT");
     const contract = BillOfLadingNFT.attach(contractAddress);
 
     // Check if bill exists
