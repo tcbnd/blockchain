@@ -34,7 +34,11 @@
   "blockchain": {
     "dataHash": "0xc68e34fa18d3657daa5e971d6ef7407c862e0c61ccb5eb7fede909f5ba728d70",
     "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
-    "mintResult": null
+    "status": "minted",
+    "tokenId": "7",
+    "transactionHash": "0xfc81995e9169166c8465aa9c536d774592cbe24804fcbda463239ac81c334e2a",
+    "explorerUrl": "https://sepolia.etherscan.io/tx/0xfc81995e9169166c8465aa9c536d774592cbe24804fcbda463239ac81c334e2a",
+    "contractUrl": "https://sepolia.etherscan.io/address/0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED"
   },
   "timestamp": "2026-01-22T09:51:49.319405"
 }

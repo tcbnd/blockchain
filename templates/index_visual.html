@@ -651,6 +651,24 @@
                 grid-template-columns: 1fr;
             }
         }
+        
+        /* File item highlight animation */
+        .file-item-highlight {
+            animation: highlightPulse 2s ease-out;
+        }
+        
+        @keyframes highlightPulse {
+            0% {
+                background: #fff9c4 !important;
+                transform: scale(1.02);
+                box-shadow: 0 4px 20px rgba(255, 235, 59, 0.5) !important;
+            }
+            100% {
+                background: white !important;
+                transform: scale(1);
+                box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
+            }
+        }
     </style>
     <!-- Add Web3.js library -->
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
@@ -1089,6 +1107,26 @@
             return labels[tabName] || '';
         }
         
+        function highlightFileItem(filename) {
+            if (!filename) return;
+            
+            // Find the file item by data-filename attribute
+            const fileItem = document.querySelector(`.file-item[data-filename="${filename}"]`);
+            
+            if (fileItem) {
+                // Add highlight class
+                fileItem.classList.add('file-item-highlight');
+                
+                // Scroll to the file item
+                fileItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Remove highlight class after animation completes
+                setTimeout(() => {
+                    fileItem.classList.remove('file-item-highlight');
+                }, 2000);
+            }
+        }
+        
         function showMessage(message, type = 'success') {
             const messageDiv = document.getElementById('message');
             messageDiv.className = type;
@@ -1319,7 +1357,7 @@
                     }
                     
                     return `
-                    <div style="background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                    <div class="file-item" data-filename="${filename}" style="background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: all 0.3s ease;">
                         <div style="flex: 1;">
                             <div style="font-weight: bold; color: #333; margin-bottom: 5px;">${originalFilename}</div>
                             <div style="color: #666; font-size: 0.9rem;">
@@ -1406,13 +1444,22 @@
                     noTxYet.style.display = 'none';
                     console.log('Transaction link updated:', result.blockchain.transactionHash);
                 } else {
-                    // 還沒有交易 - 根據狀態顯示不同消息
+                    // 還沒有交易 - 根據Token ID和狀態顯示不同消息
                     etherscanLink.style.display = 'none';
                     noTxYet.style.display = 'inline';
-                    if (result.ipfs && result.ipfs.dataHash) {
-                        noTxYet.textContent = '✅ 已上傳IPFS，等待鑄造NFT...';
+                    
+                    if (result.blockchain.tokenId) {
+                        // 已經有Token ID = NFT已鑄造
+                        noTxYet.textContent = '✅ NFT已鑄造完成 (Token ID: ' + result.blockchain.tokenId + ')';
+                        noTxYet.style.color = '#4caf50';
+                    } else if (result.ipfs && result.ipfs.dataHash) {
+                        // 有IPFS但沒有Token ID = 等待鑄造
+                        noTxYet.textContent = '⏳ 已上傳IPFS，等待鑄造NFT...';
+                        noTxYet.style.color = '#ff9800';
                     } else {
-                        noTxYet.textContent = '⏳ 等待NFT鑄造...';
+                        // 什麼都沒有 = 還沒開始
+                        noTxYet.textContent = '⏳ 等待處理...';
+                        noTxYet.style.color = '#999';
                     }
                 }
                 
@@ -1485,7 +1532,23 @@
                 console.log('Mint NFT response:', data);
                 
                 if (data.success) {
-                    updateBlockchainDisplay(data.result);
+                    // Reload the specific file's data to show updated info
+                    const resultResponse = await fetch(`/api/results/${currentResultFilename}`);
+                    const resultData = await resultResponse.json();
+                    
+                    if (resultData.success) {
+                        // Clear old data first
+                        document.getElementById('tokenId').textContent = '-';
+                        document.getElementById('billNumber').textContent = '-';
+                        document.getElementById('ipfsHash').textContent = '-';
+                        const noTxYet = document.getElementById('noTxYet');
+                        noTxYet.textContent = '⏳ 等待處理...';
+                        noTxYet.style.color = '#999';
+                        
+                        // Update with fresh data
+                        updateBlockchainDisplay(resultData.result);
+                    }
+                    
                     if (data.already_minted) {
                         showMessage('✅ ' + data.message, 'info');
                     } else {
@@ -1700,12 +1763,27 @@
                     }
                     
                     updateTextResult(data.ocr_result);
-                    updateBlockchainDisplay(data.blockchain_result);
                     currentResultFilename = data.result_filename;  // 保存檔案名用於鑄造NFT
+                    
+                    console.log('Full workflow completed for:', data.result_filename, 'Result:', data.blockchain_result);
+                    
+                    // 清空之前的顯示，確保顯示當前文件的數據
+                    document.getElementById('tokenId').textContent = '-';
+                    document.getElementById('billNumber').textContent = '-';
+                    document.getElementById('ipfsHash').textContent = '-';
+                    const noTxYet = document.getElementById('noTxYet');
+                    noTxYet.textContent = '⏳ 等待處理...';
+                    noTxYet.style.color = '#999';
+                    document.getElementById('etherscanLink').style.display = 'none';
+                    noTxYet.style.display = 'inline';
+                    
+                    // 更新為該文件的實際數據
+                    updateBlockchainDisplay(data.blockchain_result);
                     
                     // 切換到區塊鏈標籤
                     isProcessing = false;  // 完成處理，允許切換
-                    switchTab('blockchain');
+                    const blockchainTab = document.querySelector('.nav-tab:nth-child(2)');
+                    switchTab('blockchain', blockchainTab);
                     
                     showMessage(data.message, 'success');
                     loadStats();
@@ -1744,21 +1822,43 @@
                 
                 if (data.success) {
                     currentResultFilename = filename;  // 保存檔案名
+                    
+                    console.log('Processing file:', filename, 'Result:', data.result);
+                    
+                    // 清空之前的顯示，確保顯示當前文件的數據
+                    document.getElementById('tokenId').textContent = '-';
+                    document.getElementById('billNumber').textContent = '-';
+                    document.getElementById('ipfsHash').textContent = '-';
+                    const noTxYet = document.getElementById('noTxYet');
+                    noTxYet.textContent = '⏳ 等待處理...';
+                    noTxYet.style.color = '#999';
+                    document.getElementById('etherscanLink').style.display = 'none';
+                    noTxYet.style.display = 'inline';
+                    
+                    // 更新為該文件的實際數據
                     updateBlockchainDisplay(data.result);
                     
                     // 切換到區塊鏈標籤
                     isProcessing = false;  // 允許切換
-                    switchTab('blockchain');
+                    const blockchainTab = document.querySelector('.nav-tab:nth-child(2)');
+                    switchTab('blockchain', blockchainTab);
                     
-                    // Check if NFT already exists
+                    // Show message based on actual status
                     if (data.already_exists && data.result.blockchain && data.result.blockchain.tokenId) {
-                        showMessage(data.message + '\n\n可以在區塊鏈標籤查看詳情', 'info');
+                        showMessage(`✅ 此提單已鑄造為NFT！Token ID: ${data.result.blockchain.tokenId}`, 'success');
+                    } else if (data.result.ipfs && data.result.ipfs.dataHash) {
+                        showMessage('✅ 已上傳到IPFS，可在區塊鏈標籤查看或鑄造NFT', 'success');
                     } else {
                         showMessage(data.message, 'success');
                     }
                     
                     loadFiles();
                     loadStats();
+                    
+                    // Highlight the updated file after a short delay
+                    setTimeout(() => {
+                        highlightFileItem(filename);
+                    }, 100);
                 } else {
                     showMessage(data.error, 'error');
                 }
@@ -1771,31 +1871,47 @@
         
         async function viewResult(filename) {
             try {
+                console.log('Loading result for file:', filename);
                 const response = await fetch(`/api/results/${filename}`);
                 const data = await response.json();
                 
                 if (data.success) {
                     const result = data.result;
                     currentResultFilename = filename;  // 保存檔案名
+                    
+                    console.log('Loaded result data:', result);
+                    
+                    // 清空之前的顯示
+                    document.getElementById('tokenId').textContent = '-';
+                    document.getElementById('billNumber').textContent = '-';
+                    document.getElementById('ipfsHash').textContent = '-';
+                    const noTxYet = document.getElementById('noTxYet');
+                    noTxYet.textContent = '⏳ 等待處理...';
+                    noTxYet.style.color = '#999';
+                    
+                    // 更新區塊鏈顯示
                     updateBlockchainDisplay(result);
                     
                     // 切換到區塊鏈標籤
-                    switchTab('blockchain');
+                    const blockchainTab = document.querySelector('.nav-tab:nth-child(2)');
+                    switchTab('blockchain', blockchainTab);
                     
-                    // 檢查是否為等待鑄造狀態
-                    const hasPendingMint = result.blockchain && result.blockchain.status === 'pending' && !result.blockchain.tokenId;
-                    
-                    if (hasPendingMint) {
-                        showMessage('已載入，點擊「鑄造 NFT」按鈕完成鑄造', 'info');
-                    } else if (result.blockchain && result.blockchain.tokenId) {
-                        showMessage('NFT已鑄造，Token ID: ' + result.blockchain.tokenId, 'success');
+                    // 根據實際狀態顯示消息
+                    if (result.blockchain && result.blockchain.tokenId) {
+                        // NFT已鑄造
+                        showMessage(`✅ NFT已鑄造完成！Token ID: ${result.blockchain.tokenId}`, 'success');
+                    } else if (result.ipfs && result.ipfs.dataHash) {
+                        // 已上傳IPFS但未鑄造
+                        showMessage('⏳ 已上傳到IPFS，點擊「鑄造 NFT」完成鑄造', 'info');
                     } else {
-                        showMessage('結果已載入到區塊鏈標籤', 'success');
+                        // 只有OCR結果
+                        showMessage('📋 結果已載入，可點擊「處理到區塊鏈」', 'info');
                     }
                 } else {
                     showMessage(data.error, 'error');
                 }
             } catch (error) {
+                console.error('View result error:', error);
                 showMessage('獲取結果失敗: ' + error.message, 'error');
             }
         }
