@@ -323,6 +323,7 @@ def list_ocr_files():
                     blockchain_file = filename.replace('_result.json', '_blockchain.json')
                     blockchain_path = os.path.join(output_dir, blockchain_file)
                     
+                    # Initialize status variables
                     processed = False
                     pending_mint = False
                     
@@ -403,13 +404,29 @@ def process_ocr_file():
         with open(blockchain_path, 'w', encoding='utf-8') as f:
             json.dump(result, f, ensure_ascii=False, indent=2)
         
-        return jsonify({
-            'success': True,
-            'result': result,
-            'message': f'已上傳到IPFS，等待鑄造NFT',
-            'ipfs_ready': True,
-            'nft_minted': False
-        })
+        # Check if NFT already exists
+        blockchain_status = result.get('blockchain', {}).get('status')
+        token_id = result.get('blockchain', {}).get('tokenId')
+        
+        if blockchain_status == 'minted' and token_id:
+            # NFT already exists
+            return jsonify({
+                'success': True,
+                'result': result,
+                'message': f'✅ 已上傳到IPFS\n⚠️ 此提單已鑄造為NFT (Token ID: {token_id})',
+                'ipfs_ready': True,
+                'nft_minted': True,
+                'already_exists': True
+            })
+        else:
+            # NFT needs to be minted
+            return jsonify({
+                'success': True,
+                'result': result,
+                'message': f'已上傳到IPFS，等待鑄造NFT',
+                'ipfs_ready': True,
+                'nft_minted': False
+            })
     
     except Exception as e:
         return jsonify({
@@ -460,6 +477,43 @@ def mint_nft():
         
         # 鑄造NFT
         nft_result = bridge.mint_nft_from_ipfs(ipfs_result)
+        
+        # Check if bill already exists
+        if not nft_result.get('success') and nft_result.get('already_exists'):
+            # If we have existing token ID, update the blockchain file and return success
+            if nft_result.get('existing_token_id'):
+                # Update blockchain file with existing token ID
+                ipfs_result['blockchain']['tokenId'] = nft_result['existing_token_id']
+                ipfs_result['blockchain']['status'] = 'minted'
+                ipfs_result['blockchain']['note'] = '此提單已於先前鑄造'
+                if nft_result.get('existing_data'):
+                    ipfs_result['blockchain']['existingOwner'] = nft_result['existing_data'].get('owner')
+                
+                with open(blockchain_path, 'w', encoding='utf-8') as f:
+                    json.dump(ipfs_result, f, ensure_ascii=False, indent=2)
+                
+                return jsonify({
+                    'success': True,
+                    'result': ipfs_result,
+                    'already_minted': True,
+                    'message': f'⚠️ 此提單已鑄造過NFT\n\nToken ID: {nft_result["existing_token_id"]}\n\n{nft_result.get("solution", "")}'
+                })
+            else:
+                return jsonify({
+                    'success': False,
+                    'error': nft_result.get('message', '提單已存在'),
+                    'already_exists': True,
+                    'message': nft_result.get('message'),
+                    'solution': nft_result.get('solution')
+                }), 409  # 409 Conflict
+        
+        if not nft_result.get('success'):
+            return jsonify({
+                'success': False,
+                'error': nft_result.get('error', 'NFT鑄造失敗'),
+                'details': nft_result.get('last_error'),
+                'solution': nft_result.get('solution')
+            }), 500
         
         # 更新結果文件
         with open(blockchain_path, 'w', encoding='utf-8') as f:

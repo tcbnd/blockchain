@@ -324,26 +324,59 @@ class OCRBlockchainBridge:
         data_hash = self.calculate_data_hash(bill_data)
         print(f"✅ 數據哈希: 0x{data_hash}")
         
-        # 6. 返回結果（blockchain部分為pending）
-        result = {
-            "success": True,
-            "billData": bill_data,
-            "ipfs": {
-                "dataHash": data_ipfs_hash,
-                "dataUrl": f"https://gateway.pinata.cloud/ipfs/{data_ipfs_hash}",
-                "imageHash": image_ipfs_hash,
-                "imageUrl": f"https://gateway.pinata.cloud/ipfs/{image_ipfs_hash}" if image_ipfs_hash else None
-            },
-            "blockchain": {
-                "dataHash": f"0x{data_hash}",
-                "contractAddress": self.contract_address,
-                "status": "pending",
-                "tokenId": None,
-                "transactionHash": None,
-                "message": "等待鑄造NFT"
-            },
-            "timestamp": datetime.now().isoformat()
-        }
+        # 6. 檢查提單是否已經存在於區塊鏈
+        print(f"\n🔍 檢查提單是否已存在...")
+        existing_data = self.get_existing_bill_data(bill_data['billNumber'])
+        
+        # 7. 返回結果
+        if existing_data and existing_data.get('tokenId'):
+            # 提單已存在
+            print(f"✅ 發現已存在的NFT - Token ID: {existing_data['tokenId']}")
+            result = {
+                "success": True,
+                "billData": bill_data,
+                "ipfs": {
+                    "dataHash": data_ipfs_hash,
+                    "dataUrl": f"https://gateway.pinata.cloud/ipfs/{data_ipfs_hash}",
+                    "imageHash": image_ipfs_hash,
+                    "imageUrl": f"https://gateway.pinata.cloud/ipfs/{image_ipfs_hash}" if image_ipfs_hash else None
+                },
+                "blockchain": {
+                    "dataHash": f"0x{data_hash}",
+                    "contractAddress": self.contract_address,
+                    "status": "minted",
+                    "tokenId": existing_data['tokenId'],
+                    "transactionHash": None,
+                    "explorerUrl": None,
+                    "contractUrl": f"https://sepolia.etherscan.io/address/{self.contract_address}",
+                    "tokenUrl": f"https://sepolia.etherscan.io/token/{self.contract_address}?a={existing_data['tokenId']}",
+                    "note": "此提單已於先前鑄造",
+                    "existingOwner": existing_data.get('owner')
+                },
+                "timestamp": datetime.now().isoformat()
+            }
+            print(f"⚠️  此提單已鑄造為NFT (Token ID: {existing_data['tokenId']})")
+        else:
+            # 提單不存在，等待鑄造
+            result = {
+                "success": True,
+                "billData": bill_data,
+                "ipfs": {
+                    "dataHash": data_ipfs_hash,
+                    "dataUrl": f"https://gateway.pinata.cloud/ipfs/{data_ipfs_hash}",
+                    "imageHash": image_ipfs_hash,
+                    "imageUrl": f"https://gateway.pinata.cloud/ipfs/{image_ipfs_hash}" if image_ipfs_hash else None
+                },
+                "blockchain": {
+                    "dataHash": f"0x{data_hash}",
+                    "contractAddress": self.contract_address,
+                    "status": "pending",
+                    "tokenId": None,
+                    "transactionHash": None,
+                    "message": "等待鑄造NFT"
+                },
+                "timestamp": datetime.now().isoformat()
+            }
         
         print(f"\n{'='*60}")
         print(f"✅ IPFS上傳完成！")
@@ -351,7 +384,11 @@ class OCRBlockchainBridge:
         print(f"📊 查看數據: {result['ipfs']['dataUrl']}")
         if result['ipfs']['imageUrl']:
             print(f"🖼️  查看圖片: {result['ipfs']['imageUrl']}")
-        print(f"\n⚠️  請點擊「鑄造NFT」按鈕完成NFT鑄造")
+        
+        if result['blockchain']['status'] == 'pending':
+            print(f"\n⚠️  請點擊「鑄造NFT」按鈕完成NFT鑄造")
+        else:
+            print(f"\n✅ NFT已存在 (Token ID: {result['blockchain']['tokenId']})")
         
         return result
     
@@ -397,6 +434,26 @@ class OCRBlockchainBridge:
             print(f"\n✅ NFT鑄造成功！")
             print(f"Token ID: {token_id}")
             print(f"交易哈希: {tx_hash}")
+        elif mint_result.get('already_exists') and mint_result.get('existing_token_id'):
+            # Bill already exists, use existing token ID
+            token_id = mint_result.get('existing_token_id')
+            existing_data = mint_result.get('existing_data', {})
+            
+            result['blockchain'] = {
+                "dataHash": f"0x{data_hash}",
+                "contractAddress": self.contract_address,
+                "status": "minted",
+                "tokenId": token_id,
+                "transactionHash": None,
+                "explorerUrl": None,
+                "contractUrl": f"https://sepolia.etherscan.io/address/{self.contract_address}",
+                "tokenUrl": f"https://sepolia.etherscan.io/token/{self.contract_address}?a={token_id}",
+                "note": "此提單已於先前鑄造",
+                "existingOwner": existing_data.get('owner')
+            }
+            print(f"\n⚠️ 提單已存在")
+            print(f"Token ID: {token_id}")
+            print(f"Owner: {existing_data.get('owner')}")
         else:
             result['blockchain']['status'] = "failed"
             result['blockchain']['error'] = mint_result.get('error', 'Unknown error')
@@ -418,6 +475,58 @@ class OCRBlockchainBridge:
         if match:
             return match.group(1)
         return "1"  # 默認值
+    
+    def get_existing_bill_data(self, bill_number):
+        """
+        查詢區塊鏈上是否已存在該提單號，並獲取Token ID
+        """
+        if not self.contract_address:
+            return None
+            
+        try:
+            project_dir = os.path.dirname(os.path.abspath(__file__))
+            env = os.environ.copy()
+            env['CONTRACT_ADDRESS'] = self.contract_address
+            env['BILL_NUMBER'] = bill_number
+            
+            # Try to run the check script
+            commands_to_try = [
+                ['npx', 'hardhat', 'run', 'scripts/checkBillExists.js', '--network', 'sepolia'],
+                ['node_modules\\.bin\\hardhat.cmd', 'run', 'scripts/checkBillExists.js', '--network', 'sepolia'],
+                ['cmd', '/c', 'node_modules\\.bin\\hardhat.cmd', 'run', 'scripts/checkBillExists.js', '--network', 'sepolia']
+            ]
+            
+            for cmd in commands_to_try:
+                try:
+                    result = subprocess.run(
+                        cmd,
+                        env=env,
+                        capture_output=True,
+                        text=True,
+                        encoding='utf-8',
+                        errors='ignore',
+                        cwd=project_dir,
+                        timeout=30
+                    )
+                    
+                    if result.returncode == 0 and '=== EXISTING_BILL_DATA ===' in result.stdout:
+                        # Parse the JSON data
+                        import json
+                        import re
+                        match = re.search(r'=== EXISTING_BILL_DATA ===\n(.+?)\n=== END_DATA ===', 
+                                        result.stdout, re.DOTALL)
+                        if match:
+                            data = json.loads(match.group(1))
+                            return data
+                    
+                except (subprocess.TimeoutExpired, FileNotFoundError, Exception):
+                    continue
+                    
+            return None
+            
+        except Exception as e:
+            print(f"⚠️ 查詢現有提單失敗: {e}")
+            return None
     
     def mint_nft_via_hardhat(self, bill_number, ipfs_hash, data_hash, shipper_address=None):
         """
@@ -480,6 +589,8 @@ class OCRBlockchainBridge:
                         env=env,
                         capture_output=True,
                         text=True,
+                        encoding='utf-8',
+                        errors='ignore',
                         cwd=project_dir,
                         timeout=60  # 60秒超时
                     )
@@ -499,8 +610,38 @@ class OCRBlockchainBridge:
                             'ipfs_url': f"https://gateway.pinata.cloud/ipfs/{ipfs_hash}"
                         }
                     else:
-                        print(f"❌ 命令失败: {result.stderr}")
-                        last_error = result.stderr
+                        error_output = result.stderr or result.stdout
+                        print(f"❌ 命令失败: {error_output}")
+                        
+                        # Check if bill already exists
+                        if "Bill already exists" in error_output or "execution reverted" in error_output:
+                            print("ℹ️ 提示: 該提單號已經鑄造過NFT")
+                            print("🔍 正在查詢現有Token ID...")
+                            
+                            # Try to get existing token ID from blockchain
+                            existing_data = self.get_existing_bill_data(bill_number)
+                            
+                            if existing_data:
+                                print(f"✅ 找到現有NFT - Token ID: {existing_data.get('tokenId')}")
+                                return {
+                                    'success': False,
+                                    'error': 'Bill already minted',
+                                    'message': f'提單號 {bill_number} 已經存在',
+                                    'already_exists': True,
+                                    'existing_token_id': existing_data.get('tokenId'),
+                                    'existing_data': existing_data,
+                                    'solution': f"此提單已鑄造為NFT (Token ID: {existing_data.get('tokenId')})"
+                                }
+                            else:
+                                return {
+                                    'success': False,
+                                    'error': 'Bill already minted',
+                                    'message': f'提單號 {bill_number} 已經存在，但無法獲取Token ID',
+                                    'already_exists': True,
+                                    'solution': '請手動檢查區塊鏈記錄或聯繫管理員'
+                                }
+                        
+                        last_error = error_output
                         continue
                         
                 except subprocess.TimeoutExpired:

@@ -36,11 +36,14 @@
   "blockchain": {
     "dataHash": "0xf9ec4089df1f7a8401e81cebd2abe4c72e11b2e8e5abbf9760da29737743c6a8",
     "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
-    "status": "failed",
-    "tokenId": null,
+    "status": "minted",
+    "tokenId": "6",
     "transactionHash": null,
-    "message": "等待鑄造NFT",
-    "error": "All minting attempts failed"
+    "explorerUrl": null,
+    "contractUrl": "https://sepolia.etherscan.io/address/0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "tokenUrl": "https://sepolia.etherscan.io/token/0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED?a=6",
+    "note": "此提單已於先前鑄造",
+    "existingOwner": "0x2eb625bAb63Cf0da4BaA75a71f368BEdAAe4D962"
   },
   "timestamp": "2026-01-24T00:14:26.546459"
 }

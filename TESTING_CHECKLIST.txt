@@ -1,0 +1,287 @@
+┌──────────────────────────────────────────────────────────────────┐
+│                    ✅ TESTING CHECKLIST                          │
+└──────────────────────────────────────────────────────────────────┘
+
+BEFORE TESTING:
+[ ] MetaMask installed and configured
+[ ] Switched to Sepolia Testnet in MetaMask
+[ ] Have test ETH (from https://sepoliafaucet.com)
+[ ] Application running (.\start.bat)
+[ ] Browser open to http://localhost:5000
+
+┌──────────────────────────────────────────────────────────────────┐
+│                    🌐 WALLET CONNECTION                          │
+└──────────────────────────────────────────────────────────────────┘
+
+[ ] Go to "⛓️ 區塊鏈" tab
+[ ] Click "🔗 連接 MetaMask" button
+[ ] MetaMask popup appears
+[ ] Approve connection
+[ ] Wallet address displayed in UI
+[ ] Network name shows "Sepolia" or "11155111"
+[ ] Click "❌ 斷開連接" to test disconnect
+[ ] Reconnect successfully
+
+RESULT: ✅ PASS  /  ❌ FAIL
+NOTES: _____________________________________________
+
+┌──────────────────────────────────────────────────────────────────┐
+│             📊 FUNCTION: GET BILL DATA (Read)                    │
+└──────────────────────────────────────────────────────────────────┘
+
+[ ] Have a minted Token ID (if not, mint one first)
+[ ] Click "📊 查詢提單數據" button
+[ ] Enter Token ID in prompt
+[ ] Wait for results
+[ ] Verify data displayed:
+    [ ] Bill Number
+    [ ] IPFS Hash
+    [ ] Timestamp
+    [ ] Owner Address
+    [ ] Financier (should be 0x0 if not financed)
+    [ ] Financing Amount
+    [ ] Is Financed (true/false)
+
+RESULT: ✅ PASS  /  ❌ FAIL
+TOKEN ID TESTED: ___________
+NOTES: _____________________________________________
+
+┌──────────────────────────────────────────────────────────────────┐
+│           🔄 FUNCTION: CHECK TRANSFERABILITY (Read)              │
+└──────────────────────────────────────────────────────────────────┘
+
+TEST 1: Unfinanced Bill
+[ ] Use Token ID that is NOT financed
+[ ] Click "🔄 檢查轉讓性"
+[ ] Enter Token ID
+[ ] Should show: "✅ 可以轉讓" or "Can Transfer"
+
+RESULT: ✅ PASS  /  ❌ FAIL
+
+TEST 2: Financed Bill (after pledge test)
+[ ] Use Token ID that IS financed
+[ ] Click "🔄 檢查轉讓性"
+[ ] Enter Token ID
+[ ] Should show: "❌ 不可轉讓" or "Cannot Transfer"
+
+RESULT: ✅ PASS  /  ❌ FAIL
+NOTES: _____________________________________________
+
+┌──────────────────────────────────────────────────────────────────┐
+│              🔗 FUNCTION: GET TOKEN URI (Read)                   │
+└──────────────────────────────────────────────────────────────────┘
+
+[ ] Click "🔗 獲取元數據" button
+[ ] Enter Token ID
+[ ] New tab opens with IPFS link
+[ ] IPFS data loads (may take a few seconds)
+[ ] Verify JSON data contains:
+    [ ] billNumber
+    [ ] ipfsHash
+    [ ] timestamp
+    [ ] image (another IPFS link)
+
+RESULT: ✅ PASS  /  ❌ FAIL
+IPFS URI: _____________________________________________
+NOTES: _____________________________________________
+
+┌──────────────────────────────────────────────────────────────────┐
+│          💰 FUNCTION: PLEDGE FOR FINANCING (Write)               │
+└──────────────────────────────────────────────────────────────────┘
+
+PREREQUISITES:
+[ ] Wallet connected
+[ ] Have sufficient Sepolia ETH for gas
+[ ] Know Token ID to pledge
+[ ] Have financier address ready (can use your own for testing)
+
+EXECUTION:
+[ ] Click "💰 質押融資" button
+[ ] Enter Token ID in first prompt
+[ ] Enter financier address in second prompt
+[ ] Enter amount in ETH (e.g., "1" or "0.5")
+[ ] MetaMask popup appears
+[ ] Review transaction details
+[ ] Confirm transaction in MetaMask
+[ ] Wait for confirmation (success message)
+[ ] Transaction hash displayed
+[ ] Click Etherscan link to verify
+
+VERIFICATION:
+[ ] Transaction shows on Etherscan
+[ ] Query bill data again - financier should be set
+[ ] Check transferability - should now be FALSE
+
+RESULT: ✅ PASS  /  ❌ FAIL
+TOKEN ID: ___________
+FINANCIER ADDRESS: _____________________________________________
+AMOUNT: ___________
+TX HASH: _____________________________________________
+NOTES: _____________________________________________
+
+┌──────────────────────────────────────────────────────────────────┐
+│            🔓 FUNCTION: RELEASE OWNERSHIP (Write)                │
+└──────────────────────────────────────────────────────────────────┘
+
+PREREQUISITES:
+[ ] Have a financed Token ID (from pledge test above)
+[ ] Connected wallet is the FINANCIER address
+   (OR switch to financier wallet in MetaMask)
+[ ] Have sufficient Sepolia ETH for gas
+
+EXECUTION:
+[ ] Switch to financier wallet if needed
+[ ] Click "🔓 釋放所有權" button
+[ ] Enter Token ID
+[ ] MetaMask popup appears
+[ ] Confirm transaction
+[ ] Wait for confirmation
+[ ] Transaction hash displayed
+[ ] Click Etherscan link to verify
+
+VERIFICATION:
+[ ] Transaction shows on Etherscan
+[ ] Query bill data - financier should be 0x0
+[ ] Check transferability - should now be TRUE
+[ ] isFinanced should be false
+
+RESULT: ✅ PASS  /  ❌ FAIL
+TOKEN ID: ___________
+TX HASH: _____________________________________________
+NOTES: _____________________________________________
+
+┌──────────────────────────────────────────────────────────────────┐
+│              🐍 PYTHON TEST SUITE                                │
+└──────────────────────────────────────────────────────────────────┘
+
+EXECUTION:
+[ ] Open new terminal
+[ ] Run: python test_contract_functions.py
+[ ] Script loads successfully
+[ ] Enter Token ID when prompted
+[ ] All read functions execute
+[ ] Prompted for transaction tests (y/n)
+[ ] Enter 'y' to test transactions
+[ ] Enter financier address
+[ ] Transactions execute and confirm
+
+RESULTS:
+[ ] Test 1: Contract connection - PASS
+[ ] Test 2: Get bill data - PASS
+[ ] Test 3: Check transferability - PASS
+[ ] Test 4: Get token URI - PASS
+[ ] Test 5: Pledge for financing - PASS
+[ ] Test 6: Release ownership - PASS
+
+OVERALL RESULT: ✅ PASS  /  ❌ FAIL
+NOTES: _____________________________________________
+
+┌──────────────────────────────────────────────────────────────────┐
+│             🎯 COMPLETE WORKFLOW TEST                            │
+└──────────────────────────────────────────────────────────────────┘
+
+STEP 1: Upload & Process
+[ ] Go to "📤 新增與比較" tab
+[ ] Upload bill image
+[ ] Click "⛓️ 完整處理"
+[ ] Image uploads to IPFS
+[ ] OCR processes successfully
+[ ] Data extracted correctly
+
+STEP 2: Mint NFT
+[ ] Go to "⛓️ 區塊鏈" tab
+[ ] Pending file shows in list
+[ ] Click "🎨 鑄造 NFT"
+[ ] Transaction confirms
+[ ] Token ID displayed
+[ ] Status changes to "NFT已鑄造"
+
+STEP 3: Query & Verify
+[ ] Click "📊 查詢提單數據"
+[ ] Enter new Token ID
+[ ] All data matches OCR results
+[ ] IPFS hash matches
+
+STEP 4: Finance
+[ ] Click "💰 質押融資"
+[ ] Enter Token ID, financier, amount
+[ ] Confirm transaction
+[ ] Verify financing applied
+
+STEP 5: Release
+[ ] Switch to financier wallet
+[ ] Click "🔓 釋放所有權"
+[ ] Enter Token ID
+[ ] Confirm transaction
+[ ] Verify financing released
+
+OVERALL RESULT: ✅ PASS  /  ❌ FAIL
+TIME TAKEN: ___________
+NOTES: _____________________________________________
+
+┌──────────────────────────────────────────────────────────────────┐
+│                   ⚠️  ERROR SCENARIOS                            │
+└──────────────────────────────────────────────────────────────────┘
+
+TEST: Invalid Token ID
+[ ] Enter non-existent Token ID (e.g., 99999)
+[ ] Should show proper error message
+RESULT: ✅ PASS  /  ❌ FAIL
+
+TEST: Release by Non-Financier
+[ ] Use financed Token ID
+[ ] Switch to different wallet (not financier)
+[ ] Try to release ownership
+[ ] Should fail with error
+RESULT: ✅ PASS  /  ❌ FAIL
+
+TEST: Pledge Already Financed
+[ ] Use Token ID that's already financed
+[ ] Try to pledge again
+[ ] Should fail with error
+RESULT: ✅ PASS  /  ❌ FAIL
+
+TEST: Wrong Network
+[ ] Switch MetaMask to different network (e.g., Mainnet)
+[ ] Try any transaction
+[ ] Should prompt to switch to Sepolia
+RESULT: ✅ PASS  /  ❌ FAIL
+
+┌──────────────────────────────────────────────────────────────────┐
+│                   📝 FINAL SUMMARY                               │
+└──────────────────────────────────────────────────────────────────┘
+
+Wallet Connection:        ✅ PASS  /  ❌ FAIL
+Get Bill Data:            ✅ PASS  /  ❌ FAIL
+Check Transferability:    ✅ PASS  /  ❌ FAIL
+Get Token URI:            ✅ PASS  /  ❌ FAIL
+Pledge for Financing:     ✅ PASS  /  ❌ FAIL
+Release Ownership:        ✅ PASS  /  ❌ FAIL
+Python Test Suite:        ✅ PASS  /  ❌ FAIL
+Complete Workflow:        ✅ PASS  /  ❌ FAIL
+Error Handling:           ✅ PASS  /  ❌ FAIL
+
+OVERALL SYSTEM STATUS:    ✅ READY  /  ⚠️ ISSUES  /  ❌ BLOCKED
+
+CRITICAL ISSUES FOUND:
+_________________________________________________________________
+_________________________________________________________________
+_________________________________________________________________
+
+MINOR ISSUES FOUND:
+_________________________________________________________________
+_________________________________________________________________
+_________________________________________________________________
+
+RECOMMENDATIONS:
+_________________________________________________________________
+_________________________________________________________________
+_________________________________________________________________
+
+TESTED BY: _______________
+DATE: _______________
+SIGNATURE: _______________
+
+┌──────────────────────────────────────────────────────────────────┐
+│              🎉 TESTING COMPLETE!                                │
+└──────────────────────────────────────────────────────────────────┘

@@ -1,0 +1,130 @@
+╔═══════════════════════════════════════════════════════════════════╗
+║                   🎯 QUICK START TESTING                          ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+┌───────────────────────────────────────────────────────────────────┐
+│ 1️⃣  START APPLICATION                                            │
+└───────────────────────────────────────────────────────────────────┘
+    .\start.bat
+    Open: http://localhost:5000
+
+┌───────────────────────────────────────────────────────────────────┐
+│ 2️⃣  CONNECT METAMASK                                             │
+└───────────────────────────────────────────────────────────────────┘
+    - Go to "⛓️ 區塊鏈" tab
+    - Click "🔗 連接 MetaMask"
+    - Approve connection
+    - ✅ Your address will show
+
+┌───────────────────────────────────────────────────────────────────┐
+│ 3️⃣  TEST READ FUNCTIONS (No Gas)                                 │
+└───────────────────────────────────────────────────────────────────┘
+    📊 查詢提單數據  → Enter Token ID → View bill info
+    🔄 檢查轉讓性    → Enter Token ID → See if transferable
+    🔗 獲取元數據    → Enter Token ID → View IPFS metadata
+
+┌───────────────────────────────────────────────────────────────────┐
+│ 4️⃣  TEST WRITE FUNCTIONS (Requires Gas)                          │
+└───────────────────────────────────────────────────────────────────┘
+    💰 質押融資      → Token ID + Address + Amount → Confirm tx
+    🔓 釋放所有權    → Token ID → Confirm tx (as financier)
+
+┌───────────────────────────────────────────────────────────────────┐
+│ 5️⃣  RUN PYTHON TEST SUITE                                        │
+└───────────────────────────────────────────────────────────────────┘
+    python test_contract_functions.py
+    → Enter Token ID when prompted
+    → Review all test results
+
+╔═══════════════════════════════════════════════════════════════════╗
+║                   📋 IMPLEMENTATION COMPLETE                       ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+✅ FILES CREATED/MODIFIED:
+   • templates/index_visual.html  → Web3.js + Wallet UI
+   • static/wallet.js             → MetaMask integration
+   • test_contract_functions.py   → Python test suite
+   • TESTING_GUIDE.md            → Complete documentation
+
+✅ FEATURES IMPLEMENTED:
+   • 👛 Wallet connection/disconnection
+   • 📊 Query bill data (getBillData)
+   • 🔄 Check transferability (isTransferable)
+   • 🔗 Get token URI (tokenURI)
+   • 💰 Pledge for financing (pledgeForFinancing)
+   • 🔓 Release ownership (releaseOwnership)
+   • 🎨 Mint NFT (already working)
+
+✅ NETWORK CONFIGURATION:
+   • Blockchain: Ethereum Sepolia Testnet
+   • Contract: 0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED
+   • RPC: https://ethereum-sepolia-rpc.publicnode.com
+   • ChainId: 11155111 (0xaa36a7)
+
+⚠️  PREREQUISITES:
+   • MetaMask installed: https://metamask.io
+   • Sepolia ETH for gas: https://sepoliafaucet.com
+   • Network set to Sepolia Testnet
+
+╔═══════════════════════════════════════════════════════════════════╗
+║                   🎓 TESTING WORKFLOW                             ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+STEP 1: Upload Bill Image
+    → 📤 新增與比較 tab
+    → Upload image
+    → ⛓️ 完整處理
+
+STEP 2: Mint NFT
+    → ⛓️ 區塊鏈 tab
+    → 🎨 鑄造 NFT
+    → Note Token ID
+
+STEP 3: Query Data
+    → 📊 查詢提單數據
+    → Enter Token ID
+    → Verify all fields
+
+STEP 4: Check Status
+    → 🔄 檢查轉讓性
+    → Should be: ✅ Can Transfer
+
+STEP 5: Apply Financing
+    → 💰 質押融資
+    → Enter Token ID + Address + Amount
+    → Confirm in MetaMask
+
+STEP 6: Verify Locked
+    → 🔄 檢查轉讓性
+    → Should be: ❌ Cannot Transfer
+
+STEP 7: Release
+    → Switch to financier wallet
+    → 🔓 釋放所有權
+    → Confirm transaction
+
+STEP 8: Verify Released
+    → 🔄 檢查轉讓性
+    → Should be: ✅ Can Transfer
+
+╔═══════════════════════════════════════════════════════════════════╗
+║                   🔗 USEFUL LINKS                                 ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+Contract on Etherscan:
+https://sepolia.etherscan.io/address/0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED
+
+Get Sepolia ETH:
+https://sepoliafaucet.com
+
+MetaMask Download:
+https://metamask.io
+
+Sepolia Network Info:
+https://chainlist.org/chain/11155111
+
+╔═══════════════════════════════════════════════════════════════════╗
+║                   ⚡ READY TO TEST!                               ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+See TESTING_GUIDE.md for detailed instructions and troubleshooting.

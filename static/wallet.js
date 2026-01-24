@@ -97,6 +97,9 @@ async function callGetBillData() {
     const tokenId = prompt('請輸入 Token ID:');
     if (!tokenId) return;
     
+    // Show loading
+    showFunctionResult('🔄 正在查詢中...', 'loading');
+    
     try {
         if (!contract) {
             // Use default provider for read-only
@@ -106,24 +109,53 @@ async function callGetBillData() {
         }
         
         const billData = await contract.methods.getBillData(tokenId).call();
+        const owner = await contract.methods.ownerOf(tokenId).call();
         
-        let message = '📋 提單數據:\n\n';
-        message += `提單編號: ${billData.billNumber}\n`;
-        message += `IPFS Hash: ${billData.ipfsHash}\n`;
-        message += `時間戳: ${new Date(billData.timestamp * 1000).toLocaleString()}\n`;
-        message += `是否融資: ${billData.isFinanced ? '是' : '否'}\n`;
-        if (billData.isFinanced) {
-            message += `融資方: ${billData.financier}\n`;
-            message += `融資金額: ${web3.utils.fromWei(billData.financedAmount.toString(), 'ether')} ETH\n`;
-            message += `是否已釋放: ${billData.isReleased ? '是' : '否'}\n`;
-        }
+        let html = `<div style="color: #333;">
+<h3 style="color: #4caf50; margin-bottom: 20px;">✅ 提單數據查詢成功</h3>
+
+<div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 10px; line-height: 2;">
+        <strong>Token ID:</strong> <span>${tokenId}</span>
+        <strong>提單編號:</strong> <span style="color: #667eea; font-weight: 600;">${billData.billNumber}</span>
+        <strong>所有者:</strong> <span style="font-family: monospace; font-size: 0.85rem;">${owner}</span>
+        <strong>IPFS Hash:</strong> <span style="font-family: monospace; font-size: 0.85rem;">${billData.ipfsHash}</span>
+        <strong>鑄造時間:</strong> <span>${new Date(billData.timestamp * 1000).toLocaleString('zh-CN')}</span>
+    </div>
+</div>
+
+<div style="background: ${billData.isFinanced ? '#fff3e0' : '#e8f5e9'}; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+    <strong style="color: ${billData.isFinanced ? '#f57c00' : '#2e7d32'};">
+        ${billData.isFinanced ? '🔒 融資狀態: 已質押' : '🔓 融資狀態: 未質押'}
+    </strong>
+    ${billData.isFinanced ? `
+    <div style="margin-top: 10px; padding-left: 10px; border-left: 3px solid #ff9800;">
+        <div><strong>融資方:</strong> <span style="font-family: monospace; font-size: 0.85rem;">${billData.financier}</span></div>
+        <div><strong>融資金額:</strong> <span style="color: #f57c00; font-weight: 600;">${web3.utils.fromWei(billData.financedAmount.toString(), 'ether')} ETH</span></div>
+        <div><strong>已釋放:</strong> ${billData.isReleased ? '✅ 是' : '❌ 否'}</div>
+    </div>
+    ` : '<div style="margin-top: 10px; color: #555;">提單可自由轉讓</div>'}
+</div>
+
+<div style="background: #e3f2fd; padding: 15px; border-radius: 8px;">
+    <strong style="color: #1976d2;">🔗 元數據URI</strong>
+    <div style="margin-top: 10px;">
+        <a href="${billData.tokenURI}" target="_blank" style="color: #2196f3; word-break: break-all;">${billData.tokenURI}</a>
+    </div>
+</div>
+</div>`;
         
-        alert(message);
+        showFunctionResult(html, 'success');
         console.log('Bill Data:', billData);
         
     } catch (error) {
         console.error('查詢失敗:', error);
-        alert('查詢失敗: ' + error.message);
+        showFunctionResult(`<div style="color: #d32f2f;">
+            <h3>❌ 查詢失敗</h3>
+            <p style="margin-top: 10px; background: #ffebee; padding: 15px; border-radius: 8px;">
+                ${error.message}
+            </p>
+        </div>`, 'error');
     }
 }
 
@@ -131,6 +163,8 @@ async function callGetBillData() {
 async function callIsTransferable() {
     const tokenId = prompt('請輸入 Token ID:');
     if (!tokenId) return;
+    
+    showFunctionResult('🔄 正在檢查中...', 'loading');
     
     try {
         if (!contract) {
@@ -140,11 +174,45 @@ async function callIsTransferable() {
         }
         
         const transferable = await contract.methods.isTransferable(tokenId).call();
-        alert(`Token ID ${tokenId} ${transferable ? '✅ 可以轉讓' : '❌ 不可轉讓'}`);
+        
+        const html = `<div style="color: #333;">
+<h3 style="color: ${transferable ? '#4caf50' : '#f57c00'}; margin-bottom: 20px;">
+    ${transferable ? '✅ 可以轉讓' : '⚠️ 不可轉讓'}
+</h3>
+
+<div style="background: ${transferable ? '#e8f5e9' : '#fff3e0'}; padding: 20px; border-radius: 10px;">
+    <div style="text-align: center; margin-bottom: 15px;">
+        <div style="font-size: 4rem; margin-bottom: 10px;">${transferable ? '🔓' : '🔒'}</div>
+        <strong style="font-size: 1.2rem;">Token ID: ${tokenId}</strong>
+    </div>
+    
+    <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 15px;">
+        <h4 style="margin-bottom: 10px; color: #333;">💡 說明</h4>
+        ${transferable ? `
+            <p style="color: #2e7d32; margin: 0;">
+                此提單NFT目前未被質押，可以自由轉讓給其他地址。
+                使用標準ERC-721轉讓功能即可完成轉移。
+            </p>
+        ` : `
+            <p style="color: #e65100; margin: 0;">
+                此提單NFT目前已被質押用於融資，暫時不可轉讓。
+                需等融資方調用「釋放所有權」功能後才能轉讓。
+            </p>
+        `}
+    </div>
+</div>
+</div>`;
+        
+        showFunctionResult(html, 'success');
         
     } catch (error) {
         console.error('查詢失敗:', error);
-        alert('查詢失敗: ' + error.message);
+        showFunctionResult(`<div style="color: #d32f2f;">
+            <h3>❌ 查詢失敗</h3>
+            <p style="margin-top: 10px; background: #ffebee; padding: 15px; border-radius: 8px;">
+                ${error.message}
+            </p>
+        </div>`, 'error');
     }
 }
 
@@ -152,6 +220,8 @@ async function callIsTransferable() {
 async function callTokenURI() {
     const tokenId = prompt('請輸入 Token ID:');
     if (!tokenId) return;
+    
+    showFunctionResult('🔄 正在獲取中...', 'loading');
     
     try {
         if (!contract) {
@@ -161,12 +231,46 @@ async function callTokenURI() {
         }
         
         const uri = await contract.methods.tokenURI(tokenId).call();
-        alert(`Token URI:\n${uri}`);
-        window.open(uri, '_blank');
+        
+        const html = `<div style="color: #333;">
+<h3 style="color: #2196f3; margin-bottom: 20px;">✅ 元數據URI獲取成功</h3>
+
+<div style="background: #e3f2fd; padding: 20px; border-radius: 10px;">
+    <div style="text-align: center; margin-bottom: 15px;">
+        <div style="font-size: 3rem; margin-bottom: 10px;">🔗</div>
+        <strong style="font-size: 1.1rem;">Token ID: ${tokenId}</strong>
+    </div>
+    
+    <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 15px;">
+        <h4 style="margin-bottom: 10px; color: #1976d2;">📋 IPFS元數據鏈接</h4>
+        <div style="background: #f5f5f5; padding: 12px; border-radius: 6px; word-break: break-all; font-family: monospace; font-size: 0.9rem; margin-bottom: 15px;">
+            ${uri}
+        </div>
+        <a href="${uri}" target="_blank" class="external-link" style="display: inline-block; background: linear-gradient(135deg, #2196f3, #42a5f5); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;">
+            🌐 在新標籤頁打開
+        </a>
+    </div>
+    
+    <div style="background: #fff3e0; padding: 15px; border-radius: 8px; margin-top: 15px;">
+        <strong style="color: #f57c00;">💡 提示</strong>
+        <p style="margin: 10px 0 0; color: #555;">
+            此URI指向IPFS上永久存儲的NFT元數據，包含提單的完整信息。
+            符合ERC-721標準，可被所有NFT市場和錢包識別。
+        </p>
+    </div>
+</div>
+</div>`;
+        
+        showFunctionResult(html, 'success');
         
     } catch (error) {
         console.error('查詢失敗:', error);
-        alert('查詢失敗: ' + error.message);
+        showFunctionResult(`<div style="color: #d32f2f;">
+            <h3>❌ 獲取失敗</h3>
+            <p style="margin-top: 10px; background: #ffebee; padding: 15px; border-radius: 8px;">
+                ${error.message}
+            </p>
+        </div>`, 'error');
     }
 }
 
@@ -187,6 +291,8 @@ async function callPledgeForFinancing() {
     const amount = prompt('請輸入融資金額 (ETH):');
     if (!amount) return;
     
+    showFunctionResult('⏳ 正在處理交易，請在MetaMask中確認...', 'loading');
+    
     try {
         const amountWei = web3.utils.toWei(amount, 'ether');
         
@@ -194,12 +300,55 @@ async function callPledgeForFinancing() {
             .pledgeForFinancing(tokenId, financier, amountWei)
             .send({ from: userAccount });
         
-        alert(`✅ 質押成功!\n交易哈希: ${tx.transactionHash}`);
+        const html = `<div style="color: #333;">
+<h3 style="color: #4caf50; margin-bottom: 20px;">✅ 質押成功！</h3>
+
+<div style="background: #e8f5e9; padding: 20px; border-radius: 10px;">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <div style="font-size: 4rem;">💰</div>
+        <strong style="font-size: 1.2rem;">提單已成功質押</strong>
+    </div>
+    
+    <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+        <h4 style="margin-bottom: 10px; color: #2e7d32;">📋 交易詳情</h4>
+        <div style="display: grid; grid-template-columns: 120px 1fr; gap: 10px; line-height: 2; font-size: 0.95rem;">
+            <strong>Token ID:</strong> <span>${tokenId}</span>
+            <strong>融資方:</strong> <span style="font-family: monospace; font-size: 0.85rem;">${financier}</span>
+            <strong>融資金額:</strong> <span style="color: #f57c00; font-weight: 600;">${amount} ETH</span>
+            <strong>交易哈希:</strong> <span style="font-family: monospace; font-size: 0.85rem; word-break: break-all;">${tx.transactionHash}</span>
+        </div>
+    </div>
+    
+    <div style="background: #fff3e0; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+        <strong style="color: #f57c00;">🔒 質押狀態</strong>
+        <p style="margin: 10px 0 0; color: #555;">
+            提單已被鎖定，暫時不可轉讓。
+            只有指定的融資方可以釋放所有權。
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 15px;">
+        <a href="https://sepolia.etherscan.io/tx/${tx.transactionHash}" target="_blank" class="external-link" style="display: inline-block; background: linear-gradient(135deg, #4caf50, #66bb6a); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+            🔍 在Etherscan查看交易
+        </a>
+    </div>
+</div>
+</div>`;
+        
+        showFunctionResult(html, 'success');
         console.log('Transaction:', tx);
         
     } catch (error) {
         console.error('質押失敗:', error);
-        alert('質押失敗: ' + error.message);
+        showFunctionResult(`<div style="color: #d32f2f;">
+            <h3>❌ 質押失敗</h3>
+            <p style="margin-top: 10px; background: #ffebee; padding: 15px; border-radius: 8px;">
+                ${error.message}
+            </p>
+            <p style="margin-top: 10px; color: #666; font-size: 0.9rem;">
+                常見原因：用戶取消交易、Gas不足、不是NFT所有者、提單已被質押
+            </p>
+        </div>`, 'error');
     }
 }
 
@@ -218,17 +367,61 @@ async function callReleaseOwnership() {
         return;
     }
     
+    showFunctionResult('⏳ 正在處理交易，請在MetaMask中確認...', 'loading');
+    
     try {
         const tx = await contract.methods
             .releaseOwnership(tokenId)
             .send({ from: userAccount });
         
-        alert(`✅ 釋放成功!\n交易哈希: ${tx.transactionHash}`);
+        const html = `<div style="color: #333;">
+<h3 style="color: #4caf50; margin-bottom: 20px;">✅ 釋放成功！</h3>
+
+<div style="background: #e3f2fd; padding: 20px; border-radius: 10px;">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <div style="font-size: 4rem;">🔓</div>
+        <strong style="font-size: 1.2rem;">所有權已釋放</strong>
+    </div>
+    
+    <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+        <h4 style="margin-bottom: 10px; color: #1976d2;">📋 交易詳情</h4>
+        <div style="display: grid; grid-template-columns: 120px 1fr; gap: 10px; line-height: 2; font-size: 0.95rem;">
+            <strong>Token ID:</strong> <span>${tokenId}</span>
+            <strong>操作者:</strong> <span style="font-family: monospace; font-size: 0.85rem;">${userAccount}</span>
+            <strong>交易哈希:</strong> <span style="font-family: monospace; font-size: 0.85rem; word-break: break-all;">${tx.transactionHash}</span>
+        </div>
+    </div>
+    
+    <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+        <strong style="color: #2e7d32;">✅ 解鎖狀態</strong>
+        <p style="margin: 10px 0 0; color: #555;">
+            提單質押已解除，現在可以自由轉讓。
+            原所有者恢復完整控制權。
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 15px;">
+        <a href="https://sepolia.etherscan.io/tx/${tx.transactionHash}" target="_blank" class="external-link" style="display: inline-block; background: linear-gradient(135deg, #2196f3, #42a5f5); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+            🔍 在Etherscan查看交易
+        </a>
+    </div>
+</div>
+</div>`;
+        
+        showFunctionResult(html, 'success');
         console.log('Transaction:', tx);
         
     } catch (error) {
         console.error('釋放失敗:', error);
-        alert('釋放失敗: ' + error.message);
+        showFunctionResult(`<div style="color: #d32f2f;">
+            <h3>❌ 釋放失敗</h3>
+            <p style="margin-top: 10px; background: #ffebee; padding: 15px; border-radius: 8px;">
+                ${error.message}
+            </p>
+            <p style="margin-top: 10px; color: #666; font-size: 0.9rem;">
+                常見原因：用戶取消交易、Gas不足、不是融資方、提單未被質押
+            </p>
+        </div>`, 'error');
     }
 }
 
@@ -266,3 +459,27 @@ window.addEventListener('load', async () => {
         });
     }
 });
+
+// Helper function to show results in enhanced display area
+function showFunctionResult(content, type = 'success') {
+    const resultDisplay = document.getElementById('functionResultDisplay');
+    const resultContent = document.getElementById('functionResultContent');
+    
+    if (type === 'loading') {
+        resultContent.innerHTML = `<div style="text-align: center; padding: 40px; color: #666;">
+            <div style="font-size: 3rem; margin-bottom: 15px; animation: spin 1s linear infinite;">⚙️</div>
+            <div style="font-size: 1.1rem;">${content}</div>
+        </div>
+        <style>
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+        </style>`;
+    } else {
+        resultContent.innerHTML = content;
+    }
+    
+    resultDisplay.style.display = 'block';
+    resultDisplay.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}

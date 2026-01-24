@@ -349,6 +349,176 @@
             margin-bottom: 15px;
         }
         
+        /* Enhanced Contract Function Styles */
+        .function-card.enhanced {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 2px solid #e0e0e0;
+            padding: 25px;
+        }
+        
+        .function-card.enhanced:hover {
+            border-color: #667eea;
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+        }
+        
+        .function-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .function-badge.read-only {
+            background: linear-gradient(135deg, #4caf50, #81c784);
+            color: white;
+        }
+        
+        .function-badge.transaction {
+            background: linear-gradient(135deg, #ff9800, #ffb74d);
+            color: white;
+        }
+        
+        .function-badge.auto {
+            background: linear-gradient(135deg, #2196f3, #64b5f6);
+            color: white;
+        }
+        
+        .function-icon-large {
+            font-size: 3.5rem;
+            margin: 20px 0 15px;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .function-card.enhanced .function-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .function-card.enhanced .function-desc {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .function-card.enhanced .function-desc p {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .function-card.enhanced .function-desc ul {
+            color: #666;
+        }
+        
+        .btn-enhanced {
+            width: 100%;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-enhanced span {
+            font-size: 1.2rem;
+        }
+        
+        .btn-enhanced.btn-read {
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            color: white;
+        }
+        
+        .btn-enhanced.btn-read:hover {
+            background: linear-gradient(135deg, #388e3c, #4caf50);
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .btn-enhanced.btn-transaction {
+            background: linear-gradient(135deg, #ff9800, #ffa726);
+            color: white;
+        }
+        
+        .btn-enhanced.btn-transaction:hover {
+            background: linear-gradient(135deg, #f57c00, #ff9800);
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+        }
+        
+        .btn-enhanced.btn-info {
+            background: linear-gradient(135deg, #2196f3, #42a5f5);
+            color: white;
+        }
+        
+        .btn-enhanced.btn-info:hover {
+            background: linear-gradient(135deg, #1976d2, #2196f3);
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
+        }
+        
+        #functionResultDisplay {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        #functionResultContent {
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+        
+        /* Scrollbar styling for result content */
+        #functionResultContent::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        #functionResultContent::-webkit-scrollbar-track {
+            background: #e0e0e0;
+            border-radius: 10px;
+        }
+        
+        #functionResultContent::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+        
+        #functionResultContent::-webkit-scrollbar-thumb:hover {
+            background: #5568d3;
+        }
+        
         /* 其他現有樣式保持不變 */
         .stats {
             display: grid;
@@ -712,48 +882,130 @@
             </div>
             
             <!-- 智能合約函數 -->
-            <h3 style="margin: 30px 0 20px; color: #333;">🔧 智能合約函數操作</h3>
-            <div class="contract-functions">
-                <div class="function-card" onclick="showFunctionDialog('mintBill')">
-                    <div class="function-icon">🏭</div>
-                    <div class="function-title">鑄造提單NFT</div>
-                    <div class="function-desc">為提單創建新的NFT代幣</div>
-                    <button class="btn">執行鑄造</button>
+            <div style="margin-top: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; color: white; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);">
+                <h3 style="margin: 0 0 10px; color: white;">🔧 智能合約函數操作</h3>
+                <p style="margin: 0; opacity: 0.9; font-size: 0.95rem;">與區塊鏈智能合約互動，管理提單NFT的生命週期</p>
+            </div>
+            
+            <div class="contract-functions" style="margin-top: 20px;">
+                <!-- Read-Only Functions -->
+                <div style="grid-column: 1 / -1; background: #e8f5e9; border-left: 4px solid #4caf50; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <strong style="color: #2e7d32;">📖 查詢功能</strong> <span style="color: #666; font-size: 0.9rem;">· 無需Gas費用 · 即時返回結果</span>
                 </div>
                 
-                <div class="function-card" onclick="showFunctionDialog('pledgeForFinancing')">
-                    <div class="function-icon">💰</div>
-                    <div class="function-title">質押融資</div>
-                    <div class="function-desc">將提單質押給金融機構以獲得融資</div>
-                    <button class="btn">申請融資</button>
-                </div>
-                
-                <div class="function-card" onclick="showFunctionDialog('releaseOwnership')">
-                    <div class="function-icon">🔓</div>
-                    <div class="function-title">釋放所有權</div>
-                    <div class="function-desc">金融機構釋放提單所有權</div>
-                    <button class="btn">釋放權利</button>
-                </div>
-                
-                <div class="function-card" onclick="showFunctionDialog('getBillData')">
-                    <div class="function-icon">📊</div>
+                <div class="function-card enhanced" onclick="callGetBillData()">
+                    <div class="function-badge read-only">免費查詢</div>
+                    <div class="function-icon-large">📊</div>
                     <div class="function-title">查詢提單數據</div>
-                    <div class="function-desc">根據Token ID查詢提單詳細信息</div>
-                    <button class="btn">查詢數據</button>
+                    <div class="function-desc">
+                        <p>查詢NFT完整信息，包括：</p>
+                        <ul style="text-align: left; margin: 10px 0; padding-left: 20px; font-size: 0.85rem;">
+                            <li>提單編號與IPFS哈希</li>
+                            <li>所有者與融資狀態</li>
+                            <li>時間戳與元數據</li>
+                        </ul>
+                    </div>
+                    <button class="btn-enhanced btn-read">
+                        <span>🔍</span> 查詢數據
+                    </button>
                 </div>
                 
-                <div class="function-card" onclick="showFunctionDialog('isTransferable')">
-                    <div class="function-icon">🔄</div>
+                <div class="function-card enhanced" onclick="callIsTransferable()">
+                    <div class="function-badge read-only">免費查詢</div>
+                    <div class="function-icon-large">🔄</div>
                     <div class="function-title">檢查轉讓性</div>
-                    <div class="function-desc">檢查提單是否可以轉讓</div>
-                    <button class="btn">檢查狀態</button>
+                    <div class="function-desc">
+                        <p>檢查提單是否可轉讓：</p>
+                        <ul style="text-align: left; margin: 10px 0; padding-left: 20px; font-size: 0.85rem;">
+                            <li>✅ 未質押可自由轉讓</li>
+                            <li>❌ 質押中不可轉讓</li>
+                        </ul>
+                    </div>
+                    <button class="btn-enhanced btn-read">
+                        <span>✓</span> 檢查狀態
+                    </button>
                 </div>
                 
-                <div class="function-card" onclick="showFunctionDialog('tokenURI')">
-                    <div class="function-icon">🔗</div>
-                    <div class="function-title">獲取元數據</div>
-                    <div class="function-desc">獲取NFT的元數據URI</div>
-                    <button class="btn">獲取URI</button>
+                <div class="function-card enhanced" onclick="callTokenURI()">
+                    <div class="function-badge read-only">免費查詢</div>
+                    <div class="function-icon-large">🔗</div>
+                    <div class="function-title">獲取元數據URI</div>
+                    <div class="function-desc">
+                        <p>獲取NFT元數據鏈接：</p>
+                        <ul style="text-align: left; margin: 10px 0; padding-left: 20px; font-size: 0.85rem;">
+                            <li>IPFS永久存儲鏈接</li>
+                            <li>符合ERC-721標準</li>
+                        </ul>
+                    </div>
+                    <button class="btn-enhanced btn-read">
+                        <span>🌐</span> 獲取URI
+                    </button>
+                </div>
+                
+                <!-- Transaction Functions -->
+                <div style="grid-column: 1 / -1; background: #fff3e0; border-left: 4px solid #ff9800; padding: 15px; border-radius: 8px; margin: 25px 0 15px;">
+                    <strong style="color: #e65100;">✍️ 交易功能</strong> <span style="color: #666; font-size: 0.9rem;">· 需要Gas費用 · 需連接錢包 · 修改區塊鏈狀態</span>
+                </div>
+                
+                <div class="function-card enhanced" onclick="showMintInfo()">
+                    <div class="function-badge auto">自動執行</div>
+                    <div class="function-icon-large">🏭</div>
+                    <div class="function-title">鑄造提單NFT</div>
+                    <div class="function-desc">
+                        <p>系統自動處理鑄造：</p>
+                        <ul style="text-align: left; margin: 10px 0; padding-left: 20px; font-size: 0.85rem;">
+                            <li>OCR識別 → IPFS上傳</li>
+                            <li>自動調用智能合約</li>
+                            <li>生成唯一Token ID</li>
+                        </ul>
+                    </div>
+                    <button class="btn-enhanced btn-info">
+                        <span>ℹ️</span> 查看說明
+                    </button>
+                </div>
+                
+                <div class="function-card enhanced" onclick="callPledgeForFinancing()">
+                    <div class="function-badge transaction">需要Gas</div>
+                    <div class="function-icon-large">💰</div>
+                    <div class="function-title">質押融資</div>
+                    <div class="function-desc">
+                        <p>質押提單申請融資：</p>
+                        <ul style="text-align: left; margin: 10px 0; padding-left: 20px; font-size: 0.85rem;">
+                            <li>指定融資機構地址</li>
+                            <li>設定融資金額</li>
+                            <li>提單暫時鎖定</li>
+                        </ul>
+                    </div>
+                    <button class="btn-enhanced btn-transaction">
+                        <span>💸</span> 申請融資
+                    </button>
+                </div>
+                
+                <div class="function-card enhanced" onclick="callReleaseOwnership()">
+                    <div class="function-badge transaction">需要Gas</div>
+                    <div class="function-icon-large">🔓</div>
+                    <div class="function-title">釋放所有權</div>
+                    <div class="function-desc">
+                        <p>融資機構釋放提單：</p>
+                        <ul style="text-align: left; margin: 10px 0; padding-left: 20px; font-size: 0.85rem;">
+                            <li>僅融資方可執行</li>
+                            <li>解除質押鎖定</li>
+                            <li>恢復可轉讓性</li>
+                        </ul>
+                    </div>
+                    <button class="btn-enhanced btn-transaction">
+                        <span>🔐</span> 釋放權利
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Function Results Display -->
+            <div id="functionResultDisplay" style="display: none; margin-top: 25px; background: white; border-radius: 15px; padding: 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h4 style="margin: 0; color: #333;">📋 執行結果</h4>
+                    <button onclick="document.getElementById('functionResultDisplay').style.display='none'" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999;">×</button>
+                </div>
+                <div id="functionResultContent" style="background: #f8f9fa; border-radius: 10px; padding: 20px; font-family: 'Courier New', monospace; white-space: pre-wrap; max-height: 400px; overflow-y: auto;">
                 </div>
             </div>
         </div>
@@ -846,6 +1098,62 @@
             setTimeout(() => {
                 messageDiv.style.display = 'none';
             }, 5000);
+        }
+        
+        function showMintInfo() {
+            const resultDisplay = document.getElementById('functionResultDisplay');
+            const resultContent = document.getElementById('functionResultContent');
+            
+            resultContent.innerHTML = `<div style="color: #333;">
+<h3 style="color: #2196f3; margin-bottom: 20px;">🏭 提單NFT自動鑄造流程</h3>
+
+<div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+    <strong style="color: #1976d2;">✨ 系統自動處理</strong>
+    <p style="margin: 10px 0 0; color: #555;">
+        本系統已集成完整的OCR到區塊鏈流程，無需手動調用鑄造函數。
+    </p>
+</div>
+
+<div style="margin-bottom: 20px;">
+    <h4 style="color: #333; margin-bottom: 10px;">📋 自動流程步驟：</h4>
+    <ol style="line-height: 2; color: #555; padding-left: 20px;">
+        <li><strong>上傳提單圖片</strong> → 系統接收並預處理</li>
+        <li><strong>OCR識別</strong> → PaddleOCR提取文字信息</li>
+        <li><strong>數據結構化</strong> → 自動提取關鍵字段</li>
+        <li><strong>IPFS上傳</strong> → 永久存儲到去中心化網絡</li>
+        <li><strong>智能合約鑄造</strong> → 自動調用mintBill函數</li>
+        <li><strong>獲取Token ID</strong> → 返回唯一NFT標識</li>
+    </ol>
+</div>
+
+<div style="background: #fff3e0; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+    <strong style="color: #f57c00;">⚙️ 使用方法</strong>
+    <p style="margin: 10px 0 0; color: #555;">
+        點擊「<strong>完整流程</strong>」按鈕即可自動完成OCR識別和NFT鑄造。
+        系統會自動檢測提單是否已存在，避免重複鑄造。
+    </p>
+</div>
+
+<div style="background: #e8f5e9; padding: 15px; border-radius: 8px;">
+    <strong style="color: #2e7d32;">💡 智能檢測</strong>
+    <ul style="margin: 10px 0 0; padding-left: 20px; color: #555; line-height: 1.8;">
+        <li>如果提單已存在 → 直接顯示Token ID</li>
+        <li>如果提單未鑄造 → 自動完成鑄造流程</li>
+        <li>防止重複鑄造 → 合約層面保護</li>
+    </ul>
+</div>
+
+<div style="margin-top: 20px; padding: 15px; background: #f5f5f5; border-left: 4px solid #667eea; border-radius: 4px;">
+    <strong style="color: #667eea;">🔍 查看結果</strong>
+    <p style="margin: 10px 0 0; color: #555;">
+        鑄造完成後，可以在「文件管理」標籤查看所有已處理的提單，
+        或使用上方的「查詢提單數據」功能查看詳細的NFT信息。
+    </p>
+</div>
+</div>`;
+            
+            resultDisplay.style.display = 'block';
+            resultDisplay.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
         
         function updateProgress(percent) {
@@ -1178,12 +1486,22 @@
                 
                 if (data.success) {
                     updateBlockchainDisplay(data.result);
-                    showMessage(data.message, 'success');
+                    if (data.already_minted) {
+                        showMessage('✅ ' + data.message, 'info');
+                    } else {
+                        showMessage(data.message, 'success');
+                    }
                     loadStats();
                     loadFiles();
                 } else {
                     console.error('Mint NFT error:', data.error);
-                    showMessage(data.error, 'error');
+                    
+                    // Handle "already exists" case
+                    if (data.already_exists) {
+                        showMessage('⚠️ ' + data.error + '\n\n' + (data.solution || ''), 'warning');
+                    } else {
+                        showMessage('❌ ' + data.error + (data.details ? '\n\n詳情: ' + data.details : ''), 'error');
+                    }
                 }
             } catch (error) {
                 console.error('Mint NFT exception:', error);
@@ -1193,51 +1511,6 @@
                 btn.textContent = '🎨 鑄造 NFT';
                 isProcessing = false;  // 處理結束
             }
-        }
-        
-        // Web3 and Wallet Variables
-        let web3;
-        let userAccount = null;
-        let contract;
-        const contractAddress = '0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED';
-        const contractABI = [
-            {"inputs":[],"stateMutability":"nonpayable","type":"constructor"},
-            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"},{"indexed":true,"internalType":"address","name":"financier","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"BillFinanced","type":"event"},
-            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"},{"indexed":true,"internalType":"address","name":"shipper","type":"address"},{"indexed":false,"internalType":"string","name":"billNumber","type":"string"}],"name":"BillMinted","type":"event"},
-            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"BillReleased","type":"event"},
-            {"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"getBillData","outputs":[{"components":[{"internalType":"string","name":"billNumber","type":"string"},{"internalType":"string","name":"ipfsHash","type":"string"},{"internalType":"string","name":"dataHash","type":"string"},{"internalType":"string","name":"tokenURI","type":"string"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"bool","name":"isFinanced","type":"bool"},{"internalType":"address","name":"financier","type":"address"},{"internalType":"uint256","name":"financedAmount","type":"uint256"},{"internalType":"bool","name":"isReleased","type":"bool"}],"internalType":"struct BillOfLadingNFT.BillData","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},
-            {"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"isTransferable","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
-            {"inputs":[{"internalType":"address","name":"shipper","type":"address"},{"internalType":"string","name":"billNumber","type":"string"},{"internalType":"string","name":"ipfsHash","type":"string"},{"internalType":"string","name":"dataHash","type":"string"},{"internalType":"string","name":"_tokenURI","type":"string"}],"name":"mintBill","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},
-            {"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"address","name":"financier","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"pledgeForFinancing","outputs":[],"stateMutability":"nonpayable","type":"function"},
-            {"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"releaseOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},
-            {"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"tokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},
-            {"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ownerOf","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"}
-        ];
-        
-        // Connect Wallet
-        async function connectWallet() {
-            let message = '';
-            switch (functionName) {
-                case 'mintBill':
-                    message = '【演示說明】鑄造提單NFT功能。此功能將為新的提單創建NFT代幣，包括：設定提單號碼、記錄IPFS哈希、生成唯一Token ID。注意：只有合約擁有者可以執行此操作。本系統已自動處理鑄造功能，此處僅為功能說明展示。';
-                    break;
-                case 'pledgeForFinancing':
-                    message = '【演示說明】質押融資功能。提單持有者可以：將提單質押給金融機構、指定融資方地址、設定融資金額。質押後提單將不能轉讓，直到融資方釋放。此功能需要在實際應用中通過智能合約接口調用，本演示不會執行實際操作。';
-                    break;
-                case 'releaseOwnership':
-                    message = '【演示說明】釋放所有權功能。金融機構可以：釋放已質押的提單、恢復提單的可轉讓性。注意：只有融資方可以執行此操作。此功能需要在實際應用中通過智能合約接口調用，本演示不會執行實際操作。';
-                    break;
-                case 'getBillData':
-                    message = '【演示說明】查詢提單數據功能。可以查詢：提單基本信息、IPFS存儲位置、融資狀態、時間戳等詳細數據。此功能需要連接到區塊鏈節點進行查詢，本演示不會執行實際操作。';
-                    break;
-                case 'isTransferable':
-                    message = '【演示說明】檢查轉讓性功能。檢查提單是否可以轉讓：未融資的提單可自由轉讓、已融資但已釋放的提單可轉讓、融資中的提單不可轉讓。此功能需要連接到區塊鏈節點進行查詢，本演示不會執行實際操作。';
-                    break;
-                case 'tokenURI':
-                    message = '【演示說明】獲取元數據功能。返回NFT的元數據URI：IPFS上的JSON metadata、包含提單詳細信息、符合ERC-721標準。此功能需要連接到區塊鏈節點進行查詢，本演示不會執行實際操作。';
-                    break;
-            }
-            alert(message);
         }
         
         // 打開IPFS數據
@@ -1417,7 +1690,9 @@
                         logProcess(`IPFS上傳: ${data.blockchain_result.ipfs.dataUrl}`);
                     }
                     if (data.blockchain_result.blockchain) {
-                        if (data.blockchain_result.blockchain.status === 'pending') {
+                        if (data.blockchain_result.blockchain.tokenId) {
+                            logProcess(`✅ NFT已鑄造: Token ID ${data.blockchain_result.blockchain.tokenId}`);
+                        } else if (data.blockchain_result.blockchain.status === 'pending') {
                             logProcess(`⚠️ IPFS上傳完成，請點擊「鑄造NFT」按鈕`);
                         } else {
                             logProcess(`區塊鏈處理: ${data.blockchain_result.blockchain.dataHash}`);
@@ -1475,7 +1750,13 @@
                     isProcessing = false;  // 允許切換
                     switchTab('blockchain');
                     
-                    showMessage(data.message, 'success');
+                    // Check if NFT already exists
+                    if (data.already_exists && data.result.blockchain && data.result.blockchain.tokenId) {
+                        showMessage(data.message + '\n\n可以在區塊鏈標籤查看詳情', 'info');
+                    } else {
+                        showMessage(data.message, 'success');
+                    }
+                    
                     loadFiles();
                     loadStats();
                 } else {
@@ -1524,5 +1805,8 @@
             loadStats();
         };
     </script>
+    
+    <!-- Wallet Integration Script -->
+    <script src="{{ url_for('static', filename='wallet.js') }}"></script>
 </body>
 </html>

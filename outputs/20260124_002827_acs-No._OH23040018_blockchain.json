@@ -1,0 +1,45 @@
+{
+  "success": true,
+  "billData": {
+    "billNumber": "BL20260124002833",
+    "vessel": "MAERSK CONTAINER SHIP",
+    "voyage": "",
+    "portOfLoading": "Shanghai, China",
+    "portOfDischarge": "Los Angeles, USA",
+    "placeOfDelivery": "",
+    "shipper": {
+      "name": "Global Export Company Ltd",
+      "address": ""
+    },
+    "consignee": {
+      "name": "International Import Corp",
+      "address": ""
+    },
+    "cargoDescription": "Electronics & Components",
+    "containerInfo": "MSKU1234567",
+    "sealNumber": "987654321",
+    "grossWeight": "2500 KGS",
+    "measurement": "",
+    "issueDate": "2026-01-24",
+    "extractedAt": "2026-01-24T22:06:31.777866",
+    "accuracy": 0,
+    "originalFilename": "20260124_002827_acs-No._OH23040018.png",
+    "ocrConfidence": 0.95,
+    "rawText": "BILL OF LADING\nB/L No: BL20260124002833\nVessel: MAERSK CONTAINER SHIP\nPort of Loading: Shanghai, China\nPort of Discharge: Los Angeles, USA\nShipper: Global Export Company Ltd\nConsignee: International Import Corp\nDescription of Goods: Electronics & Components\nGross Weight: 2500 KGS\nContainer No: MSKU1234567\nSeal No: 987654321\nProcessed: 2026-01-24 00:28:33\nFreight: Prepaid\nTerms: CIF Los Angeles"
+  },
+  "ipfs": {
+    "dataHash": "QmZVNnAUhTzWVMbskjonR4imAUkPxrVUYVEyUTQXZT4h2v",
+    "dataUrl": "https://gateway.pinata.cloud/ipfs/QmZVNnAUhTzWVMbskjonR4imAUkPxrVUYVEyUTQXZT4h2v",
+    "imageHash": null,
+    "imageUrl": null
+  },
+  "blockchain": {
+    "dataHash": "0x0bb970a7dc5be5c3f547b7a8ceac1d6c4bc64a43176e1b14371c5f4ed4fdf637",
+    "contractAddress": "0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED",
+    "status": "pending",
+    "tokenId": null,
+    "transactionHash": null,
+    "message": "等待鑄造NFT"
+  },
+  "timestamp": "2026-01-24T22:06:47.092924"
+}

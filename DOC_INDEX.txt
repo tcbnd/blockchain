@@ -1,0 +1,279 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                                                                               ║
+║                    📚 DOCUMENTATION INDEX                                     ║
+║                    Where to Find What You Need                                ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+
+🎯 START HERE
+═══════════════════════════════════════════════════════════════════════════════
+
+First Time Testing?
+├─→ README_WALLET.md                    ⭐ START HERE - Overview & Quick Start
+└─→ QUICK_REFERENCE.txt                 ⭐ 1-Page Cheat Sheet
+
+
+🧪 TESTING
+═══════════════════════════════════════════════════════════════════════════════
+
+Want to Test the System?
+├─→ TESTING_GUIDE.md                    📖 Complete Step-by-Step Guide
+├─→ TESTING_CHECKLIST.txt               ✅ Detailed Checklist with Spaces for Notes
+├─→ test_contract_functions.py          🐍 Automated Python Test Suite
+└─→ QUICK_REFERENCE.txt                 ⚡ Quick Commands Reference
+
+
+🔧 TECHNICAL
+═══════════════════════════════════════════════════════════════════════════════
+
+Understanding the System?
+├─→ ARCHITECTURE_DIAGRAM.txt            🏗️  Visual System Architecture
+├─→ IMPLEMENTATION_COMPLETE.md          📋 What Was Built & How It Works
+├─→ OCR_BLOCKCHAIN_INTEGRATION.md       🔗 Original Architecture Design
+└─→ UNIFIED_APP_README.md               📚 Complete System Documentation
+
+
+🐛 TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════════════
+
+Having Problems?
+├─→ TROUBLESHOOTING.md                  🔧 Common Issues & Solutions
+├─→ Browser Console (F12)               💻 Check for JavaScript Errors
+├─→ Flask Terminal Output               🖥️  Check for Backend Errors
+└─→ Etherscan                           ⛓️  Verify Blockchain Transactions
+
+
+📖 GUIDES BY TOPIC
+═══════════════════════════════════════════════════════════════════════════════
+
+🦊 Wallet & MetaMask
+├─→ README_WALLET.md                    "👛 Wallet Integration" section
+├─→ TESTING_GUIDE.md                    "Setup MetaMask" section
+└─→ TROUBLESHOOTING.md                  "🦊 MetaMask Issues" section
+
+⛓️ Smart Contract Functions
+├─→ IMPLEMENTATION_COMPLETE.md          "🎯 Smart Contract Functions" section
+├─→ ARCHITECTURE_DIAGRAM.txt            "Contract Functions" diagram
+└─→ TESTING_GUIDE.md                    Function testing instructions
+
+🧪 Testing
+├─→ TESTING_GUIDE.md                    Complete testing guide
+├─→ TESTING_CHECKLIST.txt               Checkbox checklist
+└─→ test_contract_functions.py          Python automated tests
+
+🏗️ Architecture
+├─→ ARCHITECTURE_DIAGRAM.txt            Visual diagrams
+├─→ OCR_BLOCKCHAIN_INTEGRATION.md       Original design
+└─→ IMPLEMENTATION_COMPLETE.md          Current implementation
+
+💾 File Structure
+├─→ ARCHITECTURE_DIAGRAM.txt            "File Structure Diagram" section
+└─→ UNIFIED_APP_README.md               Project structure
+
+🌐 Network & Configuration
+├─→ IMPLEMENTATION_COMPLETE.md          "🔧 Technical Configuration" section
+├─→ README_WALLET.md                    "Technical Details" section
+└─→ .env.example                        Environment variables template
+
+
+📋 DOCUMENTATION BY USE CASE
+═══════════════════════════════════════════════════════════════════════════════
+
+"I want to test the system right now"
+├─→ QUICK_REFERENCE.txt                 5-step quick start
+└─→ .\start.bat                         Start the application
+
+"I want to understand how it works"
+├─→ README_WALLET.md                    Overview
+├─→ ARCHITECTURE_DIAGRAM.txt            Visual diagrams
+└─→ IMPLEMENTATION_COMPLETE.md          Detailed explanation
+
+"I want to test thoroughly"
+├─→ TESTING_GUIDE.md                    Detailed instructions
+├─→ TESTING_CHECKLIST.txt               Complete checklist
+└─→ test_contract_functions.py          Automated tests
+
+"I'm having problems"
+├─→ TROUBLESHOOTING.md                  Problem-solution pairs
+├─→ Browser Console (F12)               Check errors
+└─→ Etherscan                           Verify transactions
+
+"I want to modify the code"
+├─→ static/wallet.js                    Frontend Web3 integration
+├─→ templates/index_visual.html         UI components
+├─→ app_unified.py                      Backend API
+└─→ contracts/BillOfLadingNFT.sol      Smart contract
+
+"I need specific information"
+├─→ Contract Address                    IMPLEMENTATION_COMPLETE.md
+├─→ Network Settings                    README_WALLET.md
+├─→ Wallet Setup                        TESTING_GUIDE.md
+└─→ Function Reference                  IMPLEMENTATION_COMPLETE.md
+
+
+📁 FILES REFERENCE
+═══════════════════════════════════════════════════════════════════════════════
+
+Documentation (⭐ = New)
+├─→ README_WALLET.md                    ⭐ Main entry point, start here
+├─→ TESTING_GUIDE.md                    ⭐ Complete testing instructions
+├─→ TESTING_CHECKLIST.txt               ⭐ Test checklist with checkboxes
+├─→ QUICK_REFERENCE.txt                 ⭐ One-page quick reference
+├─→ IMPLEMENTATION_COMPLETE.md          ⭐ Implementation summary
+├─→ ARCHITECTURE_DIAGRAM.txt            ⭐ System architecture diagrams
+├─→ TROUBLESHOOTING.md                  ⭐ Common issues & solutions
+├─→ DOC_INDEX.txt                       ⭐ This file
+├─→ UNIFIED_APP_README.md               Original system documentation
+├─→ OCR_BLOCKCHAIN_INTEGRATION.md       Original architecture
+├─→ QUICKSTART.md                       Initial setup guide
+├─→ SETUP_COMPLETE.md                   Setup completion notes
+├─→ WEB界面升級說明.md                  UI upgrade notes (Chinese)
+├─→ 粵語快速指南.md                     Quick guide (Cantonese)
+└─→ STREAMLIT使用指南.md                Streamlit guide (Chinese)
+
+Code (⭐ = New)
+├─→ static/wallet.js                    ⭐ Web3 wallet integration (269 lines)
+├─→ test_contract_functions.py          ⭐ Python test suite (240+ lines)
+├─→ templates/index_visual.html         Main UI (modified with Web3)
+├─→ app_unified.py                      Flask backend
+├─→ ocr_to_blockchain.py                OCR to blockchain bridge
+├─→ image_processor.py                  PaddleOCR processing
+└─→ contracts/BillOfLadingNFT.sol      Smart contract
+
+Configuration
+├─→ .env                                Environment variables (private keys)
+├─→ .env.example                        Environment template
+├─→ hardhat.config.js                   Hardhat configuration
+├─→ package.json                        Node.js dependencies
+└─→ requirements.txt                    Python dependencies
+
+
+🎯 QUICK NAVIGATION
+═══════════════════════════════════════════════════════════════════════════════
+
+Need                              Read This
+────────────────────────────────────────────────────────────────────────────
+Quick start in 30 seconds        QUICK_REFERENCE.txt
+Complete testing guide           TESTING_GUIDE.md
+Test checklist                   TESTING_CHECKLIST.txt
+System overview                  README_WALLET.md
+How it works                     IMPLEMENTATION_COMPLETE.md
+Visual diagrams                  ARCHITECTURE_DIAGRAM.txt
+Fix problems                     TROUBLESHOOTING.md
+Contract functions               IMPLEMENTATION_COMPLETE.md
+Network settings                 README_WALLET.md
+Wallet setup                     TESTING_GUIDE.md
+Python testing                   test_contract_functions.py
+Frontend code                    static/wallet.js
+Backend code                     app_unified.py
+Smart contract                   contracts/BillOfLadingNFT.sol
+
+
+📖 READING ORDER
+═══════════════════════════════════════════════════════════════════════════════
+
+Recommended reading order for first-time users:
+
+1. README_WALLET.md                     Overview & motivation
+2. QUICK_REFERENCE.txt                  Quick commands
+3. TESTING_GUIDE.md                     How to test
+4. ARCHITECTURE_DIAGRAM.txt             How it works
+5. IMPLEMENTATION_COMPLETE.md           Technical details
+6. TROUBLESHOOTING.md                   When things go wrong
+
+For experienced users, start with:
+├─→ QUICK_REFERENCE.txt                 Jump right in
+└─→ test_contract_functions.py          Run automated tests
+
+
+🔍 SEARCH GUIDE
+═══════════════════════════════════════════════════════════════════════════════
+
+Looking for specific topics? Search these files:
+
+"MetaMask" or "wallet"
+├─→ README_WALLET.md
+├─→ TESTING_GUIDE.md
+└─→ TROUBLESHOOTING.md
+
+"contract" or "function"
+├─→ IMPLEMENTATION_COMPLETE.md
+├─→ ARCHITECTURE_DIAGRAM.txt
+└─→ static/wallet.js
+
+"test" or "testing"
+├─→ TESTING_GUIDE.md
+├─→ TESTING_CHECKLIST.txt
+└─→ test_contract_functions.py
+
+"error" or "problem"
+├─→ TROUBLESHOOTING.md
+└─→ Browser Console (F12)
+
+"IPFS" or "storage"
+├─→ IMPLEMENTATION_COMPLETE.md
+└─→ ocr_to_blockchain.py
+
+"network" or "Sepolia"
+├─→ README_WALLET.md
+├─→ IMPLEMENTATION_COMPLETE.md
+└─→ .env
+
+
+🎓 LEARNING PATH
+═══════════════════════════════════════════════════════════════════════════════
+
+Beginner (Never used blockchain before)
+├─→ README_WALLET.md                    "Key Concepts" section
+├─→ TESTING_GUIDE.md                    "Setup MetaMask" section
+└─→ QUICK_REFERENCE.txt                 Try basic commands
+
+Intermediate (Familiar with blockchain)
+├─→ IMPLEMENTATION_COMPLETE.md          Technical overview
+├─→ ARCHITECTURE_DIAGRAM.txt            System design
+└─→ TESTING_GUIDE.md                    Complete testing
+
+Advanced (Developer)
+├─→ static/wallet.js                    Frontend implementation
+├─→ app_unified.py                      Backend API
+├─→ contracts/BillOfLadingNFT.sol      Smart contract
+└─→ test_contract_functions.py          Test suite
+
+
+💡 TIPS
+═══════════════════════════════════════════════════════════════════════════════
+
+📌 Save these bookmarks:
+   - Contract: https://sepolia.etherscan.io/address/0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED
+   - Faucet: https://sepoliafaucet.com
+   - Pinata: https://app.pinata.cloud
+
+📌 Keep these files open:
+   - QUICK_REFERENCE.txt (for commands)
+   - TROUBLESHOOTING.md (when stuck)
+   - Browser Console F12 (for errors)
+
+📌 Test in this order:
+   1. Wallet connection
+   2. Read functions
+   3. Write functions
+   4. Full workflow
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                                                                               ║
+║                         🚀 READY TO START!                                    ║
+║                                                                               ║
+║                      Read: README_WALLET.md                                   ║
+║                      Quick: QUICK_REFERENCE.txt                               ║
+║                      Test: TESTING_GUIDE.md                                   ║
+║                                                                               ║
+║                      Run: .\start.bat                                         ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+
+Last Updated: 2026-01-24
+Version: 1.0 - Complete Wallet Integration
+Status: ✅ Ready for Testing

@@ -1,0 +1,328 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                     SYSTEM ARCHITECTURE DIAGRAM                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│                              USER INTERFACE                                   │
+│                         (templates/index_visual.html)                         │
+│                                                                               │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌──────────────┐      │
+│  │  📤 新增與  │  │  📄 檔案    │  │  ⛓️ 區塊鏈  │  │  ℹ️ 系統資訊  │      │
+│  │    比較     │  │    管理     │  │             │  │              │      │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └──────────────┘      │
+│                                                                               │
+│                      ↓                            ↓                           │
+│              Upload & OCR               Blockchain Functions                 │
+└───────────────────────────────────────────────────────────────────────────────┘
+                      ↓                            ↓
+        ┌─────────────────────────────────────────────────────────┐
+        │                  FRONTEND LAYER                         │
+        ├─────────────────────────────────────────────────────────┤
+        │                                                         │
+        │  static/wallet.js (Web3.js Integration)                │
+        │  ┌──────────────────────────────────────────────────┐  │
+        │  │  • connectWallet()                               │  │
+        │  │  • disconnectWallet()                            │  │
+        │  │  • callGetBillData()                             │  │
+        │  │  • callIsTransferable()                          │  │
+        │  │  • callTokenURI()                                │  │
+        │  │  • callPledgeForFinancing()    [Transaction]     │  │
+        │  │  • callReleaseOwnership()      [Transaction]     │  │
+        │  └──────────────────────────────────────────────────┘  │
+        │                                                         │
+        └─────────────────────────────────────────────────────────┘
+                      ↓                            ↓
+        ┌─────────────────────────┐    ┌─────────────────────────┐
+        │   MetaMask Extension    │    │    Flask Backend       │
+        │                         │    │   (app_unified.py)     │
+        │  • User Wallet          │    │                         │
+        │  • Sign Transactions    │    │  • Upload handler      │
+        │  • Network: Sepolia     │    │  • OCR processing      │
+        │  • Gas payment          │    │  • IPFS upload         │
+        └─────────────────────────┘    │  • Mint NFT (backend)  │
+                      ↓                 └─────────────────────────┘
+                      │                            ↓
+                      │                 ┌─────────────────────────┐
+                      │                 │  ocr_to_blockchain.py   │
+                      │                 │                         │
+                      │                 │  • transform_ocr_data   │
+                      │                 │  • Hardhat scripts      │
+                      │                 │  • Backend wallet       │
+                      │                 └─────────────────────────┘
+                      │                            ↓
+                      └────────────────────────────┘
+                                    ↓
+        ┌──────────────────────────────────────────────────────────┐
+        │            ETHEREUM SEPOLIA TESTNET                      │
+        │                                                          │
+        │  Smart Contract: BillOfLadingNFT.sol                    │
+        │  Address: 0x89e89036f3f4dCdFE8DdA8C78E54FfA2D09095ED    │
+        │                                                          │
+        │  ┌────────────────────────────────────────────────────┐ │
+        │  │  CONTRACT FUNCTIONS                                │ │
+        │  │                                                    │ │
+        │  │  📖 READ (No Gas)                                 │ │
+        │  │    • getBillData(tokenId)                        │ │
+        │  │    • isTransferable(tokenId)                     │ │
+        │  │    • tokenURI(tokenId)                           │ │
+        │  │    • ownerOf(tokenId)                            │ │
+        │  │                                                    │ │
+        │  │  ✍️ WRITE (Requires Gas)                          │ │
+        │  │    • mintBill(...)                [Backend]      │ │
+        │  │    • pledgeForFinancing(...)      [User]         │ │
+        │  │    • releaseOwnership(...)        [Financier]    │ │
+        │  │                                                    │ │
+        │  └────────────────────────────────────────────────────┘ │
+        └──────────────────────────────────────────────────────────┘
+                                    ↓
+        ┌──────────────────────────────────────────────────────────┐
+        │                   IPFS STORAGE (Pinata)                  │
+        │                                                          │
+        │  • Bill images                                           │
+        │  • OCR results                                           │
+        │  • NFT metadata JSON                                     │
+        │  • Permanent, decentralized storage                      │
+        └──────────────────────────────────────────────────────────┘
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                         DATA FLOW DIAGRAM                                     ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+USER UPLOAD → MINT NFT FLOW:
+────────────────────────────────────────────────────────────────────────────────
+
+1. 📤 User uploads bill image
+         ↓
+2. 🖼️ PaddleOCR extracts text
+         ↓
+3. 🔄 Transform to structured data
+         ↓
+4. 📤 Upload to IPFS (Pinata)
+         ├─→ Image IPFS hash
+         └─→ Metadata IPFS hash
+         ↓
+5. 💾 Save locally (outputs/)
+         ├─→ _ocr.txt
+         ├─→ _result.json
+         └─→ _blockchain.json
+         ↓
+6. 🎨 Backend mints NFT
+         ├─→ Uses default wallet (.env)
+         ├─→ Calls mintBill() on contract
+         └─→ Returns Token ID
+         ↓
+7. ✅ Status: "NFT已鑄造"
+
+
+USER INTERACTION → BLOCKCHAIN FLOW:
+────────────────────────────────────────────────────────────────────────────────
+
+1. 🔗 User connects MetaMask wallet
+         ↓
+2. 🌐 Web3.js establishes connection
+         ├─→ Check network (Sepolia)
+         └─→ Get user address
+         ↓
+3. 📊 User clicks "查詢提單數據"
+         ├─→ Enter Token ID
+         ├─→ Call getBillData(tokenId)
+         └─→ Display results
+         ↓
+4. 💰 User clicks "質押融資"
+         ├─→ Enter Token ID, financier, amount
+         ├─→ Build transaction
+         ├─→ MetaMask signs transaction
+         ├─→ Submit to Sepolia
+         ├─→ Wait for confirmation
+         └─→ Show transaction hash + Etherscan link
+         ↓
+5. 🔓 Financier clicks "釋放所有權"
+         ├─→ Switch to financier wallet
+         ├─→ Enter Token ID
+         ├─→ Call releaseOwnership()
+         ├─→ MetaMask signs transaction
+         └─→ Bill unlocked
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                        WALLET ARCHITECTURE                                    ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│                        TWO-WALLET SYSTEM                                      │
+├───────────────────────────────────────────────────────────────────────────────┤
+│                                                                               │
+│  ┌─────────────────────────────────────┐   ┌──────────────────────────────┐ │
+│  │     BACKEND WALLET (.env)           │   │   USER WALLETS (MetaMask)    │ │
+│  │                                     │   │                              │ │
+│  │  Purpose: Automatic NFT minting    │   │  Purpose: User interactions  │ │
+│  │  Access: Server only                │   │  Access: Browser extension   │ │
+│  │  Storage: Private key in .env       │   │  Storage: User's MetaMask    │ │
+│  │                                     │   │                              │ │
+│  │  Functions:                         │   │  Functions:                  │ │
+│  │    • mintBill()       ✅           │   │    • getBillData()      ✅  │ │
+│  │    • Auto-execution   ✅           │   │    • isTransferable()   ✅  │ │
+│  │                                     │   │    • tokenURI()         ✅  │ │
+│  │  Address:                           │   │    • pledgeForFinancing() ✅│ │
+│  │  0x28A69686CE21d33d...              │   │    • releaseOwnership()   ✅│ │
+│  │                                     │   │                              │ │
+│  │  Security: Server-side only         │   │  Flexibility: User controls  │ │
+│  └─────────────────────────────────────┘   └──────────────────────────────┘ │
+│           ↓                                           ↓                       │
+│           │                                           │                       │
+│           └──────────────────┬────────────────────────┘                       │
+│                              ↓                                                │
+│                   Smart Contract Interaction                                 │
+│                   BillOfLadingNFT @ 0x89e8...5ED                            │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    FINANCING WORKFLOW DIAGRAM                                 ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+STATE 1: INITIAL (After Minting)
+────────────────────────────────────────────────────────────────────────────────
+┌─────────────────────────────────────────┐
+│  NFT Token #1                           │
+│  ─────────────────────────────────────  │
+│  Owner: 0xAAAA... (Shipper)            │
+│  Financier: 0x0000...0000               │
+│  Is Financed: FALSE                     │
+│  Financing Amount: 0 ETH                │
+│  Transferable: ✅ YES                   │
+└─────────────────────────────────────────┘
+
+        ↓ Owner calls pledgeForFinancing(1, 0xBBBB, 10 ETH)
+
+STATE 2: FINANCED (Locked)
+────────────────────────────────────────────────────────────────────────────────
+┌─────────────────────────────────────────┐
+│  NFT Token #1                           │
+│  ─────────────────────────────────────  │
+│  Owner: 0xAAAA... (Shipper)            │
+│  Financier: 0xBBBB... (Bank)           │
+│  Is Financed: TRUE                      │
+│  Financing Amount: 10 ETH               │
+│  Transferable: ❌ NO (LOCKED)          │
+└─────────────────────────────────────────┘
+
+        ↓ Financier calls releaseOwnership(1)
+
+STATE 3: RELEASED (Unlocked)
+────────────────────────────────────────────────────────────────────────────────
+┌─────────────────────────────────────────┐
+│  NFT Token #1                           │
+│  ─────────────────────────────────────  │
+│  Owner: 0xAAAA... (Shipper)            │
+│  Financier: 0x0000...0000               │
+│  Is Financed: FALSE                     │
+│  Financing Amount: 0 ETH (cleared)      │
+│  Transferable: ✅ YES                   │
+└─────────────────────────────────────────┘
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                      FILE STRUCTURE DIAGRAM                                   ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+blockchain/
+├── 🔧 CONFIGURATION
+│   ├── .env                          # Private keys, API keys
+│   ├── hardhat.config.js             # Hardhat configuration
+│   ├── package.json                  # Node.js dependencies
+│   └── requirements.txt              # Python dependencies
+│
+├── 🎨 FRONTEND
+│   ├── templates/
+│   │   └── index_visual.html        # Main UI (1529 lines)
+│   └── static/
+│       └── wallet.js                 # Web3 integration (269 lines) ⭐ NEW
+│
+├── 🔙 BACKEND
+│   ├── app_unified.py                # Flask server (main)
+│   ├── ocr_to_blockchain.py          # OCR → Blockchain bridge
+│   ├── image_processor.py            # PaddleOCR processing
+│   └── utils/
+│       └── (helper modules)
+│
+├── ⛓️ BLOCKCHAIN
+│   ├── contracts/
+│   │   └── BillOfLadingNFT.sol      # Smart contract (ERC-721)
+│   ├── scripts/
+│   │   ├── deploy.js                 # Contract deployment
+│   │   ├── mint-nft.js               # Minting script
+│   │   ├── pledge.js                 # Financing script
+│   │   └── release.js                # Release script
+│   └── test/
+│       └── BillOfLadingNFT.test.js   # Contract tests
+│
+├── 🧪 TESTING
+│   ├── test_contract_functions.py    # Python test suite ⭐ NEW
+│   ├── TESTING_GUIDE.md              # Complete testing guide ⭐ NEW
+│   ├── QUICK_REFERENCE.txt           # Quick start ⭐ NEW
+│   ├── TESTING_CHECKLIST.txt         # Detailed checklist ⭐ NEW
+│   └── IMPLEMENTATION_COMPLETE.md    # Summary document ⭐ NEW
+│
+├── 💾 DATA STORAGE
+│   ├── outputs/                      # OCR results
+│   │   ├── YYYYMMDD_HHMMSS_ocr.txt
+│   │   ├── YYYYMMDD_HHMMSS_result.json
+│   │   └── YYYYMMDD_HHMMSS_blockchain.json (with tokenId)
+│   ├── uploads/                      # Original images
+│   └── test_images/                  # Test samples
+│
+└── 📚 DOCUMENTATION
+    ├── OCR_BLOCKCHAIN_INTEGRATION.md
+    ├── QUICKSTART.md
+    ├── SETUP_COMPLETE.md
+    ├── UNIFIED_APP_README.md
+    ├── WEB界面升級說明.md
+    └── 粵語快速指南.md
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    TECHNOLOGY STACK SUMMARY                                   ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+FRONTEND:
+┌────────────────────────────────────────────────────────────────────┐
+│  HTML/CSS/JavaScript                                               │
+│  ├─ Web3.js v4.x         → Ethereum integration                   │
+│  ├─ MetaMask Extension   → Wallet connection                      │
+│  └─ Bootstrap/Custom CSS → UI styling                             │
+└────────────────────────────────────────────────────────────────────┘
+
+BACKEND:
+┌────────────────────────────────────────────────────────────────────┐
+│  Python 3.x                                                        │
+│  ├─ Flask                → Web server                             │
+│  ├─ PaddleOCR            → Text extraction                        │
+│  ├─ Web3.py              → Blockchain interaction                 │
+│  ├─ Pillow               → Image processing                       │
+│  └─ Requests             → API calls                              │
+└────────────────────────────────────────────────────────────────────┘
+
+BLOCKCHAIN:
+┌────────────────────────────────────────────────────────────────────┐
+│  Ethereum Sepolia Testnet                                          │
+│  ├─ Solidity 0.8.x       → Smart contract language               │
+│  ├─ Hardhat              → Development environment                │
+│  ├─ OpenZeppelin ERC-721 → NFT standard                           │
+│  └─ Etherscan            → Block explorer                         │
+└────────────────────────────────────────────────────────────────────┘
+
+STORAGE:
+┌────────────────────────────────────────────────────────────────────┐
+│  IPFS (via Pinata)                                                 │
+│  ├─ API Key: eb58c2f80178be2103ac                                 │
+│  ├─ Images               → Original bill scans                    │
+│  ├─ Metadata             → NFT JSON                               │
+│  └─ Gateway              → https://gateway.pinata.cloud           │
+└────────────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                           🎯 READY TO TEST!
+═══════════════════════════════════════════════════════════════════════════════
